@@ -9,13 +9,9 @@
     "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "paths": {
-      "~/*": ["./*"],
-      "@/*": ["./src/*"]
-    },
     "resolveJsonModule": true,
     "rootDir": ".",
-    "types": ["vite/client"],
+    "types": [],
 
     "newLine": "lf",
     "noEmit": true,
