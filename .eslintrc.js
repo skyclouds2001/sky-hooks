@@ -32,6 +32,12 @@ module.exports = {
         ignore: ['package.json'],
       },
     ],
+    'promise/always-return': [
+      'error',
+      {
+        ignoreLastCallback: true,
+      },
+    ],
   },
   settings: {
     'import/parsers': {
@@ -46,15 +52,23 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/test/*.[jt]s?(x)'],
-      extends: ['plugin:testing-library/vue', 'plugin:vitest/recommended'],
-    },
-    {
       files: ['*.ts', '*.tsx', '*.vue'],
       rules: {
         'jsdoc/require-param-type': 'off',
         'jsdoc/require-property-type': 'off',
         'jsdoc/require-returns-type': 'off',
+      },
+    },
+    {
+      files: ['**/test/*.[jt]s?(x)'],
+      extends: ['plugin:testing-library/vue', 'plugin:vitest/recommended'],
+    },
+    {
+      files: ['**/type/*.[jt]s?(x)'],
+      rules: {
+        'no-var': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-redeclare': 'off',
       },
     },
   ],
