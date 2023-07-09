@@ -1,42 +1,53 @@
 {
-  "name": "vite-vue-tempalte-sky",
-  "private": true,
+  "name": "@sky-fly/shooks",
   "version": "0.0.0",
-  "description": "A template project of Vue-Vite",
+  "license": "MIT",
+  "description": "A useful vue composition function library",
   "keywords": [
-    "template",
-    "project",
-    "vite",
     "vue",
-    "vue-router",
-    "pinia",
-    "element-plus",
-    "typescript",
-    "eslint",
-    "prettier",
-    "stylelint",
-    "commitlint",
-    "lint-staged"
+    "composition function",
+    "library"
   ],
+  "files": [
+    "dist",
+    "type"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "browser": "./dist/index.umd.js",
+  "unpkg": "./dist/index.umd.js",
+  "jsdelivr": "./dist/index.umd.js",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js",
+      "browser": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "homepage": "https://github.com/skyclouds2001/sky-hooks#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/skyclouds2001/vite-vue-template-sky.git"
+    "url": "git+https://github.com/skyclouds2001/sky-hooks.git"
   },
-  "homepage": "https://github.com/skyclouds2001/vite-vue-template-sky#readme",
   "bugs": {
-    "url": "https://github.com/skyclouds2001/vite-vue-template-sky/issues",
+    "url": "https://github.com/skyclouds2001/sky-hooks/issues",
     "email": "skyclouds2001@163.com"
   },
-  "license": "MIT",
   "author": {
     "name": "skyclouds2001",
     "email": "skyclouds2001@163.com",
-    "url": "https://skyclouds2001.github.io/"
+    "url": "https://skyclouds2001.github.io"
   },
   "contributors": [
     "skyclouds2001"
   ],
-  "main": "src/main.ts",
   "packageManager": "pnpm@8.4.0",
   "engines": {
     "node": ">=18.13.0",
