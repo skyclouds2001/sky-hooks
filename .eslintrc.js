@@ -8,7 +8,7 @@ module.exports = {
     'shared-node-browser': true,
     worker: true,
   },
-  extends: ['standard-with-typescript', 'eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'plugin:n/recommended', 'plugin:promise/recommended', 'plugin:import/recommended', 'plugin:security/recommended', 'plugin:jsdoc/recommended', 'plugin:jsx-a11y/recommended', 'plugin:regexp/recommended', 'plugin:json/recommended', 'plugin:markdown/recommended', 'plugin:prettier/recommended'],
+  extends: ['standard-with-typescript', 'eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'plugin:n/recommended', 'plugin:promise/recommended', 'plugin:import/recommended', 'plugin:security/recommended', 'plugin:jsdoc/recommended', 'plugin:jsx-a11y/recommended', 'plugin:regexp/recommended', 'plugin:prettier/recommended'],
   parser: 'vue-eslint-parser',
   parserOptions: {
     parser: '@typescript-eslint/parser',
@@ -19,10 +19,11 @@ module.exports = {
     },
     project: 'tsconfig.json',
     tsconfigRootDir: '.',
-    extraFileExtensions: ['.vue', '.json', '.html', '.md', '.mdx'],
+    extraFileExtensions: ['.vue'],
   },
-  plugins: ['html', 'tsdoc'],
+  plugins: ['tsdoc'],
   globals: {},
+  ignorePatterns: ['.eslintrc.js'],
   rules: {
     'n/no-missing-import': 'off',
     'import/no-unresolved': [
@@ -31,10 +32,8 @@ module.exports = {
         ignore: ['package.json'],
       },
     ],
-    '@typescript-eslint/promise-function-async': 'off',
   },
   settings: {
-    'import/core-modules': ['element-plus'],
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
@@ -47,12 +46,8 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['**/tests/unit/*.[jt]s?(x)', '**/tests/components/*.[jt]s?(x)'],
+      files: ['**/test/*.[jt]s?(x)'],
       extends: ['plugin:testing-library/vue', 'plugin:vitest/recommended'],
-    },
-    {
-      files: ['**/tests/e2e/*.[jt]s?(x)'],
-      extends: ['plugin:playwright/playwright-test'],
     },
     {
       files: ['*.ts', '*.tsx', '*.vue'],
