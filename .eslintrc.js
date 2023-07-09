@@ -8,10 +8,9 @@ module.exports = {
     'shared-node-browser': true,
     worker: true,
   },
-  extends: ['standard-with-typescript', 'eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:@typescript-eslint/recommended', 'plugin:n/recommended', 'plugin:promise/recommended', 'plugin:import/recommended', 'plugin:security/recommended', 'plugin:jsdoc/recommended', 'plugin:jsx-a11y/recommended', 'plugin:regexp/recommended', 'plugin:prettier/recommended'],
-  parser: 'vue-eslint-parser',
+  extends: ['standard-with-typescript', 'eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:n/recommended', 'plugin:promise/recommended', 'plugin:import/recommended', 'plugin:security/recommended', 'plugin:jsdoc/recommended', 'plugin:jsx-a11y/recommended', 'plugin:regexp/recommended', 'plugin:prettier/recommended'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    parser: '@typescript-eslint/parser',
     ecmaVersion: 'latest',
     sourceType: 'module',
     ecmaFeatures: {
@@ -19,7 +18,6 @@ module.exports = {
     },
     project: 'tsconfig.json',
     tsconfigRootDir: '.',
-    extraFileExtensions: ['.vue'],
   },
   plugins: ['tsdoc'],
   globals: {},
@@ -61,7 +59,7 @@ module.exports = {
     },
     {
       files: ['**/test/*.[jt]s?(x)'],
-      extends: ['plugin:testing-library/vue', 'plugin:vitest/recommended'],
+      extends: ['plugin:vitest/recommended'],
     },
     {
       files: ['**/type/*.[jt]s?(x)'],
