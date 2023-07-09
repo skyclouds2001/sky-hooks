@@ -11,7 +11,7 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "rootDir": ".",
-    "types": ["vite/client"],
+    "types": [],
 
     "newLine": "lf",
     "noEmit": true,
