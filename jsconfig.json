@@ -4,6 +4,6 @@
     "baseUrl": ".",
     "rootDir": "."
   },
-  "include": ["src/**/*", "test/**/*", "type/**/*"],
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.vue", "**/*.json", "**/*.html", "**/*.md", "**/*.mdx"],
   "exclude": ["node_modules", "dist"]
 }
