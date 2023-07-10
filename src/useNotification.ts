@@ -44,7 +44,7 @@ const useNotification = (
       if (document.visibilityState === 'visible') {
         notification.value?.close()
       }
-    })
+    }, { passive: true })
 
     tryOnScopeDispose(close)
   }

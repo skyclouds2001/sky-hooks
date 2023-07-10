@@ -6,11 +6,11 @@ const useDocumentActiveElement = (): Readonly<ShallowRef<Element | null>> => {
 
   useEventListener(window, 'blur', () => {
     activeElement.value = document.activeElement
-  })
+  }, { passive: true })
 
   useEventListener(window, 'focus', () => {
     activeElement.value = document.activeElement
-  })
+  }, { passive: true })
 
   return shallowReadonly(activeElement)
 }

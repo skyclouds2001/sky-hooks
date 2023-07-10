@@ -114,7 +114,7 @@ const useStorage = <T extends number | string | boolean | object | null>(
       if (e.key === storageKey) {
         data.value = e.newValue !== null ? parse<T>(e.newValue) : null
       }
-    })
+    }, { passive: true })
   }
 
   if (initial !== undefined) {

@@ -47,7 +47,7 @@ const useDevicesList = (
   if (isSupported) {
     useEventListener<MediaDevices, MediaDevicesEventMap, 'devicechange'>(navigator.mediaDevices, 'devicechange', () => {
       void update()
-    })
+    }, { passive: true })
 
     if (requestImmediate) {
       void requestPermission()

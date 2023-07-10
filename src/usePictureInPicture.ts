@@ -48,11 +48,11 @@ const usePictureInPicture = (
 
       useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(target, 'enterpictureinpicture', () => {
         isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
-      })
+      }, { passive: true })
 
       useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(target, 'leavepictureinpicture', () => {
         isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
-      })
+      }, { passive: true })
     },
     {
       immediate: true,

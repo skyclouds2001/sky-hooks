@@ -48,7 +48,7 @@ const useWakeLock = (): {
     void navigator.wakeLock.request('screen').then((wakeLock) => {
       isActive.value = wakeLock.released
     })
-  })
+  }, { passive: true })
 
   return {
     isSupported,

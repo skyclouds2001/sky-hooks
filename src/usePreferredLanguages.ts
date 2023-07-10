@@ -6,7 +6,7 @@ const usePreferredLanguages = (): Readonly<Ref<readonly string[]>> => {
 
   useEventListener(window, 'languagechange', () => {
     languages.value = navigator.languages
-  })
+  }, { passive: true })
 
   return readonly(languages)
 }

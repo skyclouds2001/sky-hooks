@@ -37,16 +37,16 @@ const useBattery = (): {
 
       useEventListener<BatteryManager, BatteryManagerEventMap, 'chargingchange'>(batteryManager, 'chargingchange', (e) => {
         updateBatteryInfo(e.target as BatteryManager)
-      })
+      }, { passive: true })
       useEventListener<BatteryManager, BatteryManagerEventMap, 'levelchange'>(batteryManager, 'levelchange', (e) => {
         updateBatteryInfo(e.target as BatteryManager)
-      })
+      }, { passive: true })
       useEventListener<BatteryManager, BatteryManagerEventMap, 'chargingtimechange'>(batteryManager, 'chargingtimechange', (e) => {
         updateBatteryInfo(e.target as BatteryManager)
-      })
+      }, { passive: true })
       useEventListener<BatteryManager, BatteryManagerEventMap, 'dischargingtimechange'>(batteryManager, 'dischargingtimechange', (e) => {
         updateBatteryInfo(e.target as BatteryManager)
-      })
+      }, { passive: true })
     })
   }
 

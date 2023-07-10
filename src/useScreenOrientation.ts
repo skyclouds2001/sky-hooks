@@ -24,7 +24,7 @@ const useScreenOrientation = (): {
   useEventListener<ScreenOrientation, ScreenOrientationEventMap, 'change'>(screen.orientation, 'change', () => {
     type.value = screen.orientation.type
     angel.value = screen.orientation.angle
-  })
+  }, { passive: true })
 
   return {
     isSupported,

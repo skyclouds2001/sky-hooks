@@ -6,7 +6,7 @@ const useDocumentReadyState = (): Readonly<Ref<DocumentReadyState>> => {
 
   useEventListener(document, 'readystatechange', () => {
     readyState.value = document.readyState
-  })
+  }, { passive: true })
 
   return readonly(readyState)
 }

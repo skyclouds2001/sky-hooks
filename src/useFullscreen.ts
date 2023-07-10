@@ -53,10 +53,10 @@ const useFullscreen = (
   if (isSupported) {
     useEventListener(document, 'fullscreenchange', () => {
       isFullscreen.value = document.fullscreenElement === target
-    })
+    }, { passive: true })
 
     if (onError !== undefined) {
-      useEventListener(document, 'fullscreenerror', onError)
+      useEventListener(document, 'fullscreenerror', onError, { passive: true })
     }
   }
 

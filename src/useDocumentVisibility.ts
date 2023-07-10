@@ -6,7 +6,7 @@ const useDocumentVisibility = (): Readonly<Ref<DocumentVisibilityState>> => {
 
   useEventListener(document, 'visibilitychange', () => {
     visibility.value = document.visibilityState
-  })
+  }, { passive: true })
 
   return readonly(visibility)
 }

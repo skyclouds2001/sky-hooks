@@ -14,7 +14,7 @@ const useSelection = (): {
 
   useEventListener(document, 'selectionchange', () => {
     selection.value = window.getSelection()
-  })
+  }, { passive: true })
 
   return {
     selection: shallowReadonly(selection),

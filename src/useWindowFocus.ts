@@ -6,11 +6,11 @@ const useWindowFocus = (): Readonly<Ref<boolean>> => {
 
   useEventListener(window, 'focus', () => {
     isFocus.value = true
-  })
+  }, { passive: true })
 
   useEventListener(window, 'blur', () => {
     isFocus.value = false
-  })
+  }, { passive: true })
 
   return readonly(isFocus)
 }

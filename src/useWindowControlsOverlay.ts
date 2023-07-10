@@ -15,7 +15,7 @@ const useWindowControlsOverlay = (): {
   useEventListener<WindowControlsOverlay, WindowControlsOverlayEventMap, 'geometrychange'>(navigator.windowControlsOverlay, 'geometrychange', (e) => {
     visible.value = e.visible
     rect.value = e.titlebarAreaRect
-  })
+  }, { passive: true })
 
   return {
     isSupported,
