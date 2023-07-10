@@ -82,6 +82,8 @@ export { default as useMediaRecorder } from './useMediaRecorder'
 
 export { default as useModel } from './useModel'
 
+export { default as useMouse } from './useMouse'
+
 export { default as useMutationObserver } from './useMutationObserver'
 
 export { default as useNetwork } from './useNetwork'
