@@ -60,6 +60,8 @@ export { default as useFileDialog } from './useFileDialog'
 
 export { default as useFileSystemAccess } from './useFileSystemAccess'
 
+export { default as useFps } from './useFps'
+
 export { default as useFullscreen } from './useFullscreen'
 
 export { default as useGeolocation } from './useGeolocation'
