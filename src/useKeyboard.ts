@@ -38,7 +38,7 @@ const useKeyboard = (options: {
     },
   })
 
-  const updateKeys = (e: KeyboardEvent, mode: boolean) => {
+  const updateKeys = (e: KeyboardEvent, mode: boolean): void => {
     if (e.key in keys) {
       keys[e.key].value = true
     } else {
@@ -60,6 +60,16 @@ const useKeyboard = (options: {
     updateKeys(e, false)
     onEventFired?.(e)
   }, { passive })
+
+  const reset = (): void => {
+    keys.current.clear()
+    Object.entries(keys).forEach(([_, value]) => {
+      value.value = false
+    })
+  }
+
+  useEventListener(window, 'focus', reset, { passive: true })
+  useEventListener(window, 'blur', reset, { passive: true })
 
   return proxy
 }
