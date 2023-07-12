@@ -1,9 +1,11 @@
 import { ref, type Ref } from 'vue'
 import { useAnimationFrame } from '.'
 
-const useFps = (options: {
-  every?: number
-} = {}): Ref<number> => {
+const useFps = (
+  options: {
+    every?: number
+  } = {}
+): Ref<number> => {
   const { every = 10 } = options
 
   const fps = ref(0)
@@ -15,7 +17,7 @@ const useFps = (options: {
     ++tick
     if (tick >= every) {
       tick = 0
-      let cur = window.performance.now()
+      const cur = window.performance.now()
       fps.value = Math.round(1000 / (cur - now) / every)
       now = cur
     }

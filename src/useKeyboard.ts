@@ -12,11 +12,13 @@ const DefaultAliasMap = {
   right: 'arrowright',
 }
 
-const useKeyboard = (options: {
-  aliasMap?: Record<string, string>
-  passive?: boolean
-  onEventFired?: (e: KeyboardEvent) => void
-} = {}): Readonly<Record<string, Ref<boolean>> & { current: ReadonlySet<string> }> => {
+const useKeyboard = (
+  options: {
+    aliasMap?: Record<string, string>
+    passive?: boolean
+    onEventFired?: (e: KeyboardEvent) => void
+  } = {}
+): Readonly<Record<string, Readonly<Ref<boolean>>> & { current: ReadonlySet<string> }> => {
   const { aliasMap = {}, passive = true, onEventFired } = options
 
   const aliases = Object.assign({}, aliasMap, DefaultAliasMap)
@@ -52,23 +54,37 @@ const useKeyboard = (options: {
     }
   }
 
-  useEventListener(window, 'keydown', (e) => {
-    updateKeys(e, true)
-    onEventFired?.(e)
-  }, { passive })
-  useEventListener(window, 'keyup', (e) => {
-    updateKeys(e, false)
-    onEventFired?.(e)
-  }, { passive })
+  useEventListener(
+    window,
+    'keydown',
+    (e) => {
+      updateKeys(e, true)
+      onEventFired?.(e)
+    },
+    { passive }
+  )
+
+  useEventListener(
+    window,
+    'keyup',
+    (e) => {
+      updateKeys(e, false)
+      onEventFired?.(e)
+    },
+    { passive }
+  )
 
   const reset = (): void => {
     keys.current.clear()
-    Object.entries(keys).forEach(([_, value]) => {
-      value.value = false
+    Object.entries(keys).forEach(([key, value]) => {
+      if (key !== 'current') {
+        ;(value as Ref<boolean>).value = false
+      }
     })
   }
 
   useEventListener(window, 'focus', reset, { passive: true })
+
   useEventListener(window, 'blur', reset, { passive: true })
 
   return proxy
