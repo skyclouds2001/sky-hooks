@@ -1,7 +1,7 @@
 import { reactive, ref, type Ref } from 'vue'
 import { useEventListener } from '.'
 
-const defaultAliasMap = {
+const DefaultAliasMap = {
   ctrl: 'control',
   command: 'meta',
   cmd: 'meta',
@@ -14,10 +14,12 @@ const defaultAliasMap = {
 
 const useKeyboard = (options: {
   aliasMap?: Record<string, string>
+  passive?: boolean
+  onEventFired?: (e: KeyboardEvent) => void
 } = {}): Readonly<Record<string, Ref<boolean>> & { current: ReadonlySet<string> }> => {
-  const { aliasMap = {} } = options
+  const { aliasMap = {}, passive = true, onEventFired } = options
 
-  const aliases = Object.assign({}, aliasMap, defaultAliasMap)
+  const aliases = Object.assign({}, aliasMap, DefaultAliasMap)
 
   const keys: Record<string, Ref<boolean>> & { current: Set<string> } = {
     current: reactive(new Set()),
@@ -52,10 +54,12 @@ const useKeyboard = (options: {
 
   useEventListener(window, 'keydown', (e) => {
     updateKeys(e, true)
-  }, { passive: true })
+    onEventFired?.(e)
+  }, { passive })
   useEventListener(window, 'keyup', (e) => {
     updateKeys(e, false)
-  }, { passive: true })
+    onEventFired?.(e)
+  }, { passive })
 
   return proxy
 }
