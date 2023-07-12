@@ -1,13 +1,34 @@
 import { reactive, ref, type Ref } from 'vue'
 import { useEventListener } from '.'
 
-const useKeyboard = (): Record<string, Ref<boolean>> & { current: Set<string> } => {
+const defaultAliasMap = {
+  ctrl: 'control',
+  command: 'meta',
+  cmd: 'meta',
+  option: 'alt',
+  up: 'arrowup',
+  down: 'arrowdown',
+  left: 'arrowleft',
+  right: 'arrowright',
+}
+
+const useKeyboard = (options: {
+  aliasMap?: Record<string, string>
+} = {}): Readonly<Record<string, Ref<boolean>> & { current: ReadonlySet<string> }> => {
+  const { aliasMap = {} } = options
+
+  const aliases = Object.assign({}, aliasMap, defaultAliasMap)
+
   const keys: Record<string, Ref<boolean>> & { current: Set<string> } = {
     current: reactive(new Set()),
   }
 
   const proxy = new Proxy(keys, {
     get: (target, prop, receiver) => {
+      if (prop in aliases && typeof prop === 'string') {
+        prop = aliases[prop]
+      }
+
       if (!Reflect.has(target, prop)) {
         Reflect.set(target, prop, ref(false))
       }
