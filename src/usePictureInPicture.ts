@@ -5,7 +5,7 @@ const usePictureInPicture = (
   target: MaybeRefOrGetter<HTMLVideoElement | null>
 ): {
   isSupported: boolean
-  isPictureInPicture: Readonly<Ref<boolean>>
+  isPictureInPicture: Ref<boolean>
   pictureInPictureWindow: Readonly<Ref<PictureInPictureWindow | null>>
   enter: () => Promise<void>
   exit: () => Promise<void>
@@ -39,6 +39,10 @@ const usePictureInPicture = (
     await (isPictureInPicture.value ? exit() : enter())
   }
 
+  watch(isPictureInPicture, (isPictureInPicture) => {
+    void (isPictureInPicture ? enter() : exit())
+  })
+
   watch(
     () => toValue(target),
     (target) => {
@@ -71,7 +75,7 @@ const usePictureInPicture = (
 
   return {
     isSupported,
-    isPictureInPicture: readonly(isPictureInPicture),
+    isPictureInPicture,
     pictureInPictureWindow: readonly(pictureInPictureWindow),
     enter,
     exit,

@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { ref, type Ref, watch } from 'vue'
 import { useEventListener } from '.'
 
 const useFullscreen = (
@@ -7,7 +7,7 @@ const useFullscreen = (
   onError?: (e: Event) => void
 ): {
   isSupported: boolean
-  isFullscreen: Readonly<Ref<boolean>>
+  isFullscreen: Ref<boolean>
   enter: () => Promise<void>
   exit: () => Promise<void>
   toggle: () => Promise<void>
@@ -51,9 +51,18 @@ const useFullscreen = (
   }
 
   if (isSupported) {
-    useEventListener(document, 'fullscreenchange', () => {
-      isFullscreen.value = document.fullscreenElement === target
-    }, { passive: true })
+    watch(isFullscreen, (isFullscreen) => {
+      void (isFullscreen ? enter() : exit())
+    })
+
+    useEventListener(
+      document,
+      'fullscreenchange',
+      () => {
+        isFullscreen.value = document.fullscreenElement === target
+      },
+      { passive: true }
+    )
 
     if (onError !== undefined) {
       useEventListener(document, 'fullscreenerror', onError, { passive: true })
@@ -62,7 +71,7 @@ const useFullscreen = (
 
   return {
     isSupported,
-    isFullscreen: readonly(isFullscreen),
+    isFullscreen,
     enter,
     exit,
     toggle,
