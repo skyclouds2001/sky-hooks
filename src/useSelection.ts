@@ -12,9 +12,16 @@ const useSelection = (): {
   const ranges = computed(() => (selection.value !== null ? (new Array(selection.value.rangeCount).fill(0).map((_, i) => selection.value?.getRangeAt(i)) as Range[]) : []))
   const rects = computed(() => ranges.value.map((range) => range.getBoundingClientRect()))
 
-  useEventListener(document, 'selectionchange', () => {
-    selection.value = window.getSelection()
-  }, { passive: true })
+  useEventListener(
+    document,
+    'selectionchange',
+    () => {
+      selection.value = window.getSelection()
+    },
+    {
+      passive: true,
+    }
+  )
 
   return {
     selection: shallowReadonly(selection),

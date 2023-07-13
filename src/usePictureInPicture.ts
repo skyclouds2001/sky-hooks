@@ -56,7 +56,9 @@ const usePictureInPicture = (
         () => {
           isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
         },
-        { passive: true }
+        {
+          passive: true,
+        }
       )
 
       useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(
@@ -65,7 +67,9 @@ const usePictureInPicture = (
         () => {
           isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
         },
-        { passive: true }
+        {
+          passive: true,
+        }
       )
     },
     {

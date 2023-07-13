@@ -61,11 +61,15 @@ const useFullscreen = (
       () => {
         isFullscreen.value = document.fullscreenElement === target
       },
-      { passive: true }
+      {
+        passive: true,
+      }
     )
 
     if (onError !== undefined) {
-      useEventListener(document, 'fullscreenerror', onError, { passive: true })
+      useEventListener(document, 'fullscreenerror', onError, {
+        passive: true,
+      })
     }
   }
 

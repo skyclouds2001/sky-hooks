@@ -38,16 +38,30 @@ const useClipboard = (
   }
 
   if (isSupported && listen) {
-    useEventListener(window, 'copy', () => {
-      void navigator.clipboard.readText().then((data) => {
-        text.value = data
-      })
-    }, { passive: true })
-    useEventListener(window, 'cut', () => {
-      void navigator.clipboard.readText().then((data) => {
-        text.value = data
-      })
-    }, { passive: true })
+    useEventListener(
+      window,
+      'copy',
+      () => {
+        void navigator.clipboard.readText().then((data) => {
+          text.value = data
+        })
+      },
+      {
+        passive: true,
+      }
+    )
+    useEventListener(
+      window,
+      'cut',
+      () => {
+        void navigator.clipboard.readText().then((data) => {
+          text.value = data
+        })
+      },
+      {
+        passive: true,
+      }
+    )
   }
 
   return {

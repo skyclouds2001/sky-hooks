@@ -42,9 +42,16 @@ const useBluetooth = (): {
     isAvailable.value = await navigator.bluetooth.getAvailability()
   }
 
-  useEventListener<Bluetooth, BluetoothEventMap, 'availabilitychanged'>(navigator.bluetooth, 'availabilitychanged', () => {
-    void updateBluetoothAvailability()
-  }, { passive: true })
+  useEventListener<Bluetooth, BluetoothEventMap, 'availabilitychanged'>(
+    navigator.bluetooth,
+    'availabilitychanged',
+    () => {
+      void updateBluetoothAvailability()
+    },
+    {
+      passive: true,
+    }
+  )
 
   tryOnMounted(async () => {
     await updateBluetoothAvailability()

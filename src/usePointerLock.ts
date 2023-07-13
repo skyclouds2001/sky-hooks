@@ -50,11 +50,15 @@ const usePointerLock = (
       () => {
         isPointerLock.value = document.pointerLockElement === target
       },
-      { passive: true }
+      {
+        passive: true,
+      }
     )
 
     if (onError !== undefined) {
-      useEventListener(document, 'pointerlockerror', onError, { passive: true })
+      useEventListener(document, 'pointerlockerror', onError, {
+        passive: true,
+      })
     }
   }
 

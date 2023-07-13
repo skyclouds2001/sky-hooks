@@ -38,17 +38,24 @@ const useWakeLock = (): {
     await (isActive.value ? release() : request())
   }
 
-  useEventListener(document, 'visibilitychange', () => {
-    if (!isSupported) return
+  useEventListener(
+    document,
+    'visibilitychange',
+    () => {
+      if (!isSupported) return
 
-    if (wakeLockSentinel === null) return
+      if (wakeLockSentinel === null) return
 
-    if (document.visibilityState === 'hidden') return
+      if (document.visibilityState === 'hidden') return
 
-    void navigator.wakeLock.request('screen').then((wakeLock) => {
-      isActive.value = wakeLock.released
-    })
-  }, { passive: true })
+      void navigator.wakeLock.request('screen').then((wakeLock) => {
+        isActive.value = wakeLock.released
+      })
+    },
+    {
+      passive: true,
+    }
+  )
 
   return {
     isSupported,

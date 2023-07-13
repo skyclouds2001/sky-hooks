@@ -54,9 +54,16 @@ const useNetwork = (): {
 
     updateNetworkInformation(connection)
 
-    useEventListener<NetworkInformation, NetworkInformationEventMap, 'change'>(connection, 'change', () => {
-      updateNetworkInformation(connection)
-    }, { passive: true })
+    useEventListener<NetworkInformation, NetworkInformationEventMap, 'change'>(
+      connection,
+      'change',
+      () => {
+        updateNetworkInformation(connection)
+      },
+      {
+        passive: true,
+      }
+    )
   }
 
   return {

@@ -13,7 +13,9 @@ const useWindowSize = (): {
     height.value = window.innerHeight
   }
 
-  useEventListener(window, 'resize', update, { passive: true })
+  useEventListener(window, 'resize', update, {
+    passive: true,
+  })
 
   update()
 

@@ -110,11 +110,18 @@ const useStorage = <T extends number | string | boolean | object | null>(
   )
 
   if (watchChange) {
-    useEventListener(window, 'storage', (e) => {
-      if (e.key === storageKey) {
-        data.value = e.newValue !== null ? parse<T>(e.newValue) : null
+    useEventListener(
+      window,
+      'storage',
+      (e) => {
+        if (e.key === storageKey) {
+          data.value = e.newValue !== null ? parse<T>(e.newValue) : null
+        }
+      },
+      {
+        passive: true,
       }
-    }, { passive: true })
+    )
   }
 
   if (initial !== undefined) {
