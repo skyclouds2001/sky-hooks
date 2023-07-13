@@ -104,6 +104,8 @@ export { default as usePermission } from './usePermission'
 
 export { default as usePictureInPicture } from './usePictureInPicture'
 
+export { default as usePointerCapture } from './usePointerCapture'
+
 export { default as usePointerLock } from './usePointerLock'
 
 export { default as usePreferredLanguages } from './usePreferredLanguages'
