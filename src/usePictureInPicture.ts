@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, unref, toValue, watch } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, type Ref, toValue, watch } from 'vue'
 import { useEventListener } from '.'
 
 const usePictureInPicture = (
@@ -20,7 +20,7 @@ const usePictureInPicture = (
   const enter = async (): Promise<void> => {
     if (!isSupported) return
 
-    const window = await unref(target)?.requestPictureInPicture()
+    const window = await toValue(target)?.requestPictureInPicture()
     pictureInPictureWindow.value = window ?? null
 
     isPictureInPicture.value = true
@@ -46,13 +46,23 @@ const usePictureInPicture = (
 
       if (target === null) return
 
-      useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(target, 'enterpictureinpicture', () => {
-        isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
-      }, { passive: true })
+      useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(
+        target,
+        'enterpictureinpicture',
+        () => {
+          isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
+        },
+        { passive: true }
+      )
 
-      useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(target, 'leavepictureinpicture', () => {
-        isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
-      }, { passive: true })
+      useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(
+        target,
+        'leavepictureinpicture',
+        () => {
+          isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
+        },
+        { passive: true }
+      )
     },
     {
       immediate: true,
