@@ -22,9 +22,15 @@ const useWebWorker = <D>(
     worker.value?.terminate()
   }
 
-  worker.value?.addEventListener('message', (e) => {
-    data.value = e.data
-  })
+  worker.value?.addEventListener(
+    'message',
+    (e) => {
+      data.value = e.data
+    },
+    {
+      passive: true,
+    }
+  )
 
   tryOnScopeDispose(() => {
     worker.value?.terminate()

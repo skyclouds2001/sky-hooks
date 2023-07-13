@@ -54,47 +54,65 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = window.indexedDB.open(db.name, db.version)
 
-      request.addEventListener('success', (e) => {
-        const db = (e.target as IDBOpenDBRequest).result
+      request.addEventListener(
+        'success',
+        (e) => {
+          const db = (e.target as IDBOpenDBRequest).result
 
-        database.value = db
+          database.value = db
 
-        if (onDatabaseAbort !== undefined) {
-          db.addEventListener('abort', onDatabaseAbort)
+          if (onDatabaseAbort !== undefined) {
+            db.addEventListener('abort', onDatabaseAbort)
+          }
+          if (onDatabaseClose !== undefined) {
+            db.addEventListener('close', onDatabaseClose)
+          }
+          if (onDatabaseError !== undefined) {
+            db.addEventListener('error', onDatabaseError)
+          }
+          if (onDatabaseVersionChange !== undefined) {
+            db.addEventListener('versionchange', onDatabaseVersionChange)
+          }
+
+          resolve(db)
+        },
+        {
+          passive: true,
         }
-        if (onDatabaseClose !== undefined) {
-          db.addEventListener('close', onDatabaseClose)
+      )
+
+      request.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
         }
-        if (onDatabaseError !== undefined) {
-          db.addEventListener('error', onDatabaseError)
+      )
+
+      request.addEventListener(
+        'upgradeneeded',
+        (e) => {
+          const { name, autoIncrement = true, keyPath = 'id', indexes = [] } = os
+
+          const db = (e.target as IDBOpenDBRequest).result
+
+          const object = db.createObjectStore(name, {
+            autoIncrement,
+            keyPath,
+          })
+
+          indexes.forEach((index) => {
+            const { name, keyPath, options } = index
+
+            object.createIndex(name, keyPath, options)
+          })
+        },
+        {
+          passive: true,
         }
-        if (onDatabaseVersionChange !== undefined) {
-          db.addEventListener('versionchange', onDatabaseVersionChange)
-        }
-
-        resolve(db)
-      })
-
-      request.addEventListener('error', (e) => {
-        reject(e)
-      })
-
-      request.addEventListener('upgradeneeded', (e) => {
-        const { name, autoIncrement = true, keyPath = 'id', indexes = [] } = os
-
-        const db = (e.target as IDBOpenDBRequest).result
-
-        const object = db.createObjectStore(name, {
-          autoIncrement,
-          keyPath,
-        })
-
-        indexes.forEach((index) => {
-          const { name, keyPath, options } = index
-
-          object.createIndex(name, keyPath, options)
-        })
-      })
+      )
     })
   }
 
@@ -102,11 +120,17 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve) => {
       database.value?.close()
 
-      database.value?.addEventListener('close', (e) => {
-        database.value = null
-        store.value = null
-        resolve(e)
-      })
+      database.value?.addEventListener(
+        'close',
+        (e) => {
+          database.value = null
+          store.value = null
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -114,15 +138,27 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = window.indexedDB.deleteDatabase(db.name)
 
-      request.addEventListener('success', (e) => {
-        database.value = null
-        store.value = null
-        resolve(e)
-      })
+      request.addEventListener(
+        'success',
+        (e) => {
+          database.value = null
+          store.value = null
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -134,13 +170,25 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readwrite').objectStore(os.name).add(data)
 
-      request?.addEventListener('success', (e) => {
-        resolve(e)
-      })
+      request?.addEventListener(
+        'success',
+        (e) => {
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -148,13 +196,25 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readwrite').objectStore(os.name).put(data)
 
-      request?.addEventListener('success', (e) => {
-        resolve(e)
-      })
+      request?.addEventListener(
+        'success',
+        (e) => {
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -162,13 +222,25 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readwrite').objectStore(os.name).delete(query)
 
-      request?.addEventListener('success', (e) => {
-        resolve(e)
-      })
+      request?.addEventListener(
+        'success',
+        (e) => {
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -176,13 +248,25 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).get(query)
 
-      request?.addEventListener('success', (e) => {
-        resolve(e)
-      })
+      request?.addEventListener(
+        'success',
+        (e) => {
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -190,13 +274,25 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).getAll(query, count)
 
-      request?.addEventListener('success', (e) => {
-        resolve(e)
-      })
+      request?.addEventListener(
+        'success',
+        (e) => {
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -204,13 +300,25 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).index(name).get(query)
 
-      request?.addEventListener('success', (e) => {
-        resolve(e)
-      })
+      request?.addEventListener(
+        'success',
+        (e) => {
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -218,19 +326,31 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).openCursor(query, direction)
 
-      request?.addEventListener('success', (e) => {
-        const cursor = (e.target as IDBRequest<IDBCursorWithValue | null>).result
-        if (cursor !== null) {
-          onData(cursor.value)
-          cursor.continue()
-        } else {
-          resolve(null)
+      request?.addEventListener(
+        'success',
+        (e) => {
+          const cursor = (e.target as IDBRequest<IDBCursorWithValue | null>).result
+          if (cursor !== null) {
+            onData(cursor.value)
+            cursor.continue()
+          } else {
+            resolve(null)
+          }
+        },
+        {
+          passive: true,
         }
-      })
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -238,19 +358,31 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).index(name).openCursor(query, direction)
 
-      request?.addEventListener('success', (e) => {
-        const cursor = (e.target as IDBRequest<IDBCursorWithValue | null>).result
-        if (cursor !== null) {
-          onData(cursor.value)
-          cursor.continue()
-        } else {
-          resolve(null)
+      request?.addEventListener(
+        'success',
+        (e) => {
+          const cursor = (e.target as IDBRequest<IDBCursorWithValue | null>).result
+          if (cursor !== null) {
+            onData(cursor.value)
+            cursor.continue()
+          } else {
+            resolve(null)
+          }
+        },
+        {
+          passive: true,
         }
-      })
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -258,13 +390,25 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).count(query)
 
-      request?.addEventListener('success', (e) => {
-        resolve(e)
-      })
+      request?.addEventListener(
+        'success',
+        (e) => {
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 
@@ -272,13 +416,25 @@ const useIndexedDB = <D extends Obj>(options: {
     return new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readwrite').objectStore(os.name).clear()
 
-      request?.addEventListener('success', (e) => {
-        resolve(e)
-      })
+      request?.addEventListener(
+        'success',
+        (e) => {
+          resolve(e)
+        },
+        {
+          passive: true,
+        }
+      )
 
-      request?.addEventListener('error', (e) => {
-        reject(e)
-      })
+      request?.addEventListener(
+        'error',
+        (e) => {
+          reject(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 

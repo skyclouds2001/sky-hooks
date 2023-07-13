@@ -63,29 +63,53 @@ const useSpeechRecognition = (
     rec.lang = lang
     rec.maxAlternatives = maxAlternatives
 
-    rec.addEventListener('start', () => {
-      isListening.value = true
-      isFinished.value = false
-    })
+    rec.addEventListener(
+      'start',
+      () => {
+        isListening.value = true
+        isFinished.value = false
+      },
+      {
+        passive: true,
+      }
+    )
 
-    rec.addEventListener('result', (e) => {
-      result.value = Array.from(e.results)
-        .map((res) => {
-          isFinished.value ||= res.isFinal
-          return res.item(0)
-        })
-        .map((res) => res.transcript)
-        .join('')
-      error.value = null
-    })
+    rec.addEventListener(
+      'result',
+      (e) => {
+        result.value = Array.from(e.results)
+          .map((res) => {
+            isFinished.value ||= res.isFinal
+            return res.item(0)
+          })
+          .map((res) => res.transcript)
+          .join('')
+        error.value = null
+      },
+      {
+        passive: true,
+      }
+    )
 
-    rec.addEventListener('error', (e) => {
-      error.value = e
-    })
+    rec.addEventListener(
+      'error',
+      (e) => {
+        error.value = e
+      },
+      {
+        passive: true,
+      }
+    )
 
-    rec.addEventListener('end', () => {
-      isListening.value = false
-    })
+    rec.addEventListener(
+      'end',
+      () => {
+        isListening.value = false
+      },
+      {
+        passive: true,
+      }
+    )
 
     watch(isListening, (isListening) => {
       if (isListening) {
