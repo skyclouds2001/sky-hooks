@@ -1,6 +1,6 @@
 {
   "name": "@sky-fly/shooks",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "description": "A useful vue composition function library",
   "keywords": [
