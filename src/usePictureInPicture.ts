@@ -13,7 +13,7 @@ const usePictureInPicture = (
 } => {
   const isSupported = 'pictureInPictureElement' in document && 'requestPictureInPicture' in HTMLVideoElement.prototype && 'exitPictureInPicture' in document && document.pictureInPictureEnabled
 
-  const isPictureInPicture = ref(document.pictureInPictureElement === target && document.pictureInPictureElement !== null)
+  const isPictureInPicture = ref(document.pictureInPictureElement === toValue(target) && document.pictureInPictureElement !== null)
 
   const pictureInPictureWindow = ref<PictureInPictureWindow | null>(null)
 
