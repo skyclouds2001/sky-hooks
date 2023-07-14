@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, toValue, watch } from 'vue'
+import { type MaybeRefOrGetter, ref, type Ref, shallowReadonly, toValue, watch } from 'vue'
 import { useEventListener } from '.'
 
 const usePictureInPicture = (
@@ -80,7 +80,7 @@ const usePictureInPicture = (
   return {
     isSupported,
     isPictureInPicture,
-    pictureInPictureWindow: readonly(pictureInPictureWindow),
+    pictureInPictureWindow: shallowReadonly(pictureInPictureWindow),
     enter,
     exit,
     toggle,
