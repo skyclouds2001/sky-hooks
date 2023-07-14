@@ -39,43 +39,43 @@ const usePictureInPicture = (
     await (isPictureInPicture.value ? exit() : enter())
   }
 
-  watch(isPictureInPicture, (isPictureInPicture) => {
-    void (isPictureInPicture ? enter() : exit())
-  })
+  if (isSupported) {
+    watch(isPictureInPicture, (isPictureInPicture) => {
+      void (isPictureInPicture ? enter() : exit())
+    })
 
-  watch(
-    () => toValue(target),
-    (target) => {
-      if (!isSupported) return
+    watch(
+      () => toValue(target),
+      (target) => {
+        if (target === null) return
 
-      if (target === null) return
+        useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(
+          target,
+          'enterpictureinpicture',
+          () => {
+            isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
+          },
+          {
+            passive: true,
+          }
+        )
 
-      useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(
-        target,
-        'enterpictureinpicture',
-        () => {
-          isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
-        },
-        {
-          passive: true,
-        }
-      )
-
-      useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(
-        target,
-        'leavepictureinpicture',
-        () => {
-          isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
-        },
-        {
-          passive: true,
-        }
-      )
-    },
-    {
-      immediate: true,
-    }
-  )
+        useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(
+          target,
+          'leavepictureinpicture',
+          () => {
+            isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
+          },
+          {
+            passive: true,
+          }
+        )
+      },
+      {
+        immediate: true,
+      }
+    )
+  }
 
   return {
     isSupported,

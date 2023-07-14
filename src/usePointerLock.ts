@@ -14,7 +14,7 @@ const usePointerLock = (
   unlock: () => void
   trigger: () => void
 } => {
-  const isSupported = 'pointerLockElement' in document && 'requestPointerLock' in HTMLElement.prototype && 'exitPointerLock' in document
+  const isSupported = 'pointerLockElement' in document && 'requestPointerLock' in Element.prototype && 'exitPointerLock' in document
 
   const isPointerLock = ref(document.pointerLockElement === target)
 

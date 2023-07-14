@@ -1,6 +1,15 @@
-import { ref, watch } from 'vue'
+import { ref, type Ref, watch } from 'vue'
 
-const usePointerCapture = (target: HTMLElement = document.documentElement, id: number): any => {
+const usePointerCapture = (
+  target: HTMLElement = document.documentElement,
+  id: number
+): {
+  isSupported: boolean
+  isPointerCapture: Ref<boolean>
+  set: () => void
+  release: () => void
+  toggle: () => void
+} => {
   const isSupported = 'setPointerCapture' in Element.prototype && 'releasePointerCapture' in Element.prototype && 'hasPointerCapture' in Element.prototype
 
   const isPointerCapture = ref(target.hasPointerCapture(id))
@@ -19,9 +28,11 @@ const usePointerCapture = (target: HTMLElement = document.documentElement, id: n
     isPointerCapture.value ? release() : set()
   }
 
-  watch(isPointerCapture, (isPointerCapture) => {
-    isPointerCapture ? set() : release()
-  })
+  if (isSupported) {
+    watch(isPointerCapture, (isPointerCapture) => {
+      isPointerCapture ? set() : release()
+    })
+  }
 
   return {
     isSupported,
