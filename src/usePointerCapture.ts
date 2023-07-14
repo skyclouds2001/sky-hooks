@@ -16,12 +16,14 @@ const usePointerCapture = (
 
   const set = (): void => {
     target.setPointerCapture(id)
-    isPointerCapture.value = target.hasPointerCapture(id)
+
+    isPointerCapture.value = true
   }
 
   const release = (): void => {
     target.releasePointerCapture(id)
-    isPointerCapture.value = target.hasPointerCapture(id)
+
+    isPointerCapture.value = false
   }
 
   const toggle = (): void => {
