@@ -41,30 +41,54 @@ const useEventSource = (
     })
     status.value = EventSource.CONNECTING
 
-    es.value.addEventListener('error', (e) => {
-      status.value = EventSource.CLOSED
-      error.value = e
-      onError?.(e)
-    })
+    es.value.addEventListener(
+      'error',
+      (e) => {
+        status.value = EventSource.CLOSED
+        error.value = e
+        onError?.(e)
+      },
+      {
+        passive: true,
+      }
+    )
 
-    es.value.addEventListener('message', (e) => {
-      message.value = e.data
-      event.value = 'message'
-      onMessage?.(e)
-    })
+    es.value.addEventListener(
+      'message',
+      (e) => {
+        message.value = e.data
+        event.value = 'message'
+        onMessage?.(e)
+      },
+      {
+        passive: true,
+      }
+    )
 
-    es.value.addEventListener('open', (e) => {
-      status.value = EventSource.OPEN
-      error.value = null
-      onOpen?.(e)
-    })
+    es.value.addEventListener(
+      'open',
+      (e) => {
+        status.value = EventSource.OPEN
+        error.value = null
+        onOpen?.(e)
+      },
+      {
+        passive: true,
+      }
+    )
 
     events.forEach((ev) => {
-      es.value?.addEventListener(ev, (e) => {
-        message.value = e.data
-        event.value = ev
-        onMessage?.(e)
-      })
+      es.value?.addEventListener(
+        ev,
+        (e) => {
+          message.value = e.data
+          event.value = ev
+          onMessage?.(e)
+        },
+        {
+          passive: true,
+        }
+      )
     })
   }
 

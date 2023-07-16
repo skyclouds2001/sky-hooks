@@ -74,29 +74,59 @@ const useSpeechSynthesis = (
     ssu.rate = rate
     ssu.volume = volume
 
-    ssu.addEventListener('start', () => {
-      isPlaying.value = true
-      status.value = 'play'
-    })
+    ssu.addEventListener(
+      'start',
+      () => {
+        isPlaying.value = true
+        status.value = 'play'
+      },
+      {
+        passive: true,
+      }
+    )
 
-    ssu.addEventListener('pause', () => {
-      isPlaying.value = false
-      status.value = 'pause'
-    })
+    ssu.addEventListener(
+      'pause',
+      () => {
+        isPlaying.value = false
+        status.value = 'pause'
+      },
+      {
+        passive: true,
+      }
+    )
 
-    ssu.addEventListener('resume', () => {
-      isPlaying.value = true
-      status.value = 'play'
-    })
+    ssu.addEventListener(
+      'resume',
+      () => {
+        isPlaying.value = true
+        status.value = 'play'
+      },
+      {
+        passive: true,
+      }
+    )
 
-    ssu.addEventListener('end', () => {
-      isPlaying.value = false
-      status.value = 'end'
-    })
+    ssu.addEventListener(
+      'end',
+      () => {
+        isPlaying.value = false
+        status.value = 'end'
+      },
+      {
+        passive: true,
+      }
+    )
 
-    ssu.addEventListener('error', (e) => {
-      error.value = e.error
-    })
+    ssu.addEventListener(
+      'error',
+      (e) => {
+        error.value = e.error
+      },
+      {
+        passive: true,
+      }
+    )
 
     utterance.value = ssu
   }

@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { ref, type Ref, watch } from 'vue'
 import { useEventListener } from '.'
 
 const useFullscreen = (
@@ -7,24 +7,15 @@ const useFullscreen = (
   onError?: (e: Event) => void
 ): {
   isSupported: boolean
-  isFullscreen: Readonly<Ref<boolean>>
+  isFullscreen: Ref<boolean>
   enter: () => Promise<void>
   exit: () => Promise<void>
   toggle: () => Promise<void>
 } => {
-  /**
-   * 标记用户是否启用全屏功能
-   */
-  const isSupported = 'fullscreenElement' in document && 'requestFullscreen' in HTMLElement.prototype && 'exitFullscreen' in document && document.fullscreenEnabled
+  const isSupported = 'fullscreenElement' in document && 'requestFullscreen' in Element.prototype && 'exitFullscreen' in document && document.fullscreenEnabled
 
-  /**
-   * 当前全屏状态
-   */
   const isFullscreen = ref(document.fullscreenElement === target)
 
-  /**
-   * 进入全屏状态方法
-   */
   const enter = async (): Promise<void> => {
     if (!isSupported) return
 
@@ -33,36 +24,44 @@ const useFullscreen = (
     isFullscreen.value = true
   }
 
-  /**
-   * 退出全屏状态方法
-   */
   const exit = async (): Promise<void> => {
     if (!isSupported) return
 
     await document.exitFullscreen()
+
     isFullscreen.value = false
   }
 
-  /**
-   * 切换全屏状态方法
-   */
   const toggle = async (): Promise<void> => {
     await (isFullscreen.value ? exit() : enter())
   }
 
   if (isSupported) {
-    useEventListener(document, 'fullscreenchange', () => {
-      isFullscreen.value = document.fullscreenElement === target
+    watch(isFullscreen, (isFullscreen) => {
+      void (isFullscreen ? enter() : exit())
     })
 
+    useEventListener(
+      document,
+      'fullscreenchange',
+      () => {
+        isFullscreen.value = document.fullscreenElement === target
+      },
+      {
+        passive: true,
+      }
+    )
+
     if (onError !== undefined) {
-      useEventListener(document, 'fullscreenerror', onError)
+      useEventListener(document, 'fullscreenerror', onError, {
+        passive: true,
+      })
     }
   }
 
   return {
     isSupported,
-    isFullscreen: readonly(isFullscreen),
+    isFullscreen,
     enter,
     exit,
     toggle,

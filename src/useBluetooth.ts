@@ -1,13 +1,13 @@
-import { computed, type ComputedRef, ref, shallowRef, type ShallowRef } from 'vue'
+import { computed, type ComputedRef, readonly, ref, type Ref, shallowReadonly, shallowRef, type ShallowRef } from 'vue'
 import { tryOnMounted, tryOnUnmounted, useEventListener } from '.'
 
 const useBluetooth = (): {
   isSupported: boolean
-  isAvailable: ComputedRef<boolean>
+  isAvailable: Readonly<Ref<boolean>>
   isConnected: ComputedRef<boolean>
   device: ShallowRef<BluetoothDevice | null>
   server: ShallowRef<BluetoothRemoteGATTServer | null>
-  error: ComputedRef<unknown>
+  error: Readonly<ShallowRef<unknown>>
   requestDevice: () => Promise<void>
 } => {
   const isSupported = 'bluetooth' in navigator
@@ -20,7 +20,7 @@ const useBluetooth = (): {
 
   const server = shallowRef<BluetoothRemoteGATTServer | null>(null)
 
-  const error = ref<unknown>()
+  const error = shallowRef<unknown>()
 
   const requestDevice = async (): Promise<void> => {
     if (!isSupported) return
@@ -42,9 +42,16 @@ const useBluetooth = (): {
     isAvailable.value = await navigator.bluetooth.getAvailability()
   }
 
-  useEventListener<Bluetooth, BluetoothEventMap, 'availabilitychanged'>(navigator.bluetooth, 'availabilitychanged', () => {
-    void updateBluetoothAvailability()
-  })
+  useEventListener<Bluetooth, BluetoothEventMap, 'availabilitychanged'>(
+    navigator.bluetooth,
+    'availabilitychanged',
+    () => {
+      void updateBluetoothAvailability()
+    },
+    {
+      passive: true,
+    }
+  )
 
   tryOnMounted(async () => {
     await updateBluetoothAvailability()
@@ -57,11 +64,11 @@ const useBluetooth = (): {
 
   return {
     isSupported,
-    isAvailable: computed(() => isAvailable.value),
+    isAvailable: readonly(isAvailable),
     isConnected,
     device,
     server,
-    error: computed(() => error.value),
+    error: shallowReadonly(error),
     requestDevice,
   }
 }

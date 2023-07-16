@@ -13,9 +13,16 @@ const useMediaQuery = (
 
   const matches = ref(mediaQuery.matches)
 
-  useEventListener<MediaQueryList, MediaQueryListEventMap, 'change'>(mediaQuery, 'change', (e) => {
-    matches.value = e.matches
-  })
+  useEventListener<MediaQueryList, MediaQueryListEventMap, 'change'>(
+    mediaQuery,
+    'change',
+    (e) => {
+      matches.value = e.matches
+    },
+    {
+      passive: true,
+    }
+  )
 
   return {
     isSupported,

@@ -21,15 +21,29 @@ const useOnline = (): {
    */
   const offlineAt = ref(isOnline.value ? undefined : Date.now())
 
-  useEventListener(window, 'online', () => {
-    isOnline.value = true
-    onlineAt.value = isOnline.value ? Date.now() : undefined
-  })
+  useEventListener(
+    window,
+    'online',
+    () => {
+      isOnline.value = true
+      onlineAt.value = isOnline.value ? Date.now() : undefined
+    },
+    {
+      passive: true,
+    }
+  )
 
-  useEventListener(window, 'offline', () => {
-    isOnline.value = false
-    offlineAt.value = isOnline.value ? undefined : Date.now()
-  })
+  useEventListener(
+    window,
+    'offline',
+    () => {
+      isOnline.value = false
+      offlineAt.value = isOnline.value ? undefined : Date.now()
+    },
+    {
+      passive: true,
+    }
+  )
 
   return {
     isOnline: readonly(isOnline),

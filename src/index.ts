@@ -60,6 +60,8 @@ export { default as useFileDialog } from './useFileDialog'
 
 export { default as useFileSystemAccess } from './useFileSystemAccess'
 
+export { default as useFps } from './useFps'
+
 export { default as useFullscreen } from './useFullscreen'
 
 export { default as useGeolocation } from './useGeolocation'
@@ -72,6 +74,8 @@ export { default as useIntersectionObserver } from './useIntersectionObserver'
 
 export { default as useInterval } from './useInterval'
 
+export { default as useKeyboard } from './useKeyboard'
+
 export { default as useLocalStorage } from './useLocalStorage'
 
 export { default as useLocation } from './useLocation'
@@ -81,6 +85,8 @@ export { default as useMediaQuery } from './useMediaQuery'
 export { default as useMediaRecorder } from './useMediaRecorder'
 
 export { default as useModel } from './useModel'
+
+export { default as useMouse } from './useMouse'
 
 export { default as useMutationObserver } from './useMutationObserver'
 
@@ -97,6 +103,8 @@ export { default as useOnline } from './useOnline'
 export { default as usePermission } from './usePermission'
 
 export { default as usePictureInPicture } from './usePictureInPicture'
+
+export { default as usePointerCapture } from './usePointerCapture'
 
 export { default as usePointerLock } from './usePointerLock'
 

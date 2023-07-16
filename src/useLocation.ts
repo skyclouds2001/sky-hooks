@@ -49,13 +49,27 @@ const useLocation = (): Readonly<BrowserLocation> => {
 
   update('load')
 
-  useEventListener(window, 'hashchange', () => {
-    update('hashchange')
-  })
+  useEventListener(
+    window,
+    'hashchange',
+    () => {
+      update('hashchange')
+    },
+    {
+      passive: true,
+    }
+  )
 
-  useEventListener(window, 'popstate', () => {
-    update('popstate')
-  })
+  useEventListener(
+    window,
+    'popstate',
+    () => {
+      update('popstate')
+    },
+    {
+      passive: true,
+    }
+  )
 
   return readonly(location)
 }

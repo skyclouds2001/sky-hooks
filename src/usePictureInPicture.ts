@@ -1,11 +1,11 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, unref, toValue, watch } from 'vue'
+import { type MaybeRefOrGetter, ref, type Ref, shallowReadonly, toValue, watch } from 'vue'
 import { useEventListener } from '.'
 
 const usePictureInPicture = (
   target: MaybeRefOrGetter<HTMLVideoElement | null>
 ): {
   isSupported: boolean
-  isPictureInPicture: Readonly<Ref<boolean>>
+  isPictureInPicture: Ref<boolean>
   pictureInPictureWindow: Readonly<Ref<PictureInPictureWindow | null>>
   enter: () => Promise<void>
   exit: () => Promise<void>
@@ -13,14 +13,14 @@ const usePictureInPicture = (
 } => {
   const isSupported = 'pictureInPictureElement' in document && 'requestPictureInPicture' in HTMLVideoElement.prototype && 'exitPictureInPicture' in document && document.pictureInPictureEnabled
 
-  const isPictureInPicture = ref(document.pictureInPictureElement === target && document.pictureInPictureElement !== null)
+  const isPictureInPicture = ref(document.pictureInPictureElement === toValue(target) && document.pictureInPictureElement !== null)
 
   const pictureInPictureWindow = ref<PictureInPictureWindow | null>(null)
 
   const enter = async (): Promise<void> => {
     if (!isSupported) return
 
-    const window = await unref(target)?.requestPictureInPicture()
+    const window = await toValue(target)?.requestPictureInPicture()
     pictureInPictureWindow.value = window ?? null
 
     isPictureInPicture.value = true
@@ -39,30 +39,48 @@ const usePictureInPicture = (
     await (isPictureInPicture.value ? exit() : enter())
   }
 
-  watch(
-    () => toValue(target),
-    (target) => {
-      if (!isSupported) return
+  if (isSupported) {
+    watch(isPictureInPicture, (isPictureInPicture) => {
+      void (isPictureInPicture ? enter() : exit())
+    })
 
-      if (target === null) return
+    watch(
+      () => toValue(target),
+      (target) => {
+        if (target === null) return
 
-      useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(target, 'enterpictureinpicture', () => {
-        isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
-      })
+        useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(
+          target,
+          'enterpictureinpicture',
+          () => {
+            isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
+          },
+          {
+            passive: true,
+          }
+        )
 
-      useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(target, 'leavepictureinpicture', () => {
-        isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
-      })
-    },
-    {
-      immediate: true,
-    }
-  )
+        useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(
+          target,
+          'leavepictureinpicture',
+          () => {
+            isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
+          },
+          {
+            passive: true,
+          }
+        )
+      },
+      {
+        immediate: true,
+      }
+    )
+  }
 
   return {
     isSupported,
-    isPictureInPicture: readonly(isPictureInPicture),
-    pictureInPictureWindow: readonly(pictureInPictureWindow),
+    isPictureInPicture,
+    pictureInPictureWindow: shallowReadonly(pictureInPictureWindow),
     enter,
     exit,
     toggle,

@@ -5,7 +5,7 @@ export default defineConfig({
     root: '.',
     watch: false,
     environment: 'jsdom',
-    include: ['tests/{unit,components}/**/*.{test,spec}.{js,jsx,ts,tsx}'],
+    include: ['**/*.{test,spec}.{js,jsx,ts,tsx}'],
     reporters: ['default', 'html'],
     coverage: {
       provider: 'v8',

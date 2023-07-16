@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { ref, type Ref, watch } from 'vue'
 import { useEventListener } from '.'
 
 const usePointerLock = (
@@ -9,12 +9,12 @@ const usePointerLock = (
   onError?: (e: Event) => void
 ): {
   isSupported: boolean
-  isPointerLock: Readonly<Ref<boolean>>
+  isPointerLock: Ref<boolean>
   lock: () => void
   unlock: () => void
   trigger: () => void
 } => {
-  const isSupported = 'pointerLockElement' in document && 'requestPointerLock' in HTMLElement.prototype && 'exitPointerLock' in document
+  const isSupported = 'pointerLockElement' in document && 'requestPointerLock' in Element.prototype && 'exitPointerLock' in document
 
   const isPointerLock = ref(document.pointerLockElement === target)
 
@@ -40,18 +40,31 @@ const usePointerLock = (
   }
 
   if (isSupported) {
-    useEventListener(document, 'pointerlockchange', () => {
-      isPointerLock.value = document.pointerLockElement === target
+    watch(isPointerLock, (isPointerLock) => {
+      isPointerLock ? lock() : unlock()
     })
 
+    useEventListener(
+      document,
+      'pointerlockchange',
+      () => {
+        isPointerLock.value = document.pointerLockElement === target
+      },
+      {
+        passive: true,
+      }
+    )
+
     if (onError !== undefined) {
-      useEventListener(document, 'pointerlockerror', onError)
+      useEventListener(document, 'pointerlockerror', onError, {
+        passive: true,
+      })
     }
   }
 
   return {
     isSupported,
-    isPointerLock: readonly(isPointerLock),
+    isPointerLock,
     lock,
     unlock,
     trigger,

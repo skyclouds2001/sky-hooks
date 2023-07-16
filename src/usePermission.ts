@@ -24,7 +24,7 @@ const usePermission = (
 
       update()
 
-      useEventListener<PermissionStatus, PermissionStatusEventMap, 'change'>(status, 'change', update)
+      useEventListener<PermissionStatus, PermissionStatusEventMap, 'change'>(status, 'change', update, { passive: true })
     })
   }
 

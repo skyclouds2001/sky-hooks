@@ -46,40 +46,64 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
     manualClose = false
     retry = 0
 
-    ws.addEventListener('open', (e) => {
-      status.value = WebSocket.OPEN
+    ws.addEventListener(
+      'open',
+      (e) => {
+        status.value = WebSocket.OPEN
 
-      onOpen?.(e)
-    })
-
-    ws.addEventListener('close', (e) => {
-      status.value = WebSocket.CLOSED
-      websocket.value = null
-
-      onClose?.(e)
-
-      if (!manualClose && autoReconnect !== undefined) {
-        const { retries = Infinity, delay = 1000, onFail = console.log } = typeof autoReconnect === 'object' ? autoReconnect : {}
-
-        if (Number.isFinite(retries) || retry < retries) {
-          setTimeout(open, delay)
-        } else {
-          onFail(e)
-        }
-
-        ++retry
+        onOpen?.(e)
+      },
+      {
+        passive: true,
       }
-    })
+    )
 
-    ws.addEventListener('message', (e) => {
-      data.value = e.data
+    ws.addEventListener(
+      'close',
+      (e) => {
+        status.value = WebSocket.CLOSED
+        websocket.value = null
 
-      onMessage?.(e)
-    })
+        onClose?.(e)
 
-    ws.addEventListener('error', (e) => {
-      onError?.(e)
-    })
+        if (!manualClose && autoReconnect !== undefined) {
+          const { retries = Infinity, delay = 1000, onFail = console.log } = typeof autoReconnect === 'object' ? autoReconnect : {}
+
+          if (Number.isFinite(retries) || retry < retries) {
+            setTimeout(open, delay)
+          } else {
+            onFail(e)
+          }
+
+          ++retry
+        }
+      },
+      {
+        passive: true,
+      }
+    )
+
+    ws.addEventListener(
+      'message',
+      (e) => {
+        data.value = e.data
+
+        onMessage?.(e)
+      },
+      {
+        passive: true,
+      }
+    )
+
+    ws.addEventListener(
+      'error',
+      (e) => {
+        onError?.(e)
+      },
+      {
+        passive: true,
+      }
+    )
 
     status.value = WebSocket.CONNECTING
     websocket.value = ws

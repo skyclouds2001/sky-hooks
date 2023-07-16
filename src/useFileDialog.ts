@@ -18,9 +18,15 @@ const useFileDialog = (
 
   const input = document.createElement('input')
   input.type = 'file'
-  input.addEventListener('change', (e) => {
-    files.value = (e.target as HTMLInputElement).files
-  })
+  input.addEventListener(
+    'change',
+    (e) => {
+      files.value = (e.target as HTMLInputElement).files
+    },
+    {
+      passive: true,
+    }
+  )
 
   const open = (localOptions: Options = {}): void => {
     const { multiple = true, accept = '*', reset: shouldReset = false } = { ...options, ...localOptions }

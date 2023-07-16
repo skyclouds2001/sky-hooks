@@ -4,9 +4,16 @@ import { useEventListener } from '.'
 const useDocumentReadyState = (): Readonly<Ref<DocumentReadyState>> => {
   const readyState = ref(document.readyState)
 
-  useEventListener(document, 'readystatechange', () => {
-    readyState.value = document.readyState
-  })
+  useEventListener(
+    document,
+    'readystatechange',
+    () => {
+      readyState.value = document.readyState
+    },
+    {
+      passive: true,
+    }
+  )
 
   return readonly(readyState)
 }

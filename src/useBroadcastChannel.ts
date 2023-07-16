@@ -30,15 +30,29 @@ const useBroadcastChannel = <D = unknown, P = D>(
     isOpen.value = false
   }
 
-  useEventListener<BroadcastChannel, BroadcastChannelEventMap, 'message'>(broadcastChannel, 'message', (e) => {
-    data.value = e.data
-    error.value = null
-  })
+  useEventListener<BroadcastChannel, BroadcastChannelEventMap, 'message'>(
+    broadcastChannel,
+    'message',
+    (e) => {
+      data.value = e.data
+      error.value = null
+    },
+    {
+      passive: true,
+    }
+  )
 
-  useEventListener<BroadcastChannel, BroadcastChannelEventMap, 'messageerror'>(broadcastChannel, 'messageerror', (e) => {
-    error.value = e
-    data.value = null
-  })
+  useEventListener<BroadcastChannel, BroadcastChannelEventMap, 'messageerror'>(
+    broadcastChannel,
+    'messageerror',
+    (e) => {
+      error.value = e
+      data.value = null
+    },
+    {
+      passive: true,
+    }
+  )
 
   tryOnScopeDispose(close)
 

@@ -13,7 +13,9 @@ const useWindowScroll = (): {
     y.value = window.scrollY
   }
 
-  useEventListener(window, 'scroll', update)
+  useEventListener(window, 'scroll', update, {
+    passive: true,
+  })
 
   update()
 

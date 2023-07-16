@@ -40,11 +40,18 @@ const useNotification = (
   }
 
   if (isSupported) {
-    useEventListener(document, 'visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        notification.value?.close()
+    useEventListener(
+      document,
+      'visibilitychange',
+      () => {
+        if (document.visibilityState === 'visible') {
+          notification.value?.close()
+        }
+      },
+      {
+        passive: true,
       }
-    })
+    )
 
     tryOnScopeDispose(close)
   }

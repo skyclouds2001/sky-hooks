@@ -58,7 +58,7 @@ module.exports = {
       },
     },
     {
-      files: ['**/test/*.[jt]s?(x)'],
+      files: ['**/*.{test,spec}.{js,jsx,ts,tsx}'],
       extends: ['plugin:vitest/recommended'],
     },
     {
