@@ -1,7 +1,7 @@
-import { readonly, ref, type Ref } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, type Ref, toValue, watch } from 'vue'
 
 const usePointerCapture = (
-  target: HTMLElement = document.documentElement,
+  target: MaybeRefOrGetter<HTMLElement | null> = document.documentElement,
   id: number
 ): {
   isSupported: boolean
@@ -12,22 +12,36 @@ const usePointerCapture = (
 } => {
   const isSupported = 'setPointerCapture' in Element.prototype && 'releasePointerCapture' in Element.prototype && 'hasPointerCapture' in Element.prototype
 
-  const isPointerCapture = ref(target.hasPointerCapture(id))
+  const isPointerCapture = ref(toValue(target)?.hasPointerCapture(id) ?? false)
 
   const set = (): void => {
-    target.setPointerCapture(id)
+    toValue(target)?.setPointerCapture(id)
 
     isPointerCapture.value = true
   }
 
   const release = (): void => {
-    target.releasePointerCapture(id)
+    toValue(target)?.releasePointerCapture(id)
 
     isPointerCapture.value = false
   }
 
   const toggle = (): void => {
     isPointerCapture.value ? release() : set()
+  }
+
+  if (isSupported) {
+    watch(
+      () => toValue(target),
+      (target) => {
+        if (target === null) return
+
+        isPointerCapture.value ? set() : release()
+      },
+      {
+        immediate: true,
+      }
+    )
   }
 
   return {

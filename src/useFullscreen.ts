@@ -1,8 +1,8 @@
-import { readonly, ref, type Ref } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, type Ref, toValue, watch } from 'vue'
 import { useEventListener } from '.'
 
 const useFullscreen = (
-  target: HTMLElement = document.documentElement,
+  target: MaybeRefOrGetter<HTMLElement | null> = document.documentElement,
   options?: FullscreenOptions,
   onError?: (e: Event) => void
 ): {
@@ -14,12 +14,12 @@ const useFullscreen = (
 } => {
   const isSupported = 'fullscreenElement' in document && 'requestFullscreen' in Element.prototype && 'exitFullscreen' in document && document.fullscreenEnabled
 
-  const isFullscreen = ref(document.fullscreenElement === target)
+  const isFullscreen = ref(document.fullscreenElement === toValue(target))
 
   const enter = async (): Promise<void> => {
     if (!isSupported) return
 
-    await target.requestFullscreen(options)
+    await toValue(target)?.requestFullscreen(options)
 
     isFullscreen.value = true
   }
@@ -37,11 +37,23 @@ const useFullscreen = (
   }
 
   if (isSupported) {
+    watch(
+      () => toValue(target),
+      (target) => {
+        if (target === null) return
+
+        void (isFullscreen.value ? enter() : exit())
+      },
+      {
+        immediate: true,
+      }
+    )
+
     useEventListener(
       document,
       'fullscreenchange',
       () => {
-        isFullscreen.value = document.fullscreenElement === target
+        isFullscreen.value = document.fullscreenElement === toValue(target)
       },
       {
         passive: true,

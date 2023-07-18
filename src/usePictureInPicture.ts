@@ -45,6 +45,8 @@ const usePictureInPicture = (
       (target) => {
         if (target === null) return
 
+        void (isPictureInPicture.value ? enter() : exit())
+
         useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(
           target,
           'enterpictureinpicture',

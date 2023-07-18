@@ -1,8 +1,8 @@
-import { readonly, ref, type Ref } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, type Ref, toValue, watch } from 'vue'
 import { useEventListener } from '.'
 
 const usePointerLock = (
-  target: HTMLElement = document.documentElement,
+  target: MaybeRefOrGetter<HTMLElement | null> = document.documentElement,
   options?: {
     unadjustedMovement: boolean
   },
@@ -16,13 +16,13 @@ const usePointerLock = (
 } => {
   const isSupported = 'pointerLockElement' in document && 'requestPointerLock' in Element.prototype && 'exitPointerLock' in document
 
-  const isPointerLock = ref(document.pointerLockElement === target)
+  const isPointerLock = ref(document.pointerLockElement === toValue(target))
 
   const lock = (): void => {
     if (!isSupported) return
 
     // @ts-expect-error 尚未支持的函数参数
-    target.requestPointerLock(options)
+    toValue(target)?.requestPointerLock(options)
 
     isPointerLock.value = true
   }
@@ -40,11 +40,23 @@ const usePointerLock = (
   }
 
   if (isSupported) {
+    watch(
+      () => toValue(target),
+      (target) => {
+        if (target === null) return
+
+        isPointerLock.value ? lock() : unlock()
+      },
+      {
+        immediate: true,
+      }
+    )
+
     useEventListener(
       document,
       'pointerlockchange',
       () => {
-        isPointerLock.value = document.pointerLockElement === target
+        isPointerLock.value = document.pointerLockElement === toValue(target)
       },
       {
         passive: true,
