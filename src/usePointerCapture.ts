@@ -1,11 +1,11 @@
-import { ref, type Ref, watch } from 'vue'
+import { readonly, ref, type Ref } from 'vue'
 
 const usePointerCapture = (
   target: HTMLElement = document.documentElement,
   id: number
 ): {
   isSupported: boolean
-  isPointerCapture: Ref<boolean>
+  isPointerCapture: Readonly<Ref<boolean>>
   set: () => void
   release: () => void
   toggle: () => void
@@ -30,15 +30,9 @@ const usePointerCapture = (
     isPointerCapture.value ? release() : set()
   }
 
-  if (isSupported) {
-    watch(isPointerCapture, (isPointerCapture) => {
-      isPointerCapture ? set() : release()
-    })
-  }
-
   return {
     isSupported,
-    isPointerCapture,
+    isPointerCapture: readonly(isPointerCapture),
     set,
     release,
     toggle,

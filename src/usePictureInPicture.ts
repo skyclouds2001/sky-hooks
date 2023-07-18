@@ -1,11 +1,11 @@
-import { type MaybeRefOrGetter, ref, type Ref, shallowReadonly, toValue, watch } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, type Ref, shallowReadonly, toValue, watch } from 'vue'
 import { useEventListener } from '.'
 
 const usePictureInPicture = (
   target: MaybeRefOrGetter<HTMLVideoElement | null>
 ): {
   isSupported: boolean
-  isPictureInPicture: Ref<boolean>
+  isPictureInPicture: Readonly<Ref<boolean>>
   pictureInPictureWindow: Readonly<Ref<PictureInPictureWindow | null>>
   enter: () => Promise<void>
   exit: () => Promise<void>
@@ -40,10 +40,6 @@ const usePictureInPicture = (
   }
 
   if (isSupported) {
-    watch(isPictureInPicture, (isPictureInPicture) => {
-      void (isPictureInPicture ? enter() : exit())
-    })
-
     watch(
       () => toValue(target),
       (target) => {
@@ -79,7 +75,7 @@ const usePictureInPicture = (
 
   return {
     isSupported,
-    isPictureInPicture,
+    isPictureInPicture: readonly(isPictureInPicture),
     pictureInPictureWindow: shallowReadonly(pictureInPictureWindow),
     enter,
     exit,
