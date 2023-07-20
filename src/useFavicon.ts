@@ -1,7 +1,7 @@
 import { ref, type Ref, watch } from 'vue'
 
 const useFavicon = (initial?: string): Ref<string | null> => {
-  const favicon = ref<string | null>(initial ?? '')
+  const favicon = ref<string | null>(initial ?? null)
 
   watch(
     favicon,
