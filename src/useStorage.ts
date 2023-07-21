@@ -106,8 +106,13 @@ const useStorage = <T extends number | string | boolean | object | null>(
     },
     {
       deep,
+      immediate: true,
     }
   )
+
+  if (initial !== undefined && data.value === null) {
+    data.value = initial
+  }
 
   if (watchChange) {
     useEventListener(
@@ -122,10 +127,6 @@ const useStorage = <T extends number | string | boolean | object | null>(
         passive: true,
       }
     )
-  }
-
-  if (initial !== undefined) {
-    data.value = initial
   }
 
   return data
