@@ -17,7 +17,7 @@ const stringify = <T extends StorageDataType>(data: T): string => {
       val = JSON.stringify(data)
       break
     case 'map':
-      val = JSON.stringify(Array.from(data as Map<any, any>).entries())
+      val = JSON.stringify(Array.from((data as Map<any, any>).entries()))
       break
     case 'set':
       val = JSON.stringify(Array.from(data as Set<any>))
