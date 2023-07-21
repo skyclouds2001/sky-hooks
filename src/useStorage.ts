@@ -101,7 +101,7 @@ const useStorage = <T extends number | string | boolean | object | null>(
       if (value === null) {
         storage.removeItem(storageKey)
       } else {
-        storage.setItem(storageKey, stringify<T>(value as T))
+        storage.setItem(storageKey, stringify<T>(value))
       }
     },
     {
