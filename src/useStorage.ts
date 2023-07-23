@@ -17,7 +17,7 @@ const stringify = <T extends StorageDataType>(data: T): string => {
       val = JSON.stringify(data)
       break
     case 'map':
-      val = JSON.stringify(Array.from(data as Map<any, any>).entries())
+      val = JSON.stringify(Array.from((data as Map<any, any>).entries()))
       break
     case 'set':
       val = JSON.stringify(Array.from(data as Set<any>))
@@ -89,7 +89,7 @@ const useStorage = <T extends number | string | boolean | object | null>(
 ): Ref<T | null> | ShallowRef<T | null> => {
   const { storage = window.localStorage, prefix = true, shallow = false, deep = true, watchChange = true, initial } = options
 
-  const storageKey = `${typeof prefix === 'string' ? prefix : 'shooks'}-${key}`
+  const storageKey = prefix === false ? key : `${typeof prefix === 'string' ? prefix : 'shooks'}-${key}`
 
   const storeValue = storage.getItem(storageKey)
 
@@ -101,13 +101,18 @@ const useStorage = <T extends number | string | boolean | object | null>(
       if (value === null) {
         storage.removeItem(storageKey)
       } else {
-        storage.setItem(storageKey, stringify<T>(value as T))
+        storage.setItem(storageKey, stringify<T>(value))
       }
     },
     {
       deep,
+      immediate: true,
     }
   )
+
+  if (initial !== undefined && data.value === null) {
+    data.value = initial
+  }
 
   if (watchChange) {
     useEventListener(
@@ -122,10 +127,6 @@ const useStorage = <T extends number | string | boolean | object | null>(
         passive: true,
       }
     )
-  }
-
-  if (initial !== undefined) {
-    data.value = initial
   }
 
   return data
