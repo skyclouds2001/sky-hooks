@@ -44,10 +44,6 @@ const useMouse = (
     }
   }
 
-  useEventListener(target, 'mousemove', handleMouseMove, {
-    passive: true,
-  })
-
   const handleMouseDown = (): void => {
     pressed.value = true
   }
@@ -55,6 +51,10 @@ const useMouse = (
   const handleMouseUp = (): void => {
     pressed.value = false
   }
+
+  useEventListener(target, 'mousemove', handleMouseMove, {
+    passive: true,
+  })
 
   useEventListener(target, 'mousedown', handleMouseDown, {
     passive: true,
