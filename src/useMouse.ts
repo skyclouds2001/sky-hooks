@@ -8,9 +8,9 @@ const useMouse = (
     passive?: boolean
   } = {}
 ): {
-  x: Ref<number>
-  y: Ref<number>
-  pressed: Ref<boolean>
+  x: Readonly<Ref<number>>
+  y: Readonly<Ref<number>>
+  pressed: Readonly<Ref<boolean>>
 } => {
   const { target = window, type = 'client', passive = true } = options
 
