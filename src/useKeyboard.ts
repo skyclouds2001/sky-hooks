@@ -32,6 +32,7 @@ const useKeyboard = (
   const proxy = new Proxy(keys, {
     get: (target, prop, receiver) => {
       if (prop in aliases && typeof prop === 'string') {
+        // eslint-disable-next-line security/detect-object-injection
         prop = aliases[prop]
       }
 
@@ -65,7 +66,9 @@ const useKeyboard = (
       updateKeys(e, true)
       onEventFired?.(e)
     },
-    { passive }
+    {
+      passive,
+    }
   )
 
   useEventListener(
@@ -75,7 +78,9 @@ const useKeyboard = (
       updateKeys(e, false)
       onEventFired?.(e)
     },
-    { passive }
+    {
+      passive,
+    }
   )
 
   const reset = (): void => {
@@ -86,9 +91,13 @@ const useKeyboard = (
     })
   }
 
-  useEventListener(window, 'focus', reset, { passive: true })
+  useEventListener(window, 'focus', reset, {
+    passive: true,
+  })
 
-  useEventListener(window, 'blur', reset, { passive: true })
+  useEventListener(window, 'blur', reset, {
+    passive: true,
+  })
 
   return proxy
 }

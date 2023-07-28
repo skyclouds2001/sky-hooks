@@ -18,52 +18,61 @@ const useMouse = (
   const y = ref(0)
   const pressed = ref(false)
 
-  const handleMouseMove = (e: MouseEvent): void => {
-    if (typeof type === 'function') {
-      const pos = type(e)
-      x.value = pos[0]
-      y.value = pos[1]
-    } else {
-      switch (type) {
-        case 'client':
-          x.value = e.clientX
-          y.value = e.clientY
-          break
-        case 'offset':
-          x.value = e.offsetX
-          y.value = e.offsetY
-          break
-        case 'page':
-          x.value = e.pageX
-          y.value = e.pageY
-          break
-        case 'screen':
-          x.value = e.screenX
-          y.value = e.screenY
-          break
+  useEventListener(
+    target,
+    'mousemove',
+    (e: MouseEvent) => {
+      if (typeof type === 'function') {
+        const pos = type(e)
+        x.value = pos[0]
+        y.value = pos[1]
+      } else {
+        switch (type) {
+          case 'client':
+            x.value = e.clientX
+            y.value = e.clientY
+            break
+          case 'offset':
+            x.value = e.offsetX
+            y.value = e.offsetY
+            break
+          case 'page':
+            x.value = e.pageX
+            y.value = e.pageY
+            break
+          case 'screen':
+            x.value = e.screenX
+            y.value = e.screenY
+            break
+        }
       }
+    },
+    {
+      passive,
     }
-  }
+  )
 
-  const handleMouseDown = (): void => {
-    pressed.value = true
-  }
+  useEventListener(
+    target,
+    'mousedown',
+    () => {
+      pressed.value = true
+    },
+    {
+      passive,
+    }
+  )
 
-  const handleMouseUp = (): void => {
-    pressed.value = false
-  }
-
-  useEventListener(target, 'mousemove', handleMouseMove, {
-    passive,
-  })
-
-  useEventListener(target, 'mousedown', handleMouseDown, {
-    passive,
-  })
-
-  useEventListener(target, 'mouseup', handleMouseUp, {
-    passive,
-  })
+  useEventListener(
+    target,
+    'mouseup',
+    () => {
+      pressed.value = false
+    },
+    {
+      passive,
+    }
+  )
 
   return {
     x,
