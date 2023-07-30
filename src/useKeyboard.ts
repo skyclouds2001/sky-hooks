@@ -12,24 +12,27 @@ const DefaultAliasMap = {
   right: 'arrowright',
 }
 
+const current = Symbol('current')
+
 const useKeyboard = (
   options: {
     aliasMap?: Record<string, string>
     passive?: boolean
     onEventFired?: (e: KeyboardEvent) => void
   } = {}
-): Readonly<Record<string, Readonly<Ref<boolean>>> & { current: ReadonlySet<string> }> => {
+): Readonly<Record<string, Readonly<Ref<boolean>>> & { [current]: ReadonlySet<string> }> => {
   const { aliasMap = {}, passive = true, onEventFired } = options
 
   const aliases = Object.assign({}, aliasMap, DefaultAliasMap)
 
-  const keys: Record<string, Ref<boolean>> & { current: Set<string> } = {
-    current: reactive(new Set()),
+  const keys: Record<string, Ref<boolean>> & { [current]: Set<string> } = {
+    [current]: reactive(new Set()),
   }
 
   const proxy = new Proxy(keys, {
     get: (target, prop, receiver) => {
       if (prop in aliases && typeof prop === 'string') {
+        // eslint-disable-next-line security/detect-object-injection
         prop = aliases[prop]
       }
 
@@ -48,9 +51,11 @@ const useKeyboard = (
     }
 
     if (mode) {
-      keys.current.add(e.key)
+      // eslint-disable-next-line security/detect-object-injection
+      keys[current].add(e.key)
     } else {
-      keys.current.delete(e.key)
+      // eslint-disable-next-line security/detect-object-injection
+      keys[current].delete(e.key)
     }
   }
 
@@ -61,7 +66,9 @@ const useKeyboard = (
       updateKeys(e, true)
       onEventFired?.(e)
     },
-    { passive }
+    {
+      passive,
+    }
   )
 
   useEventListener(
@@ -71,21 +78,26 @@ const useKeyboard = (
       updateKeys(e, false)
       onEventFired?.(e)
     },
-    { passive }
+    {
+      passive,
+    }
   )
 
   const reset = (): void => {
-    keys.current.clear()
-    Object.entries(keys).forEach(([key, value]) => {
-      if (key !== 'current') {
-        ;(value as Ref<boolean>).value = false
-      }
+    // eslint-disable-next-line security/detect-object-injection
+    keys[current].clear()
+    Object.entries(keys).forEach(([_, value]) => {
+      value.value = false
     })
   }
 
-  useEventListener(window, 'focus', reset, { passive: true })
+  useEventListener(window, 'focus', reset, {
+    passive: true,
+  })
 
-  useEventListener(window, 'blur', reset, { passive: true })
+  useEventListener(window, 'blur', reset, {
+    passive: true,
+  })
 
   return proxy
 }
