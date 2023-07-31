@@ -146,6 +146,8 @@ export { default as useUserMedia } from './useUserMedia'
 
 export { default as useVibrate } from './useVibrate'
 
+export { default as useVirtualKeyboard } from './useVirtualKeyboard'
+
 export { default as useWakeLock } from './useWakeLock'
 
 export { default as useWebSocket } from './useWebSocket'
