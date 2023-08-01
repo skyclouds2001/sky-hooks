@@ -1,10 +1,10 @@
-import { ref, type Ref } from 'vue'
+import { readonly, ref, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 const useVirtualKeyboard = (): {
   isSupported: boolean
-  visible: Ref<boolean>
-  rect: Ref<DOMRect>
+  visible: Readonly<Ref<boolean>>
+  rect: Readonly<Ref<DOMRect>>
   hide: () => void
   show: () => void
 } => {
@@ -29,15 +29,22 @@ const useVirtualKeyboard = (): {
   }
 
   if (isSupported) {
-    useEventListener(navigator.virtualKeyboard, 'geometrychange', () => {
-      rect.value = navigator.virtualKeyboard.boundingRect
-    })
+    useEventListener(
+      navigator.virtualKeyboard,
+      'geometrychange',
+      () => {
+        rect.value = navigator.virtualKeyboard.boundingRect
+      },
+      {
+        passive: true,
+      }
+    )
   }
 
   return {
     isSupported,
-    visible,
-    rect,
+    visible: readonly(visible),
+    rect: readonly(rect),
     hide,
     show,
   }
