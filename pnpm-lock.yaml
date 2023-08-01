@@ -1366,7 +1366,7 @@ packages:
       babel-plugin-polyfill-corejs2: 0.4.4(@babel/core@7.22.8)
       babel-plugin-polyfill-corejs3: 0.8.2(@babel/core@7.22.8)
       babel-plugin-polyfill-regenerator: 0.5.1(@babel/core@7.22.8)
-      core-js-compat: 3.31.0
+      core-js-compat: 3.32.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3014,7 +3014,7 @@ packages:
     dependencies:
       '@babel/core': 7.22.8
       '@babel/helper-define-polyfill-provider': 0.4.1(@babel/core@7.22.8)
-      core-js-compat: 3.31.0
+      core-js-compat: 3.32.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3456,8 +3456,8 @@ packages:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
     dev: true
 
-  /core-js-compat@3.31.0:
-    resolution: {integrity: sha512-hM7YCu1cU6Opx7MXNu0NuumM0ezNeAeRKadixyiQELWY3vT3De9S4J5ZBMraWV2vZnrE1Cirl0GtFtDtMUXzPw==}
+  /core-js-compat@3.32.0:
+    resolution: {integrity: sha512-7a9a3D1k4UCVKnLhrgALyFcP7YCsLOQIxPd0dKjf/6GuPcgyiGP70ewWdCGrSK7evyhymi0qO4EqCmSJofDeYw==}
     dependencies:
       browserslist: 4.21.9
     dev: true
