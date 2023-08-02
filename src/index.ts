@@ -36,6 +36,8 @@ export { default as useCssVariable } from './useCssVariable'
 
 export { default as useDebounce } from './useDebounce'
 
+export { default as useDevicePixelRatio } from './useDevicePixelRatio'
+
 export { default as useDevicesList } from './useDevicesList'
 
 export { default as useDisplayMedia } from './useDisplayMedia'
@@ -145,6 +147,8 @@ export { default as useToggle } from './useToggle'
 export { default as useUserMedia } from './useUserMedia'
 
 export { default as useVibrate } from './useVibrate'
+
+export { default as useVirtualKeyboard } from './useVirtualKeyboard'
 
 export { default as useWakeLock } from './useWakeLock'
 

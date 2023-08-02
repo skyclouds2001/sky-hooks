@@ -10,7 +10,7 @@ const useToggle = <const T = true, const F = false>(
   value: Readonly<Ref<T | F>>
   toggle: (val?: T | F) => void
 } => {
-  const { truthy = true, falsy = false, initial = falsy } = options
+  const { truthy = true as MaybeRefOrGetter<T>, falsy = false as MaybeRefOrGetter<F>, initial = falsy } = options
 
   const value = ref(initial) as Ref<T | F>
 
@@ -18,7 +18,7 @@ const useToggle = <const T = true, const F = false>(
     if (val !== undefined) {
       value.value = val
     } else {
-      value.value = value.value === toValue(truthy) ? (toValue(falsy) as F) : (toValue(truthy) as T)
+      value.value = value.value === toValue(truthy) ? toValue(falsy) : toValue(truthy)
     }
   }
 

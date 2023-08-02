@@ -13,12 +13,12 @@ function useEventListener<E extends string>(target: EventTarget, event: E, liste
 function useEventListener<T extends EventTarget, M extends Record<string, any>, E extends keyof M>(target: T, event: E, listener: (this: T, e: M[E]) => void, options?: UseEventListenerOptions): () => void
 
 /**
- * 自动在组件绑定时注册事件回调并在组件卸载时移除事件回调方法
- * @param target 事件目标对象
- * @param event 事件名称
- * @param listener 事件回调方法
- * @param options 事件选项
- * @returns 取消事件监听方法
+ * auto bind event listener when mounted and unbind when unmounted or disposed or if controlled
+ * @param target event target
+ * @param event event name
+ * @param listener event listener callback
+ * @param options event listener options
+ * @returns cancel event listener
  */
 function useEventListener(target: EventTarget, event: string, listener: (this: EventTarget, e: Event) => void, options?: UseEventListenerOptions): () => void {
   target.addEventListener(event, listener, options)

@@ -6,19 +6,10 @@ const useOnline = (): {
   onlineAt: Readonly<Ref<number | undefined>>
   offlineAt: Readonly<Ref<number | undefined>>
 } => {
-  /**
-   * 网络状态
-   */
   const isOnline = ref(window.navigator.onLine)
 
-  /**
-   * 网络连接时间
-   */
   const onlineAt = ref(isOnline.value ? Date.now() : undefined)
 
-  /**
-   * 网络断开时间
-   */
   const offlineAt = ref(isOnline.value ? undefined : Date.now())
 
   useEventListener(

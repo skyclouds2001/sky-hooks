@@ -5,14 +5,8 @@ const useBattery = (): {
   isSupported: boolean
   battery: Readonly<Partial<BatteryManager>>
 } => {
-  /**
-   * 是否支持电池API
-   */
   const isSupported = 'getBattery' in navigator
 
-  /**
-   * 电池信息
-   */
   const battery = reactive<Partial<BatteryManager>>({
     charging: false,
     chargingTime: 0,
@@ -20,10 +14,6 @@ const useBattery = (): {
     level: 100,
   })
 
-  /**
-   * 更新电池信息方法
-   * @param batteryManager 电池信息管理器
-   */
   const updateBatteryInfo = (batteryManager: BatteryManager): void => {
     battery.charging = batteryManager.charging
     battery.chargingTime = batteryManager.chargingTime
