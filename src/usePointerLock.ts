@@ -21,7 +21,7 @@ const usePointerLock = (
   const lock = (): void => {
     if (!isSupported) return
 
-    // @ts-expect-error 尚未支持的函数参数
+    // @ts-expect-error unsupported function param
     toValue(target)?.requestPointerLock(options)
 
     isPointerLock.value = true

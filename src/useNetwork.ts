@@ -12,14 +12,8 @@ const useNetwork = (): {
     downlinkMax: number | null
   }>
 } => {
-  /**
-   * 标记 Navigator.connection 是否支持
-   */
   const isSupported = 'connection' in navigator
 
-  /**
-   * 网络连接状态对象
-   */
   const connection = reactive<{
     downlink: number | null
     effectiveType: NetworkEffectiveType | null
@@ -36,10 +30,6 @@ const useNetwork = (): {
     saveData: null,
   })
 
-  /**
-   * 更新网络连接状态
-   * @param information 网络连接对象
-   */
   const updateNetworkInformation = (information: NetworkInformation): void => {
     connection.downlink = information.downlink
     connection.downlinkMax = information.downlinkMax
