@@ -18,6 +18,8 @@ export { default as useAnimationFrame } from './useAnimationFrame'
 
 export { default as useAppBadge } from './useAppBadge'
 
+export { default as useBase64 } from './useBase64'
+
 export { default as useBattery } from './useBattery'
 
 export { default as useBluetooth } from './useBluetooth'
