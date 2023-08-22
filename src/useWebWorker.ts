@@ -1,7 +1,7 @@
 import { ref, type Ref, shallowRef, type ShallowRef } from 'vue'
 import { tryOnScopeDispose } from '.'
 
-const useWebWorker = <D>(
+const useWebWorker = <D = any>(
   source: string,
   options: WorkerOptions
 ): {
