@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, ref, type Ref, watch, toValue } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, type Ref, watch, toValue } from 'vue'
 import useEventListener from './useEventListener'
 
 enum MediaType {
@@ -24,17 +24,17 @@ enum NetworkState {
 
 const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>): {
   element: HTMLMediaElement | null | undefined
-  type: Ref<MediaType>
-  readyState: Ref<ReadyState>
-  networkState: Ref<NetworkState>
-  playing: Ref<boolean>
-  pausing: Ref<boolean>
+  type: Readonly<Ref<MediaType>>
+  readyState: Readonly<Ref<ReadyState>>
+  networkState: Readonly<Ref<NetworkState>>
+  playing: Readonly<Ref<boolean>>
+  pausing: Readonly<Ref<boolean>>
   play: () => Promise<void>
   pause: () => Promise<void>
   volume: Ref<number>
   muted: Ref<boolean>
   rate: Ref<number>
-  duration: Ref<number>
+  duration: Readonly<Ref<number>>
 } => {
   const element = toValue(target)
 
@@ -105,6 +105,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
       } else {
         type.value = MediaType.UNKNOWN
       }
+      readyState.value = target.readyState
+      networkState.value = target.networkState
 
       playing.value = !target.paused
       pausing.value = target.paused
@@ -112,8 +114,6 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
       muted.value = target.muted
       rate.value = target.playbackRate
       duration.value = target.duration
-      readyState.value = target.readyState
-      networkState.value = target.networkState
 
       if (playing.value) {
         target.play()
@@ -211,17 +211,17 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
 
   return {
     element,
-    type,
-    playing,
-    pausing,
+    type: readonly(type),
+    readyState: readonly(readyState),
+    networkState: readonly(networkState),
+    playing: readonly(playing),
+    pausing: readonly(pausing),
     play,
     pause,
     volume,
     muted,
     rate,
-    duration,
-    readyState,
-    networkState,
+    duration: readonly(duration),
   }
 }
 
