@@ -7,16 +7,13 @@ enum MediaType {
   VIDEO = 'video',
 }
 
-// todo https://github.com/vueuse/vueuse/blob/main/packages/core/useMediaControls/index.ts
 const useMedia = (target: MaybeRefOrGetter<HTMLMediaElement | null | undefined>): any => {
   const element = toValue(target)
 
   const mediaType = ref(MediaType.UNKNOWN)
 
-  // todo
   const readyState = ref<HTMLMediaElement['HAVE_NOTHING' | 'HAVE_METADATA' | 'HAVE_CURRENT_DATA' | 'HAVE_FUTURE_DATA' | 'HAVE_ENOUGH_DATA']>(HTMLMediaElement.HAVE_NOTHING)
 
-  // todo
   const networkState = ref<HTMLMediaElement['NETWORK_EMPTY' | 'NETWORK_IDLE' | 'NETWORK_LOADING' | 'NETWORK_NO_SOURCE']>(HTMLMediaElement.NETWORK_EMPTY)
 
   const playing = ref(false)
