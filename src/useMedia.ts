@@ -22,9 +22,11 @@ enum NetworkState {
   NETWORK_NO_SOURCE = HTMLMediaElement.NETWORK_NO_SOURCE,
 }
 
-const useMedia = (target: MaybeRefOrGetter<HTMLMediaElement | null | undefined>): {
+const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>): {
   element: HTMLMediaElement | null | undefined
   type: Ref<MediaType>
+  readyState: Ref<ReadyState>
+  networkState: Ref<NetworkState>
   playing: Ref<boolean>
   pausing: Ref<boolean>
   play: () => Promise<void>
@@ -33,12 +35,14 @@ const useMedia = (target: MaybeRefOrGetter<HTMLMediaElement | null | undefined>)
   muted: Ref<boolean>
   rate: Ref<number>
   duration: Ref<number>
-  readyState: Ref<ReadyState>
-  networkState: Ref<NetworkState>
 } => {
   const element = toValue(target)
 
   const type = ref(MediaType.UNKNOWN)
+
+  const readyState = ref<ReadyState>(ReadyState.HAVE_NOTHING)
+
+  const networkState = ref<NetworkState>(NetworkState.NETWORK_EMPTY)
 
   const playing = ref(false)
 
@@ -59,10 +63,6 @@ const useMedia = (target: MaybeRefOrGetter<HTMLMediaElement | null | undefined>)
   const rate = ref(1.0)
 
   const duration = ref(NaN)
-
-  const readyState = ref<ReadyState>(ReadyState.HAVE_NOTHING)
-
-  const networkState = ref<NetworkState>(NetworkState.NETWORK_EMPTY)
 
   watch(volume, (volume) => {
     if (element != null) {
