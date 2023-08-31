@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, watch, toValue } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, type Ref, watch, toValue, shallowReadonly } from 'vue'
 import useEventListener from './useEventListener'
 
 enum MediaType {
@@ -23,7 +23,7 @@ enum NetworkState {
 }
 
 const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>): {
-  element: HTMLMediaElement | null | undefined
+  element: Readonly<MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>>
   type: Readonly<Ref<MediaType>>
   readyState: Readonly<Ref<ReadyState>>
   networkState: Readonly<Ref<NetworkState>>
@@ -35,9 +35,10 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
   muted: Ref<boolean>
   rate: Ref<number>
   duration: Readonly<Ref<number>>
+  currentTime: Ref<number>
+  seeking: Readonly<Ref<boolean>>
+  waiting: Readonly<Ref<boolean>>
 } => {
-  const element = toValue(target)
-
   const type = ref(MediaType.UNKNOWN)
 
   const readyState = ref<ReadyState>(ReadyState.HAVE_NOTHING)
@@ -64,21 +65,37 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
 
   const duration = ref(NaN)
 
+  const currentTime = ref(0)
+
+  const seeking = ref(false)
+
+  const waiting = ref(false)
+
   watch(volume, (volume) => {
-    if (element != null) {
-      element.volume = volume
+    const el = toValue(target)
+    if (el != null) {
+      el.volume = volume
     }
   })
 
   watch(muted, (muted) => {
-    if (element != null) {
-      element.muted = muted
+    const el = toValue(target)
+    if (el != null) {
+      el.muted = muted
     }
   })
 
   watch(rate, (rate) => {
-    if (element != null) {
-      element.playbackRate = rate
+    const el = toValue(target)
+    if (el != null) {
+      el.playbackRate = rate
+    }
+  })
+
+  watch(currentTime, (currentTime) => {
+    const el = toValue(target)
+    if (el != null) {
+      el.currentTime = Math.max(Math.min(currentTime, duration.value), 0)
     }
   })
 
@@ -87,14 +104,17 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
     (target) => {
       if (target == null) {
         type.value = MediaType.UNKNOWN
+        readyState.value = ReadyState.HAVE_NOTHING
+        networkState.value = NetworkState.NETWORK_EMPTY
         playing.value = false
         pausing.value = true
         volume.value = 1.0
         muted.value = false
         rate.value = 1.0
         duration.value = NaN
-        readyState.value = ReadyState.HAVE_NOTHING
-        networkState.value = NetworkState.NETWORK_EMPTY
+        currentTime.value = 0
+        seeking.value = false
+        waiting.value = false
         return
       }
 
@@ -114,6 +134,9 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
       muted.value = target.muted
       rate.value = target.playbackRate
       duration.value = target.duration
+      currentTime.value = target.currentTime
+      seeking.value = target.seeking
+      waiting.value = false
 
       if (playing.value) {
         target.play()
@@ -152,6 +175,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         () => {
           playing.value = !target.paused
           pausing.value = target.paused
+          waiting.value = false
         },
         {
           passive: true,
@@ -164,6 +188,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         () => {
           playing.value = !target.paused
           pausing.value = target.paused
+          waiting.value = true
         },
         {
           passive: true,
@@ -203,6 +228,39 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
           passive: true,
         },
       )
+
+      useEventListener(
+        target,
+        'timeupdate',
+        () => {
+          currentTime.value = target.currentTime
+        },
+        {
+          passive: true,
+        },
+      )
+
+      useEventListener(
+        target,
+        'seeking',
+        () => {
+          seeking.value = target.seeking
+        },
+        {
+          passive: true,
+        },
+      )
+
+      useEventListener(
+        target,
+        'seeked',
+        () => {
+          seeking.value = target.seeking
+        },
+        {
+          passive: true,
+        },
+      )
     },
     {
       immediate: true,
@@ -210,7 +268,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
   )
 
   return {
-    element,
+    element: target,
     type: readonly(type),
     readyState: readonly(readyState),
     networkState: readonly(networkState),
@@ -222,6 +280,9 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
     muted,
     rate,
     duration: readonly(duration),
+    currentTime,
+    seeking: readonly(seeking),
+    waiting: readonly(waiting),
   }
 }
 
