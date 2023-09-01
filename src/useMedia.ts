@@ -2,7 +2,7 @@ import { type MaybeRefOrGetter, readonly, ref, type Ref, watch, toValue, shallow
 import useEventListener from './useEventListener'
 
 enum MediaType {
-  UNKNOWN = 'unknown',
+  MEDIA = 'media',
   AUDIO = 'audio',
   VIDEO = 'video',
 }
@@ -22,6 +22,17 @@ enum NetworkState {
   NETWORK_NO_SOURCE = HTMLMediaElement.NETWORK_NO_SOURCE,
 }
 
+const transformTimeRanges = (timeRanges: TimeRanges) => {
+  const len = timeRanges.length
+
+  const ranges = Array<number>(len * 2)
+  for (let i = 0; i < len; ++i) {
+    ranges[i * 2 + 0] = timeRanges.start(i)
+    ranges[i * 2 + 1] = timeRanges.end(i)
+  }
+  return ranges
+}
+
 const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>): {
   element: Readonly<MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>>
   type: Readonly<Ref<MediaType>>
@@ -38,8 +49,9 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
   currentTime: Ref<number>
   seeking: Readonly<Ref<boolean>>
   waiting: Readonly<Ref<boolean>>
+  buffered: Readonly<Ref<readonly number[]>>
 } => {
-  const type = ref(MediaType.UNKNOWN)
+  const type = ref(MediaType.MEDIA)
 
   const readyState = ref<ReadyState>(ReadyState.HAVE_NOTHING)
 
@@ -70,6 +82,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
   const seeking = ref(false)
 
   const waiting = ref(false)
+
+  const buffered = ref<number[]>([])
 
   watch(volume, (volume) => {
     const el = toValue(target)
@@ -103,9 +117,11 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
     () => toValue(target),
     (target) => {
       if (target == null) {
-        type.value = MediaType.UNKNOWN
+        type.value = MediaType.MEDIA
+
         readyState.value = ReadyState.HAVE_NOTHING
         networkState.value = NetworkState.NETWORK_EMPTY
+
         playing.value = false
         pausing.value = true
         volume.value = 1.0
@@ -115,6 +131,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         currentTime.value = 0
         seeking.value = false
         waiting.value = false
+        buffered.value = []
         return
       }
 
@@ -123,8 +140,9 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
       } else if (target instanceof HTMLVideoElement) {
         type.value = MediaType.VIDEO
       } else {
-        type.value = MediaType.UNKNOWN
+        type.value = MediaType.MEDIA
       }
+
       readyState.value = target.readyState
       networkState.value = target.networkState
 
@@ -137,13 +155,33 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
       currentTime.value = target.currentTime
       seeking.value = target.seeking
       waiting.value = false
+      buffered.value = transformTimeRanges(target.buffered)
 
-      if (playing.value) {
-        target.play()
-      }
-      if (pausing.value) {
-        target.pause()
-      }
+      useEventListener(
+        target,
+        'loadstart',
+        () => {
+          playing.value = !target.paused
+          pausing.value = target.paused
+          waiting.value = false
+        },
+        {
+          passive: true,
+        },
+      )
+
+      useEventListener(
+        target,
+        'loadeddata',
+        () => {
+          playing.value = !target.paused
+          pausing.value = target.paused
+          waiting.value = true
+        },
+        {
+          passive: true,
+        },
+      )
 
       useEventListener(
         target,
@@ -261,6 +299,17 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
           passive: true,
         },
       )
+
+      useEventListener(
+        target,
+        'progress',
+        () => {
+          buffered.value = transformTimeRanges(target.buffered)
+        },
+        {
+          passive: true,
+        },
+      )
     },
     {
       immediate: true,
@@ -283,6 +332,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
     currentTime,
     seeking: readonly(seeking),
     waiting: readonly(waiting),
+    buffered: readonly(buffered),
   }
 }
 
