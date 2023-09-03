@@ -1,6 +1,6 @@
 import { type MaybeRefOrGetter, ref, type Ref, watch, toValue } from 'vue'
 
-const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | Array<unknown> | Blob | File | ArrayBuffer | HTMLImageElement | HTMLCanvasElement>): Ref<string> => {
+const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[] | Blob | File | ArrayBuffer | HTMLImageElement | HTMLCanvasElement>): Ref<string> => {
   const base64 = ref('')
 
   const encoder = new TextEncoder()

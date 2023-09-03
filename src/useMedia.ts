@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, watch, toValue, shallowReadonly } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, type Ref, watch, toValue } from 'vue'
 import useEventListener from './useEventListener'
 
 enum MediaType {
@@ -22,7 +22,7 @@ enum NetworkState {
   NETWORK_NO_SOURCE = HTMLMediaElement.NETWORK_NO_SOURCE,
 }
 
-const transformTimeRanges = (timeRanges: TimeRanges) => {
+const transformTimeRanges = (timeRanges: TimeRanges): number[] => {
   const len = timeRanges.length
 
   const ranges = Array<number>(len * 2)
@@ -33,7 +33,9 @@ const transformTimeRanges = (timeRanges: TimeRanges) => {
   return ranges
 }
 
-const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>): {
+const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
+  target: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>
+): {
   element: Readonly<MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>>
   type: Readonly<Ref<MediaType>>
   readyState: Readonly<Ref<ReadyState>>
@@ -62,7 +64,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
   const pausing = ref(true)
 
   const play = async (): Promise<void> => {
-    return toValue(target)?.play()
+    return await toValue(target)?.play()
   }
 
   const pause = async (): Promise<void> => {
@@ -167,7 +169,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -180,7 +182,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -192,7 +194,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -204,7 +206,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -217,7 +219,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -230,7 +232,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -242,7 +244,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -253,7 +255,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -264,7 +266,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -275,7 +277,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -286,7 +288,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -297,7 +299,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
 
       useEventListener(
@@ -308,7 +310,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(target: MaybeRe
         },
         {
           passive: true,
-        },
+        }
       )
     },
     {
