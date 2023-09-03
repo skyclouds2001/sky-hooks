@@ -42,6 +42,7 @@ const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[
             canvas.height = img.height
             context.drawImage(img, 0, 0, canvas.width, canvas.height)
             base64.value = canvas.toDataURL()
+            context.clearRect(0, 0, canvas.width, canvas.height)
           } catch {
             base64.value = ''
           }
@@ -51,7 +52,7 @@ const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[
         }
       } else if (target instanceof HTMLCanvasElement) {
         try {
-          base64.value = canvas.toDataURL()
+          base64.value = target.toDataURL()
         } catch {
           base64.value = ''
         }
