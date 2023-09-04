@@ -18,6 +18,8 @@ export { default as useAnimationFrame } from './useAnimationFrame'
 
 export { default as useAppBadge } from './useAppBadge'
 
+export { default as useBase64 } from './useBase64'
+
 export { default as useBattery } from './useBattery'
 
 export { default as useBluetooth } from './useBluetooth'
@@ -83,6 +85,8 @@ export { default as useKeyboardLock } from './useKeyboardLock'
 export { default as useLocalStorage } from './useLocalStorage'
 
 export { default as useLocation } from './useLocation'
+
+export { default as useMedia } from './useMedia'
 
 export { default as useMediaQuery } from './useMediaQuery'
 

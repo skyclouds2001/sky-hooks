@@ -1,31 +1,36 @@
 import { ref, type Ref, shallowRef, type ShallowRef } from 'vue'
 import { tryOnScopeDispose } from '.'
 
-const useWebWorker = <D = any>(
+const useSharedWorker = <D = any>(
   source: string | URL,
-  options: WorkerOptions
+  options: string | WorkerOptions
 ): {
-  worker: ShallowRef<Worker | null>
+  worker: ShallowRef<SharedWorker | null>
   data: Ref<D | null>
   error: ShallowRef<Error | null>
   postMessage: (message: D) => void
-  terminate: () => void
+  start: () => void
+  close: () => void
 } => {
-  const worker = shallowRef<Worker>(new window.Worker(source, options))
+  const worker = shallowRef<SharedWorker>(new window.SharedWorker(source, options))
 
   const data: Ref<D | null> = ref(null)
 
   const error = shallowRef<Error | null>(null)
 
   const postMessage = (message: D): void => {
-    worker.value?.postMessage(message)
+    worker.value?.port.postMessage(message)
   }
 
-  const terminate = (): void => {
-    worker.value?.terminate()
+  const start = (): void => {
+    worker.value?.port.start()
   }
 
-  worker.value?.addEventListener(
+  const close = (): void => {
+    worker.value?.port.close()
+  }
+
+  worker.value?.port.addEventListener(
     'message',
     (e) => {
       data.value = e.data
@@ -46,7 +51,7 @@ const useWebWorker = <D = any>(
   )
 
   tryOnScopeDispose(() => {
-    worker.value?.terminate()
+    worker.value?.port.close()
   })
 
   return {
@@ -54,8 +59,9 @@ const useWebWorker = <D = any>(
     data,
     error,
     postMessage,
-    terminate,
+    start,
+    close,
   }
 }
 
-export default useWebWorker
+export default useSharedWorker
