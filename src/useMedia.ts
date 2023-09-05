@@ -52,6 +52,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
   seeking: Readonly<Ref<boolean>>
   waiting: Readonly<Ref<boolean>>
   buffered: Readonly<Ref<readonly number[]>>
+  error: Readonly<Ref<MediaError | null>>
 } => {
   const type = ref(MediaType.MEDIA)
 
@@ -86,6 +87,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
   const waiting = ref(false)
 
   const buffered = ref<number[]>([])
+
+  const error = ref<MediaError | null>(null)
 
   watch(volume, (volume) => {
     const el = toValue(target)
@@ -383,6 +386,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         'abort',
         () => {
           networkState.value = target.networkState
+
+          error.value = target.error
         },
         {
           passive: true,
@@ -394,6 +399,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         'error',
         () => {
           networkState.value = target.networkState
+
+          error.value = target.error
         },
         {
           passive: true,
@@ -444,6 +451,7 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
     seeking: readonly(seeking),
     waiting: readonly(waiting),
     buffered: readonly(buffered),
+    error: readonly(error),
   }
 }
 
