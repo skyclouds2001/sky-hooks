@@ -163,6 +163,9 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         target,
         'loadstart',
         () => {
+          readyState.value = target.readyState
+          networkState.value = target.networkState
+
           playing.value = !target.paused
           pausing.value = target.paused
           waiting.value = false
@@ -174,8 +177,21 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
 
       useEventListener(
         target,
+        'loadedmetadata',
+        () => {
+          readyState.value = target.readyState
+        },
+        {
+          passive: true,
+        }
+      )
+
+      useEventListener(
+        target,
         'loadeddata',
         () => {
+          readyState.value = target.readyState
+
           playing.value = !target.paused
           pausing.value = target.paused
           waiting.value = true
@@ -187,8 +203,32 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
 
       useEventListener(
         target,
+        'canplay',
+        () => {
+          readyState.value = target.readyState
+        },
+        {
+          passive: true,
+        }
+      )
+
+      useEventListener(
+        target,
+        'canplaythrough',
+        () => {
+          readyState.value = target.readyState
+        },
+        {
+          passive: true,
+        }
+      )
+
+      useEventListener(
+        target,
         'play',
         () => {
+          readyState.value = target.readyState
+
           playing.value = !target.paused
           pausing.value = target.paused
         },
@@ -201,6 +241,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         target,
         'pause',
         () => {
+          readyState.value = target.readyState
+
           playing.value = !target.paused
           pausing.value = target.paused
         },
@@ -213,6 +255,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         target,
         'playing',
         () => {
+          readyState.value = target.readyState
+
           playing.value = !target.paused
           pausing.value = target.paused
           waiting.value = false
@@ -226,6 +270,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         target,
         'waiting',
         () => {
+          readyState.value = target.readyState
+
           playing.value = !target.paused
           pausing.value = target.paused
           waiting.value = true
@@ -273,6 +319,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         target,
         'timeupdate',
         () => {
+          readyState.value = target.readyState
+
           currentTime.value = target.currentTime
         },
         {
@@ -284,6 +332,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         target,
         'seeking',
         () => {
+          readyState.value = target.readyState
+
           seeking.value = target.seeking
         },
         {
@@ -295,6 +345,8 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         target,
         'seeked',
         () => {
+          readyState.value = target.readyState
+
           seeking.value = target.seeking
         },
         {
@@ -306,7 +358,64 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
         target,
         'progress',
         () => {
+          networkState.value = target.networkState
+
           buffered.value = transformTimeRanges(target.buffered)
+        },
+        {
+          passive: true,
+        }
+      )
+
+      useEventListener(
+        target,
+        'suspend',
+        () => {
+          networkState.value = target.networkState
+        },
+        {
+          passive: true,
+        }
+      )
+
+      useEventListener(
+        target,
+        'abort',
+        () => {
+          networkState.value = target.networkState
+        },
+        {
+          passive: true,
+        }
+      )
+
+      useEventListener(
+        target,
+        'error',
+        () => {
+          networkState.value = target.networkState
+        },
+        {
+          passive: true,
+        }
+      )
+
+      useEventListener(
+        target,
+        'emptied',
+        () => {
+          networkState.value = target.networkState
+        },
+        {
+          passive: true,
+        }
+      )
+
+      useEventListener(
+        target,
+        'stalled',
+        () => {
+          networkState.value = target.networkState
         },
         {
           passive: true,
