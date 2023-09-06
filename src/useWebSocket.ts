@@ -40,7 +40,7 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
 
   let manualClose = false
   let retry = 0
-  let id: number
+  let id: number | null = null
 
   const open = (): void => {
     if (websocket.value != null || status.value === WebSocket.OPEN) return
@@ -83,6 +83,11 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
 
           ++retry
         }
+        
+        if (heartbeat && id != null) {
+          window.clearInterval(id)
+          id = null
+        }
 
         manualClose = false
       },
@@ -104,6 +109,14 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
     ws.addEventListener(
       'message',
       (e) => {
+        if (heartbeat) {
+          const { message = 'ping' } = typeof heartbeat === 'object' ? heartbeat : {}
+
+          if (e.data === message) {
+            return
+          }
+        }
+
         data.value = e.data
       },
       {
