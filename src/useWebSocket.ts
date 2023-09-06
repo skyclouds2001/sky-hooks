@@ -1,7 +1,7 @@
 import { ref, type Ref, shallowRef, type ShallowRef } from 'vue'
 import { tryOnScopeDispose } from '.'
 
-const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
+const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferView = string>(
   url: string | URL,
   options: {
     immediate?: boolean
@@ -13,6 +13,12 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
           retries?: number
           delay?: number
         }
+    heartbeat?:
+      | boolean
+      | {
+          message?: string
+          interval?: number
+        }
   } = {}
 ): {
   websocket: ShallowRef<WebSocket | null>
@@ -22,7 +28,7 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
   close: (code?: number, reason?: string) => void
   send: (message: D) => void
 } => {
-  const { immediate = true, autoClose = true, protocols, autoReconnect } = options
+  const { immediate = true, autoClose = true, protocols, autoReconnect = true, heartbeat = false } = options
 
   const websocket = shallowRef<WebSocket | null>(null)
 
@@ -34,9 +40,10 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
 
   let manualClose = false
   let retry = 0
+  let id: number
 
   const open = (): void => {
-    if (websocket.value !== null || status.value === WebSocket.OPEN) return
+    if (websocket.value != null || status.value === WebSocket.OPEN) return
 
     const ws = new WebSocket(url, protocols)
 
@@ -47,6 +54,14 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
       'open',
       () => {
         status.value = WebSocket.OPEN
+
+        if (heartbeat) {
+          const { message = 'ping', interval = 1000 } = typeof heartbeat === 'object' ? heartbeat : {}
+
+          id = window.setInterval(() => {
+            send(message as D)
+          }, interval)
+        }
       },
       {
         passive: true,
@@ -59,15 +74,17 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
         status.value = WebSocket.CLOSED
         websocket.value = null
 
-        if (!manualClose && autoReconnect !== undefined) {
+        if (!manualClose && !!autoReconnect) {
           const { retries = Infinity, delay = 1000 } = typeof autoReconnect === 'object' ? autoReconnect : {}
 
           if (Number.isFinite(retries) || retry < retries) {
-            setTimeout(open, delay)
+            window.setTimeout(open, delay)
           }
 
           ++retry
         }
+
+        manualClose = false
       },
       {
         passive: true,
@@ -99,7 +116,7 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
   }
 
   const close = (code?: number, reason?: string): void => {
-    if (websocket.value === null) return
+    if (websocket.value == null) return
 
     websocket.value.close(code, reason)
     status.value = WebSocket.CLOSING
@@ -108,7 +125,7 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
   }
 
   const send = (message: D): void => {
-    if (websocket.value === null || status.value !== WebSocket.OPEN) return
+    if (websocket.value == null || status.value !== WebSocket.OPEN) return
 
     websocket.value.send(message)
   }
