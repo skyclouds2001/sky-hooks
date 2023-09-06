@@ -12,12 +12,7 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
       | {
           retries?: number
           delay?: number
-          onFail?: (e: CloseEvent) => void
         }
-    onOpen?: (e: Event) => void
-    onClose?: (e: CloseEvent) => void
-    onMessage?: (e: MessageEvent<D>) => void
-    onError?: (e: Event) => void
   } = {}
 ): {
   websocket: ShallowRef<WebSocket | null>
@@ -27,11 +22,13 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
   close: (code?: number, reason?: string) => void
   send: (message: D) => void
 } => {
-  const { immediate = true, autoClose = true, protocols, autoReconnect, onOpen, onClose, onMessage, onError } = options
+  const { immediate = true, autoClose = true, protocols, autoReconnect } = options
 
   const websocket = shallowRef<WebSocket | null>(null)
 
-  const data = ref<D | null>(null) as Ref<D | null>
+  const data: Ref<D | null> = ref(null)
+
+  const error = shallowRef<Event | null>(null)
 
   const status = ref<WebSocket['CONNECTING' | 'OPEN' | 'CLOSING' | 'CLOSED']>(WebSocket.CLOSED)
 
@@ -48,10 +45,8 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
 
     ws.addEventListener(
       'open',
-      (e) => {
+      () => {
         status.value = WebSocket.OPEN
-
-        onOpen?.(e)
       },
       {
         passive: true,
@@ -60,19 +55,15 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
 
     ws.addEventListener(
       'close',
-      (e) => {
+      () => {
         status.value = WebSocket.CLOSED
         websocket.value = null
 
-        onClose?.(e)
-
         if (!manualClose && autoReconnect !== undefined) {
-          const { retries = Infinity, delay = 1000, onFail = console.log } = typeof autoReconnect === 'object' ? autoReconnect : {}
+          const { retries = Infinity, delay = 1000 } = typeof autoReconnect === 'object' ? autoReconnect : {}
 
           if (Number.isFinite(retries) || retry < retries) {
             setTimeout(open, delay)
-          } else {
-            onFail(e)
           }
 
           ++retry
@@ -84,11 +75,9 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
     )
 
     ws.addEventListener(
-      'message',
+      'error',
       (e) => {
-        data.value = e.data
-
-        onMessage?.(e)
+        error.value = e
       },
       {
         passive: true,
@@ -96,9 +85,9 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
     )
 
     ws.addEventListener(
-      'error',
+      'message',
       (e) => {
-        onError?.(e)
+        data.value = e.data
       },
       {
         passive: true,
@@ -114,6 +103,7 @@ const useWebSocket = <D extends string | ArrayBuffer | Blob = string>(
 
     websocket.value.close(code, reason)
     status.value = WebSocket.CLOSING
+
     manualClose = true
   }
 
