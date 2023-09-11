@@ -1,13 +1,13 @@
-import { computed, type ComputedRef, ref, type Ref, watch } from 'vue'
+import { computed, type ComputedRef, ref, type Ref, watch, shallowRef, type ShallowRef } from 'vue'
 
 const useFileSystemAccess = (
   options: { dataType?: 'Text' | 'ArrayBuffer' | 'Blob' } = {}
 ): {
   isSupported: boolean
   data: Ref<string | ArrayBuffer | Blob | undefined>
-  file: Ref<File | undefined>
+  file: ShallowRef<File | undefined>
   fileName: ComputedRef<string | undefined>
-  fileMIME: ComputedRef<string | undefined>
+  fileMime: ComputedRef<string | undefined>
   fileSize: ComputedRef<number | undefined>
   fileLastModified: ComputedRef<number | undefined>
   open: (options?: ShowOpenFilePickerOptions) => Promise<void>
@@ -22,10 +22,10 @@ const useFileSystemAccess = (
 
   const data = ref<string | ArrayBuffer | Blob>()
 
-  const file = ref<File>()
+  const file = shallowRef<File>()
 
   const fileName = computed(() => file.value?.name)
-  const fileMIME = computed(() => file.value?.type)
+  const fileMime = computed(() => file.value?.type)
   const fileSize = computed(() => file.value?.size)
   const fileLastModified = computed(() => file.value?.lastModified)
 
@@ -87,7 +87,7 @@ const useFileSystemAccess = (
     data,
     file,
     fileName,
-    fileMIME,
+    fileMime,
     fileSize,
     fileLastModified,
     open,
