@@ -1,18 +1,21 @@
-import { type Ref, unref } from 'vue'
+import { type Ref, ref } from 'vue'
 
 const useVibrate = (
-  pattern: VibratePattern | Ref<VibratePattern>
+  initial?: VibratePattern
 ): {
   isSupported: boolean
+  pattern: Ref<VibratePattern>
   vibrate: () => void
   stop: () => void
 } => {
   const isSupported = 'vibrate' in navigator
 
+  const pattern = ref<VibratePattern>(initial ?? 0)
+
   const vibrate = (): void => {
     if (!isSupported) return
 
-    navigator.vibrate(unref(pattern))
+    navigator.vibrate(pattern.value)
   }
 
   const stop = (): void => {
@@ -23,6 +26,7 @@ const useVibrate = (
 
   return {
     isSupported,
+    pattern,
     vibrate,
     stop,
   }
