@@ -20,7 +20,10 @@ const usePictureInPicture = (
   const enter = async (): Promise<void> => {
     if (!isSupported) return
 
+    if (document.pictureInPictureElement != null) return
+
     const window = await toValue(target)?.requestPictureInPicture()
+
     pictureInPictureWindow.value = window ?? null
 
     isPictureInPicture.value = true
@@ -29,7 +32,10 @@ const usePictureInPicture = (
   const exit = async (): Promise<void> => {
     if (!isSupported) return
 
+    if (document.pictureInPictureElement == null) return
+
     await document.exitPictureInPicture()
+
     pictureInPictureWindow.value = null
 
     isPictureInPicture.value = false

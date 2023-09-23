@@ -21,6 +21,8 @@ const usePointerLock = (
   const lock = (): void => {
     if (!isSupported) return
 
+    if (document.pointerLockElement != null) return
+
     // @ts-expect-error unsupported function param
     toValue(target)?.requestPointerLock(options)
 
@@ -29,6 +31,8 @@ const usePointerLock = (
 
   const unlock = (): void => {
     if (!isSupported) return
+
+    if (document.pointerLockElement != null) return
 
     document.exitPointerLock()
 

@@ -19,6 +19,8 @@ const useFullscreen = (
   const enter = async (): Promise<void> => {
     if (!isSupported) return
 
+    if (document.fullscreenElement != null) return
+
     await toValue(target)?.requestFullscreen(options)
 
     isFullscreen.value = true
@@ -26,6 +28,8 @@ const useFullscreen = (
 
   const exit = async (): Promise<void> => {
     if (!isSupported) return
+
+    if (document.fullscreenElement == null) return
 
     await document.exitFullscreen()
 
