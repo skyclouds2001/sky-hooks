@@ -3,9 +3,6 @@ import { useEventListener } from '.'
 
 const usePointerLock = (
   target: MaybeRefOrGetter<HTMLElement | null> = document.documentElement,
-  options?: {
-    unadjustedMovement: boolean
-  },
   onError?: (e: Event) => void
 ): {
   isSupported: boolean
@@ -23,8 +20,7 @@ const usePointerLock = (
 
     if (document.pointerLockElement != null) return
 
-    // @ts-expect-error unsupported function param
-    toValue(target)?.requestPointerLock(options)
+    toValue(target)?.requestPointerLock()
 
     isPointerLock.value = true
   }
