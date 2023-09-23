@@ -16,7 +16,7 @@ const usePointerLock = (
 } => {
   const isSupported = 'pointerLockElement' in document && 'requestPointerLock' in Element.prototype && 'exitPointerLock' in document
 
-  const isPointerLock = ref(document.pointerLockElement === toValue(target))
+  const isPointerLock = ref(document.pointerLockElement === toValue(target) && document.pointerLockElement != null)
 
   const lock = (): void => {
     if (!isSupported) return
