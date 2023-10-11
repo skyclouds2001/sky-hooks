@@ -13,14 +13,17 @@ const usePictureInPicture = (
 } => {
   const isSupported = 'pictureInPictureElement' in document && 'requestPictureInPicture' in HTMLVideoElement.prototype && 'exitPictureInPicture' in document && document.pictureInPictureEnabled
 
-  const isPictureInPicture = ref(document.pictureInPictureElement === toValue(target) && document.pictureInPictureElement !== null)
+  const isPictureInPicture = ref(document.pictureInPictureElement === toValue(target) && document.pictureInPictureElement != null)
 
   const pictureInPictureWindow = ref<PictureInPictureWindow | null>(null)
 
   const enter = async (): Promise<void> => {
     if (!isSupported) return
 
+    if (document.pictureInPictureElement != null) return
+
     const window = await toValue(target)?.requestPictureInPicture()
+
     pictureInPictureWindow.value = window ?? null
 
     isPictureInPicture.value = true
@@ -29,7 +32,10 @@ const usePictureInPicture = (
   const exit = async (): Promise<void> => {
     if (!isSupported) return
 
+    if (document.pictureInPictureElement == null) return
+
     await document.exitPictureInPicture()
+
     pictureInPictureWindow.value = null
 
     isPictureInPicture.value = false
