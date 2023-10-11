@@ -1,5 +1,5 @@
 {
-  "name": "@sky-fly/shooks",
+  "name": "@sky-fly/sky-hooks",
   "version": "0.0.3",
   "license": "MIT",
   "description": "A useful vue composition function library",
