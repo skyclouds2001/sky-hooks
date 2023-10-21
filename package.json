@@ -5,8 +5,7 @@
   "description": "A useful vue composition function library",
   "keywords": [
     "vue",
-    "composition function",
-    "library"
+    "composition function"
   ],
   "files": [
     "dist",
@@ -57,7 +56,7 @@
   },
   "scripts": {
     "build": "rollup --config rollup.config.js --bundleConfigAsCjs",
-    "lint": "eslint --fix . && prettier --write . && pnpm stylelint --fix . && markdownlint --fix **/*.md && tsc --noEmit",
+    "lint": "eslint --fix . && prettier --write . && stylelint --fix . && markdownlint --fix **/*.md && tsc --noEmit",
     "test": "vitest",
     "clean": "rimraf node_modules && rimraf dist",
     "changeset": "changeset",
