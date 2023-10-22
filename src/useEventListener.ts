@@ -32,7 +32,14 @@ function useEventListener<T extends EventTarget, M extends Record<string, any>, 
  * @param options event listener options
  * @returns cancel event listener
  */
-function useEventListener(target: EventTarget, event: string, listener: MaybeArray<Fn>, options?: UseEventListenerOptions): () => void {
+function useEventListener(
+  target: EventTarget,
+  event: string,
+  listener: MaybeArray<Fn>,
+  options: UseEventListenerOptions = {
+    passive: true,
+  }
+): () => void {
   if (!Array.isArray(listener)) {
     listener = [listener]
   }
