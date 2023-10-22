@@ -1,4 +1,4 @@
-# sky-admin
+# sky-hooks
 
 ## 0.0.0
 

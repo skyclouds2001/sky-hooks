@@ -1,3 +1,3 @@
-# @sky-fly/sky-hooks
+# sky-hooks
 
-useful vue composition function library
+a useful vue composition function library
