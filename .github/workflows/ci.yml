@@ -20,8 +20,6 @@ jobs:
           cache: pnpm
       - name: install dependencies
         run: pnpm install
-      - name: install playwright browsers
-        run: pnpm exec playwright install --with-deps
       - name: run tests
         run: pnpm test
   lint:
