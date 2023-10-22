@@ -4,5 +4,13 @@ declare var EyeDropper: {
 }
 
 interface EyeDropper {
-  open: (options?: { signal: AbortSignal }) => Promise<{ sRGBHex: string }>
+  open: (options?: ColorSelectionOptions) => Promise<ColorSelectionResult>
+}
+
+interface ColorSelectionOptions {
+  signal: AbortSignal
+}
+
+interface ColorSelectionResult {
+  sRGBHex: string
 }

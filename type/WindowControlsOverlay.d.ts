@@ -1,4 +1,5 @@
 declare var WindowControlsOverlay: WindowControlsOverlay
+
 declare var WindowControlsOverlayGeometryChangeEvent: WindowControlsOverlayGeometryChangeEvent
 
 interface Navigator {
@@ -10,8 +11,8 @@ interface WindowControlsOverlay extends EventTarget {
   getTitlebarAreaRect: () => DOMRect
   ongeometrychange: ((this: WindowControlsOverlay, ev: WindowControlsOverlayGeometryChangeEvent) => any) | null
   addEventListener: <K extends keyof WindowControlsOverlayEventMap>(type: K, listener: (this: WindowControlsOverlay, ev: WindowControlsOverlayEventMap[K]) => any, options?: boolean | AddEventListenerOptions) => void
-  removeEventListener: <K extends keyof WindowControlsOverlayEventMap>(type: K, listener: (this: WindowControlsOverlay, ev: WindowControlsOverlayEventMap[K]) => any, options?: boolean | EventListenerOptions) => void
   addEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void
+  removeEventListener: <K extends keyof WindowControlsOverlayEventMap>(type: K, listener: (this: WindowControlsOverlay, ev: WindowControlsOverlayEventMap[K]) => any, options?: boolean | EventListenerOptions) => void
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
 }
 

@@ -5,10 +5,10 @@ interface Navigator {
 }
 
 interface BatteryManager extends EventTarget {
-  charging: boolean
-  chargingTime: number
-  dischargingTime: number
-  level: number
+  readonly charging: boolean
+  readonly chargingTime: number
+  readonly dischargingTime: number
+  readonly level: number
   onchargingchange: ((this: BatteryManager, ev: Event) => any) | null
   onchargingtimechange: ((this: BatteryManager, ev: Event) => any) | null
   ondischargingtimechange: ((this: BatteryManager, ev: Event) => any) | null
