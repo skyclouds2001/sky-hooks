@@ -55,8 +55,8 @@
     "pnpm": ">=8.4.0"
   },
   "scripts": {
-    "build": "rollup --config rollup.config.js --bundleConfigAsCjs",
-    "lint": "eslint --fix . && prettier --write . && stylelint --fix . && markdownlint --fix **/*.md && tsc --noEmit",
+    "build": "rollup --config --bundleConfigAsCjs",
+    "lint": "eslint --fix . && prettier --write . && markdownlint --fix **/*.md && tsc --noEmit",
     "test": "vitest",
     "clean": "rimraf node_modules && rimraf dist",
     "changeset": "changeset",
@@ -116,9 +116,6 @@
     "rimraf": "^5.0.1",
     "rollup": "^3.26.2",
     "rollup-plugin-visualizer": "^5.9.2",
-    "stylelint": "^15.9.0",
-    "stylelint-config-recess-order": "^4.2.0",
-    "stylelint-config-standard": "^33.0.0",
     "typescript": "^5.1.5",
     "vitest": "^0.32.2"
   }
