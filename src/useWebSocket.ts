@@ -55,7 +55,7 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
       () => {
         status.value = WebSocket.OPEN
 
-        if (heartbeat) {
+        if (heartbeat !== false) {
           const { message = 'ping', interval = 1000 } = typeof heartbeat === 'object' ? heartbeat : {}
 
           id = window.setInterval(() => {
@@ -74,7 +74,7 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
         status.value = WebSocket.CLOSED
         websocket.value = null
 
-        if (!manualClose && !!autoReconnect) {
+        if (!manualClose && autoReconnect !== false) {
           const { retries = Infinity, delay = 1000 } = typeof autoReconnect === 'object' ? autoReconnect : {}
 
           if (Number.isFinite(retries) || retry < retries) {
@@ -83,8 +83,8 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
 
           ++retry
         }
-        
-        if (heartbeat && id != null) {
+
+        if (heartbeat !== false && id != null) {
           window.clearInterval(id)
           id = null
         }
@@ -109,7 +109,7 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
     ws.addEventListener(
       'message',
       (e) => {
-        if (heartbeat) {
+        if (heartbeat !== false) {
           const { message = 'ping' } = typeof heartbeat === 'object' ? heartbeat : {}
 
           if (e.data === message) {

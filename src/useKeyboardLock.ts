@@ -28,7 +28,7 @@ const useKeyboardLock = (
   const unlock = async (): Promise<void> => {
     if (!isSupported) return
 
-    await navigator.keyboard.unlock()
+    navigator.keyboard.unlock()
 
     isKeyboardLock.value = false
   }
