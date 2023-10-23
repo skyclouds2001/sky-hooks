@@ -102,12 +102,6 @@ interface UseStorageOptions<T> {
   deep?: boolean
 
   /**
-   * whether watch storage data change of specific key via the `storage` event on `Window` interface
-   * @default true
-   */
-  watchChange?: boolean
-
-  /**
    * initial value of storage data
    */
   initial?: T
@@ -120,7 +114,7 @@ interface UseStorageOptions<T> {
  * @returns storage data of specific key
  */
 const useStorage = <T extends number | string | boolean | object | null>(key: string, options: UseStorageOptions<T> = {}): Ref<T | null> | ShallowRef<T | null> => {
-  const { storage = window.localStorage, prefix = true, shallow = false, deep = true, watchChange = true, initial } = options
+  const { storage = window.localStorage, prefix = true, shallow = false, deep = true, initial } = options
 
   const storageKey = prefix === false ? key : `${typeof prefix === 'string' ? prefix : 'sky-hooks'}-${key}`
 
@@ -147,13 +141,11 @@ const useStorage = <T extends number | string | boolean | object | null>(key: st
     data.value = initial
   }
 
-  if (watchChange) {
-    useEventListener(window, 'storage', (e) => {
-      if (e.key === storageKey) {
-        data.value = e.newValue !== null ? parse<T>(e.newValue) : null
-      }
-    })
-  }
+  useEventListener(window, 'storage', (e) => {
+    if (e.key === storageKey) {
+      data.value = e.newValue !== null ? parse<T>(e.newValue) : null
+    }
+  })
 
   return data
 }

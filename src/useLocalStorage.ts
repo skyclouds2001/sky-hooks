@@ -21,12 +21,6 @@ interface UseLocalStorageOptions<T> {
   deep?: boolean
 
   /**
-   * whether watch storage data change of specific key via the `storage` event on `Window` interface
-   * @default true
-   */
-  watchChange?: boolean
-
-  /**
    * initial value of storage data
    */
   initial?: T
