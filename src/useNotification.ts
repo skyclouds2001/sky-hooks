@@ -1,15 +1,35 @@
 import { shallowRef, type ShallowRef } from 'vue'
 import { tryOnScopeDispose, useEventListener } from '.'
 
-const useNotification = (
-  title: string,
-  options: NotificationOptions = {}
-): {
+interface UseNotificationReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * the current active notification object
+   */
   notification: ShallowRef<Notification | null>
+
+  /**
+   * to show the notification
+   */
   show: () => Promise<void>
+
+  /**
+   * to close the notification
+   */
   close: () => Promise<void>
-} => {
+}
+
+/**
+ * reactive Notification API
+ * @param title notification title
+ * @param options notification options
+ * @returns @see {@link UseNotificationReturn}
+ */
+const useNotification = (title: string, options: NotificationOptions = {}): UseNotificationReturn => {
   const isSupported = 'Notification' in window
 
   const notification = shallowRef<Notification | null>(null)
@@ -40,18 +60,11 @@ const useNotification = (
   }
 
   if (isSupported) {
-    useEventListener(
-      document,
-      'visibilitychange',
-      () => {
-        if (document.visibilityState === 'visible') {
-          notification.value?.close()
-        }
-      },
-      {
-        passive: true,
+    useEventListener(document, 'visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        notification.value?.close()
       }
-    )
+    })
 
     tryOnScopeDispose(close)
   }

@@ -1,17 +1,45 @@
 import { ref, type Ref, shallowRef, type ShallowRef } from 'vue'
 import { tryOnScopeDispose } from '.'
 
-const useSharedWorker = <D = any>(
-  source: string | URL,
-  options: string | WorkerOptions
-): {
+interface UseSharedWorkerReturn<D> {
+  /**
+   * worker that currently controls
+   */
   worker: ShallowRef<SharedWorker | null>
+
+  /**
+   * recently active data
+   */
   data: Ref<D | null>
+
+  /**
+   * worker running error, if any
+   */
   error: ShallowRef<Error | null>
+
+  /**
+   * post message to the worker
+   */
   postMessage: (message: D) => void
+
+  /**
+   * start the worker
+   */
   start: () => void
+
+  /**
+   * close the worker
+   */
   close: () => void
-} => {
+}
+
+/**
+ * reactive Web Worker API for Shared Worker
+ * @param source Web Worker source file URL
+ * @param options Web Worker options
+ * @returns @see {@link UseSharedWorkerReturn}
+ */
+const useSharedWorker = <D = any>(source: string | URL, options: string | WorkerOptions): UseSharedWorkerReturn<D> => {
   const worker = shallowRef<SharedWorker>(new window.SharedWorker(source, options))
 
   const data: Ref<D | null> = ref(null)
