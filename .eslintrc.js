@@ -8,7 +8,7 @@ module.exports = {
     'shared-node-browser': true,
     worker: true,
   },
-  extends: ['standard-with-typescript', 'eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:n/recommended', 'plugin:promise/recommended', 'plugin:import/recommended', 'plugin:security/recommended', 'plugin:jsdoc/recommended', 'plugin:jsx-a11y/recommended', 'plugin:regexp/recommended', 'plugin:prettier/recommended'],
+  extends: ['eslint:recommended', 'standard-with-typescript', 'plugin:@typescript-eslint/recommended', 'plugin:n/recommended', 'plugin:promise/recommended', 'plugin:import/recommended', 'plugin:import/typescript', 'plugin:jsdoc/recommended', 'plugin:jsx-a11y/recommended', 'plugin:prettier/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
@@ -19,21 +19,17 @@ module.exports = {
     project: 'tsconfig.json',
     tsconfigRootDir: '.',
   },
-  plugins: ['tsdoc'],
-  globals: {},
+  plugins: [],
   ignorePatterns: ['.eslintrc.js'],
+  globals: {},
   rules: {
     'n/no-missing-import': 'off',
+    'n/no-missing-require': 'off',
     'import/no-unresolved': [
       'error',
       {
-        ignore: ['package.json'],
-      },
-    ],
-    'promise/always-return': [
-      'error',
-      {
-        ignoreLastCallback: true,
+        commonjs: true,
+        amd: true,
       },
     ],
   },
@@ -50,16 +46,16 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['**/*.{test,spec}.{js,jsx,ts,tsx}'],
+      extends: ['plugin:vitest/recommended'],
+    },
+    {
       files: ['*.ts', '*.tsx', '*.vue'],
       rules: {
         'jsdoc/require-param-type': 'off',
         'jsdoc/require-property-type': 'off',
         'jsdoc/require-returns-type': 'off',
       },
-    },
-    {
-      files: ['**/*.{test,spec}.{js,jsx,ts,tsx}'],
-      extends: ['plugin:vitest/recommended'],
     },
     {
       files: ['**/type/*.[jt]s?(x)'],

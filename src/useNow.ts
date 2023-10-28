@@ -1,13 +1,33 @@
 import { readonly, ref, type Ref } from 'vue'
 import { useAnimationFrame, useInterval } from '.'
 
-const useNow = (
-  options: {
-    mode?: 'AnimationFrame' | 'Interval'
-    interval?: number
-  } = {}
-): Readonly<Ref<Date>> => {
-  const { mode = 'AnimationFrame', interval = 0 } = options
+interface UseNowOptions {
+  /**
+   * whether to call callback function immediately
+   * @default true
+   */
+  immediate?: boolean
+
+  /**
+   * update the timestamp via `setInterval()` or `requestAnimationFrame()`
+   * @default 'AnimationFrame'
+   */
+  mode?: 'AnimationFrame' | 'Interval'
+
+  /**
+   * the interval number passing to `setInterval()` if `mode` is set to `'Interval'`
+   * @default 0
+   */
+  interval?: number
+}
+
+/**
+ * reactive date
+ * @param options @see {@link UseNowOptions}
+ * @returns the reactive date
+ */
+const useNow = (options: UseNowOptions = {}): Readonly<Ref<Date>> => {
+  const { immediate = true, mode = 'AnimationFrame', interval = 0 } = options
 
   const now = ref(new Date())
 
@@ -15,11 +35,13 @@ const useNow = (
     now.value = new Date()
   }
 
-  if (mode === 'AnimationFrame') {
-    useAnimationFrame(update)
-  }
-  if (mode === 'Interval') {
-    useInterval(update, interval)
+  switch (mode) {
+    case 'AnimationFrame':
+      useAnimationFrame(update, { immediate })
+      break
+    case 'Interval':
+      useInterval(update, interval, { immediate })
+      break
   }
 
   return readonly(now)

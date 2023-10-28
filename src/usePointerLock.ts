@@ -1,16 +1,40 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, toValue, watch } from 'vue'
+import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
 import { useEventListener } from '.'
 
-const usePointerLock = (
-  target: MaybeRefOrGetter<HTMLElement | null> = document.documentElement,
-  onError?: (e: Event) => void
-): {
+interface UsePointerLockReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * pointer lock status
+   */
   isPointerLock: Readonly<Ref<boolean>>
+
+  /**
+   * request pointer lock of the specified element
+   */
   lock: () => void
+
+  /**
+   * release pointer lock of the specified element
+   */
   unlock: () => void
+
+  /**
+   * trigger pointer lock of the specified element
+   */
   trigger: () => void
-} => {
+}
+
+/**
+ * reactive Pointer Lock API
+ * @param target control target
+ * @param onError optional handle to call if pointer lock fail
+ * @returns @see {@link UsePointerLockReturn}
+ */
+const usePointerLock = (target: MaybeRefOrGetter<Element | null> = document.documentElement, onError?: (e: Event) => void): UsePointerLockReturn => {
   const isSupported = 'pointerLockElement' in document && 'requestPointerLock' in Element.prototype && 'exitPointerLock' in document
 
   const isPointerLock = ref(document.pointerLockElement === toValue(target) && document.pointerLockElement != null)
@@ -52,21 +76,12 @@ const usePointerLock = (
       }
     )
 
-    useEventListener(
-      document,
-      'pointerlockchange',
-      () => {
-        isPointerLock.value = document.pointerLockElement === toValue(target)
-      },
-      {
-        passive: true,
-      }
-    )
+    useEventListener(document, 'pointerlockchange', () => {
+      isPointerLock.value = document.pointerLockElement === toValue(target)
+    })
 
     if (onError !== undefined) {
-      useEventListener(document, 'pointerlockerror', onError, {
-        passive: true,
-      })
+      useEventListener(document, 'pointerlockerror', onError)
     }
   }
 

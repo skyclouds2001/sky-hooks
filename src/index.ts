@@ -1,10 +1,14 @@
 export { default as reactifyFunction } from './reactifyFunction'
 
+export { default as tryOnActivated } from './tryOnActivated'
+
 export { default as tryOnBeforeMount } from './tryOnBeforeMount'
 
 export { default as tryOnBeforeUnmount } from './tryOnBeforeUnmount'
 
 export { default as tryOnBeforeUpdate } from './tryOnBeforeUpdate'
+
+export { default as tryOnDeactivated } from './tryOnDeactivated'
 
 export { default as tryOnMounted } from './tryOnMounted'
 
@@ -129,6 +133,8 @@ export { default as useSelection } from './useSelection'
 export { default as useSessionStorage } from './useSessionStorage'
 
 export { default as useShare } from './useShare'
+
+export { default as useSharedWorker } from './useSharedWorker'
 
 export { default as useSpeechRecognition } from './useSpeechRecognition'
 

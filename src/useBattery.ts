@@ -1,13 +1,26 @@
 import { reactive, readonly } from 'vue'
 import { useEventListener } from '.'
 
-const useBattery = (): {
+interface UseBatteryReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * Battery Status
+   */
   battery: Readonly<Partial<BatteryManager>>
-} => {
+}
+
+/**
+ * reactive Battery Status API
+ * @returns @see {@link UseBatteryReturn}
+ */
+const useBattery = (): UseBatteryReturn => {
   const isSupported = 'getBattery' in navigator
 
-  const battery = reactive<Partial<BatteryManager>>({
+  const battery = reactive<Writable<Pick<BatteryManager, 'charging' | 'chargingTime' | 'dischargingTime' | 'level'>>>({
     charging: false,
     chargingTime: 0,
     dischargingTime: 0,
@@ -25,55 +38,27 @@ const useBattery = (): {
     void navigator.getBattery().then((batteryManager) => {
       updateBatteryInfo(batteryManager)
 
-      useEventListener<BatteryManager, BatteryManagerEventMap, 'chargingchange'>(
-        batteryManager,
-        'chargingchange',
-        (e) => {
-          updateBatteryInfo(e.target as BatteryManager)
-        },
-        {
-          passive: true,
-        }
-      )
+      useEventListener<BatteryManager, BatteryManagerEventMap, 'chargingchange'>(batteryManager, 'chargingchange', (e) => {
+        updateBatteryInfo(e.target as BatteryManager)
+      })
 
-      useEventListener<BatteryManager, BatteryManagerEventMap, 'levelchange'>(
-        batteryManager,
-        'levelchange',
-        (e) => {
-          updateBatteryInfo(e.target as BatteryManager)
-        },
-        {
-          passive: true,
-        }
-      )
+      useEventListener<BatteryManager, BatteryManagerEventMap, 'levelchange'>(batteryManager, 'levelchange', (e) => {
+        updateBatteryInfo(e.target as BatteryManager)
+      })
 
-      useEventListener<BatteryManager, BatteryManagerEventMap, 'chargingtimechange'>(
-        batteryManager,
-        'chargingtimechange',
-        (e) => {
-          updateBatteryInfo(e.target as BatteryManager)
-        },
-        {
-          passive: true,
-        }
-      )
+      useEventListener<BatteryManager, BatteryManagerEventMap, 'chargingtimechange'>(batteryManager, 'chargingtimechange', (e) => {
+        updateBatteryInfo(e.target as BatteryManager)
+      })
 
-      useEventListener<BatteryManager, BatteryManagerEventMap, 'dischargingtimechange'>(
-        batteryManager,
-        'dischargingtimechange',
-        (e) => {
-          updateBatteryInfo(e.target as BatteryManager)
-        },
-        {
-          passive: true,
-        }
-      )
+      useEventListener<BatteryManager, BatteryManagerEventMap, 'dischargingtimechange'>(batteryManager, 'dischargingtimechange', (e) => {
+        updateBatteryInfo(e.target as BatteryManager)
+      })
     })
   }
 
   return {
-    battery: readonly(battery),
     isSupported,
+    battery: readonly(battery),
   }
 }
 

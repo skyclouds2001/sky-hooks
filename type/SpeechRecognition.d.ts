@@ -3,10 +3,7 @@ declare var SpeechRecognition: {
   new (): SpeechRecognition
 }
 
-declare var SpeechGrammar: {
-  prototype: SpeechGrammar
-  new (): SpeechGrammar
-}
+declare var SpeechGrammar: SpeechGrammar
 
 declare var SpeechGrammarList: {
   prototype: SpeechGrammarList
@@ -20,7 +17,7 @@ declare var SpeechRecognitionEvent: {
 
 declare var SpeechRecognitionErrorEvent: {
   prototype: SpeechRecognitionErrorEvent
-  new (): SpeechRecognitionErrorEvent
+  new (type: string, eventInitDict: SpeechRecognitionErrorEventInit): SpeechRecognitionErrorEvent
 }
 
 interface SpeechRecognition extends EventTarget {
@@ -32,19 +29,21 @@ interface SpeechRecognition extends EventTarget {
   abort: () => void
   start: () => void
   stop: () => void
-  onaudioend: ((this: SpeechRecognition, ev: Event) => any) | null
   onaudiostart: ((this: SpeechRecognition, ev: Event) => any) | null
-  onend: ((this: SpeechRecognition, ev: Event) => any) | null
-  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any) | null
-  onnomatch: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null
-  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null
-  onsoundend: ((this: SpeechRecognition, ev: Event) => any) | null
-  onsoundstart: ((this: SpeechRecognition, ev: Event) => any) | null
-  onspeechend: ((this: SpeechRecognition, ev: Event) => any) | null
   onspeechstart: ((this: SpeechRecognition, ev: Event) => any) | null
+  onsoundstart: ((this: SpeechRecognition, ev: Event) => any) | null
+  onsoundend: ((this: SpeechRecognition, ev: Event) => any) | null
+  onspeechend: ((this: SpeechRecognition, ev: Event) => any) | null
+  onaudioend: ((this: SpeechRecognition, ev: Event) => any) | null
+  onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null
+  onnomatch: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null
+  onerror: ((this: SpeechRecognition, ev: SpeechRecognitionErrorEvent) => any) | null
   onstart: ((this: SpeechRecognition, ev: Event) => any) | null
-  addEventListener: (<K extends keyof SpeechRecognitionEventMap>(type: K, listener: (this: SpeechRecognition, ev: SpeechRecognitionEventMap[K]) => any, options?: boolean | AddEventListenerOptions) => void) & ((type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void)
-  removeEventListener: (<K extends keyof SpeechRecognitionEventMap>(type: K, listener: (this: SpeechRecognition, ev: SpeechRecognitionEventMap[K]) => any, options?: boolean | EventListenerOptions) => void) & ((type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void)
+  onend: ((this: SpeechRecognition, ev: Event) => any) | null
+  addEventListener: <K extends keyof SpeechRecognitionEventMap>(type: K, listener: (this: SpeechRecognition, ev: SpeechRecognitionEventMap[K]) => any, options?: boolean | AddEventListenerOptions) => void
+  addEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void
+  removeEventListener: <K extends keyof SpeechRecognitionEventMap>(type: K, listener: (this: SpeechRecognition, ev: SpeechRecognitionEventMap[K]) => any, options?: boolean | EventListenerOptions) => void
+  removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
 }
 
 interface SpeechRecognitionEventMap {
@@ -63,11 +62,11 @@ interface SpeechRecognitionEventMap {
 
 interface SpeechGrammar {
   src: string
-  weight?: number
+  weight: number
 }
 
 interface SpeechGrammarList {
-  length: number
+  readonly length: number
   addFromString: (string: string, wieght?: number) => void
   addFromURI: (url: string, wieght?: number) => void
   item: (index: number) => SpeechGrammar
@@ -75,11 +74,23 @@ interface SpeechGrammarList {
 }
 
 interface SpeechRecognitionEvent extends Event {
-  resultIndex: number
+  readonly resultIndex: number
+  readonly results: SpeechRecognitionResultList
+}
+
+interface SpeechRecognitionEventInit extends EventInit {
+  resultIndex?: number
   results: SpeechRecognitionResultList
 }
 
 interface SpeechRecognitionErrorEvent extends Event {
-  error: 'no-speech' | 'aborted' | 'audio-capture' | 'network' | 'not-allowed' | 'service-not-allowed' | 'bad-grammar' | 'language-not-supported'
-  message: string
+  readonly error: SpeechRecognitionErrorCode
+  readonly message?: string
 }
+
+interface SpeechRecognitionErrorEventInit extends EventInit {
+  error: SpeechRecognitionErrorCode
+  message?: string
+}
+
+type SpeechRecognitionErrorCode = 'no-speech' | 'aborted' | 'audio-capture' | 'network' | 'not-allowed' | 'service-not-allowed' | 'bad-grammar' | 'language-not-supported'

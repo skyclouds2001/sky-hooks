@@ -1,59 +1,51 @@
 import { reactive, readonly } from 'vue'
 import { useEventListener } from '.'
 
-const useNetwork = (): {
+interface UseNetworkReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
-  connection: Readonly<{
-    downlink: number | null
-    effectiveType: NetworkEffectiveType | null
-    rtt: number | null
-    saveData: boolean | null
-    type: NetworkType | null
-    downlinkMax: number | null
-  }>
-} => {
+
+  /**
+   * network information
+   */
+  connection: Readonly<Pick<NetworkInformation, 'downlink' | 'effectiveType' | 'rtt' | 'saveData' | 'type' | 'downlinkMax'>>
+}
+
+/**
+ * reactive Network Information API
+ * @returns @see {@link UseNetworkReturn}
+ */
+const useNetwork = (): UseNetworkReturn => {
   const isSupported = 'connection' in navigator
 
-  const connection = reactive<{
-    downlink: number | null
-    effectiveType: NetworkEffectiveType | null
-    rtt: number | null
-    saveData: boolean | null
-    type: NetworkType | null
-    downlinkMax: number | null
-  }>({
-    downlink: null,
-    downlinkMax: null,
-    type: null,
-    effectiveType: null,
-    rtt: null,
-    saveData: null,
+  const connection = reactive<Writable<Pick<NetworkInformation, 'downlink' | 'effectiveType' | 'rtt' | 'saveData' | 'type' | 'downlinkMax'>>>({
+    downlink: 0,
+    downlinkMax: 0,
+    type: 'unknown',
+    effectiveType: 'slow-2g',
+    rtt: 0,
+    saveData: false,
   })
 
-  const updateNetworkInformation = (information: NetworkInformation): void => {
-    connection.downlink = information.downlink
-    connection.downlinkMax = information.downlinkMax
-    connection.type = information.type
-    connection.effectiveType = information.effectiveType
-    connection.rtt = information.rtt * 0.025
-    connection.saveData = information.saveData
+  const updateNetworkInformation = (): void => {
+    const { downlink, downlinkMax, type, effectiveType, rtt, saveData } = navigator.connection
+
+    connection.downlink = downlink
+    connection.downlinkMax = downlinkMax
+    connection.type = type
+    connection.effectiveType = effectiveType
+    connection.rtt = rtt * 0.025
+    connection.saveData = saveData
   }
 
   if (isSupported) {
-    const connection = navigator.connection
+    updateNetworkInformation()
 
-    updateNetworkInformation(connection)
-
-    useEventListener<NetworkInformation, NetworkInformationEventMap, 'change'>(
-      connection,
-      'change',
-      () => {
-        updateNetworkInformation(connection)
-      },
-      {
-        passive: true,
-      }
-    )
+    useEventListener<NetworkInformation, NetworkInformationEventMap, 'change'>(navigator.connection, 'change', () => {
+      updateNetworkInformation()
+    })
   }
 
   return {

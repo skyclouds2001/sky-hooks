@@ -1,9 +1,9 @@
-import { readonly, ref, type Ref } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, toValue, type Ref } from 'vue'
 import { tryOnScopeDispose } from '.'
 
 const useTimeout = (
   fn: () => void,
-  timeout: number,
+  timeout: MaybeRefOrGetter<number>,
   options: {
     immediate?: boolean
   } = {}
@@ -27,7 +27,7 @@ const useTimeout = (
       id = null
 
       fn()
-    }, timeout)
+    }, toValue(timeout))
   }
 
   const stop = (): void => {

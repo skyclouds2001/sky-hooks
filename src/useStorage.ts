@@ -76,20 +76,47 @@ const parse = <T extends StorageDataType>(data: string): T => {
   return res
 }
 
-const useStorage = <T extends number | string | boolean | object | null>(
-  key: string,
-  options: {
-    storage?: Storage
-    prefix?: boolean | string
-    shallow?: boolean
-    deep?: boolean
-    watchChange?: boolean
-    initial?: T
-  } = {}
-): Ref<T | null> | ShallowRef<T | null> => {
-  const { storage = window.localStorage, prefix = true, shallow = false, deep = true, watchChange = true, initial } = options
+interface UseStorageOptions<T> {
+  /**
+   * storage type, can be `window.sessionStorage` or `window.localStorage`
+   * @default window.localStorage
+   */
+  storage?: Storage
 
-  const storageKey = prefix === false ? key : `${typeof prefix === 'string' ? prefix : 'shooks'}-${key}`
+  /**
+   * whether use storage key prefix, by default use `'sky-hooks'` as the prefix
+   * @default true
+   */
+  prefix?: boolean | string
+
+  /**
+   * whether use shallowRef for wrap data, which may bring performance advantage
+   * @default false
+   */
+  shallow?: boolean
+
+  /**
+   * storage type
+   * @default true
+   */
+  deep?: boolean
+
+  /**
+   * initial value of storage data
+   */
+  initial?: T
+}
+
+/**
+ * reactive Web Storage API
+ * @param key storage key
+ * @param options @see {@link UseStorageOptions}
+ * @returns storage data of specific key
+ */
+const useStorage = <T extends number | string | boolean | object | null>(key: string, options: UseStorageOptions<T> = {}): Ref<T | null> | ShallowRef<T | null> => {
+  const { storage = window.localStorage, prefix = true, shallow = false, deep = true, initial } = options
+
+  const storageKey = prefix === false ? key : `${typeof prefix === 'string' ? prefix : 'sky-hooks'}-${key}`
 
   const storeValue = storage.getItem(storageKey)
 
@@ -114,20 +141,11 @@ const useStorage = <T extends number | string | boolean | object | null>(
     data.value = initial
   }
 
-  if (watchChange) {
-    useEventListener(
-      window,
-      'storage',
-      (e) => {
-        if (e.key === storageKey) {
-          data.value = e.newValue !== null ? parse<T>(e.newValue) : null
-        }
-      },
-      {
-        passive: true,
-      }
-    )
-  }
+  useEventListener(window, 'storage', (e) => {
+    if (e.key === storageKey) {
+      data.value = e.newValue !== null ? parse<T>(e.newValue) : null
+    }
+  })
 
   return data
 }

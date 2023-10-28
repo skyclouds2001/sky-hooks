@@ -1,21 +1,65 @@
-import { computed, type ComputedRef, ref, type Ref, watch, shallowRef, type ShallowRef } from 'vue'
+import { computed, ref, shallowRef, watch, type ComputedRef, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
 
-const useFileSystemAccess = (
-  options: { dataType?: 'Text' | 'ArrayBuffer' | 'Blob' } = {}
-): {
+type DataType = 'Text' | 'ArrayBuffer' | 'Blob'
+
+interface UseFileSystemAccessReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
-  data: Ref<string | ArrayBuffer | Blob | undefined>
-  file: ShallowRef<File | undefined>
-  fileName: ComputedRef<string | undefined>
-  fileMime: ComputedRef<string | undefined>
-  fileSize: ComputedRef<number | undefined>
-  fileLastModified: ComputedRef<number | undefined>
-  open: (options?: ShowOpenFilePickerOptions) => Promise<void>
-  create: (options?: ShowSaveFilePickerOptions) => Promise<void>
-  save: (options?: ShowSaveFilePickerOptions) => Promise<void>
-} => {
-  const { dataType = 'Text' } = options
 
+  /**
+   * file content of current file that is working on
+   */
+  data: Ref<string | ArrayBuffer | Blob | undefined>
+
+  /**
+   * current file that is working on
+   */
+  file: ShallowRef<File | undefined>
+
+  /**
+   * file name of current file that is working on
+   */
+  fileName: ComputedRef<string | undefined>
+
+  /**
+   * file MIME type of current file that is working on
+   */
+  fileMime: ComputedRef<string | undefined>
+
+  /**
+   * file size of current file that is working on
+   */
+  fileSize: ComputedRef<number | undefined>
+
+  /**
+   * file last modified timestamp of current file that is working on
+   */
+  fileLastModified: ComputedRef<number | undefined>
+
+  /**
+   * open the existed file as the operation target
+   */
+  open: (options?: OpenFilePickerOptions) => Promise<void>
+
+  /**
+   * create the new file as the operation target
+   */
+  create: (options?: SaveFilePickerOptions) => Promise<void>
+
+  /**
+   * save data to the specific file or create a new file
+   */
+  save: (options?: SaveFilePickerOptions) => Promise<void>
+}
+
+/**
+ * reactive File System API and File System Access API
+ * @param dataType data type of file content
+ * @returns @see {@link UseFileSystemAccessReturn}
+ */
+const useFileSystemAccess = (dataType: MaybeRefOrGetter<DataType> = 'Text'): UseFileSystemAccessReturn => {
   const isSupported = 'showOpenFilePicker' in window && 'showSaveFilePicker' in window && 'showDirectoryPicker' in window
 
   let fileHandle: FileSystemFileHandle
@@ -47,7 +91,7 @@ const useFileSystemAccess = (
     }
   }
 
-  const open = async (options?: ShowOpenFilePickerOptions): Promise<void> => {
+  const open = async (options?: OpenFilePickerOptions): Promise<void> => {
     if (!isSupported) return
 
     const [handle] = await window.showOpenFilePicker(options)
@@ -57,7 +101,7 @@ const useFileSystemAccess = (
     await updateData()
   }
 
-  const create = async (options?: ShowSaveFilePickerOptions): Promise<void> => {
+  const create = async (options?: SaveFilePickerOptions): Promise<void> => {
     if (!isSupported) return
 
     fileHandle = await window.showSaveFilePicker(options)
@@ -66,7 +110,7 @@ const useFileSystemAccess = (
     await updateData()
   }
 
-  const save = async (options?: ShowSaveFilePickerOptions): Promise<void> => {
+  const save = async (options?: SaveFilePickerOptions): Promise<void> => {
     if (!isSupported) return
 
     if (fileHandle === undefined) fileHandle = await window.showSaveFilePicker(options)
@@ -80,7 +124,9 @@ const useFileSystemAccess = (
     await updateFile()
   }
 
-  watch(() => dataType, updateData)
+  if (isSupported) {
+    watch(() => dataType, updateData)
+  }
 
   return {
     isSupported,

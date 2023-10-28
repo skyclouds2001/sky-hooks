@@ -1,9 +1,9 @@
-import { readonly, ref, type Ref } from 'vue'
+import { type MaybeRefOrGetter, readonly, ref, toValue, type Ref } from 'vue'
 import { tryOnScopeDispose } from '.'
 
 const useInterval = (
   fn: () => void,
-  timeout: number,
+  timeout: MaybeRefOrGetter<number>,
   options: {
     immediate?: boolean
     immediateCallback?: boolean
@@ -22,9 +22,9 @@ const useInterval = (
   const resume = (): void => {
     pause()
 
-    if (timeout >= 0) {
+    if (toValue(timeout) >= 0) {
       isActive.value = true
-      id = window.setInterval(fn, timeout)
+      id = window.setInterval(fn, toValue(timeout))
       if (immediateCallback) fn()
     }
   }

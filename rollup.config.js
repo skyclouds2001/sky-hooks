@@ -22,7 +22,7 @@ export default defineConfig({
       globals: {
         vue: 'Vue',
       },
-      name: 'vhooks',
+      name: 'sky-hooks',
     },
   ],
   external: ['vue'],

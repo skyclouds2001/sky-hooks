@@ -1,20 +1,54 @@
 import { readonly, ref, type Ref } from 'vue'
 import { tryOnMounted, tryOnBeforeUnmount } from '.'
 
-const useGeolocation = (
-  options: {
-    enableHighAccuracy?: boolean
-    maximumAge?: number
-    timeout?: number
-  } = {}
-): {
-  isSupported: boolean
-  geolocation: Readonly<Ref<GeolocationCoordinates>>
-  locatedAt: Readonly<Ref<number | null>>
-  error: Readonly<Ref<GeolocationPositionError | null>>
-} => {
-  const { enableHighAccuracy = true, maximumAge = 30000, timeout = 27000 } = options
+interface UseGeolocationOptions {
+  /**
+   *  whether likely to receive the best possible results
+   * @default false
+   */
+  enableHighAccuracy?: boolean
 
+  /**
+   * the maximum age in milliseconds of a possible cached position that is acceptable to return
+   * @default 0
+   */
+  maximumAge?: number
+
+  /**
+   * the maximum length of time in milliseconds that the device is allowed to take in order to return a position
+   * @default Infinity
+   */
+  timeout?: number
+}
+
+interface UseGeolocationReturn {
+  /**
+   * API support status
+   */
+  isSupported: boolean
+
+  /**
+   * geolocation information
+   */
+  geolocation: Readonly<Ref<GeolocationCoordinates>>
+
+  /**
+   * geolocation information recently updated timestamp
+   */
+  locatedAt: Readonly<Ref<number | null>>
+
+  /**
+   * geolocation information error if has
+   */
+  error: Readonly<Ref<GeolocationPositionError | null>>
+}
+
+/**
+ * reactive Geolocation API
+ * @param options @see {@link UseGeolocationOptions}
+ * @returns @see {@link UseGeolocationReturn}
+ */
+const useGeolocation = (options?: UseGeolocationOptions): UseGeolocationReturn => {
   const isSupported = 'geolocation' in navigator
 
   const location = ref<GeolocationCoordinates>({
@@ -44,11 +78,7 @@ const useGeolocation = (
         (err) => {
           error.value = err
         },
-        {
-          enableHighAccuracy,
-          maximumAge,
-          timeout,
-        }
+        options
       )
     })
 
