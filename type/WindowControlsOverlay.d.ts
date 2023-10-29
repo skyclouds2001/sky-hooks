@@ -1,6 +1,9 @@
 declare var WindowControlsOverlay: WindowControlsOverlay
 
-declare var WindowControlsOverlayGeometryChangeEvent: WindowControlsOverlayGeometryChangeEvent
+declare var WindowControlsOverlayGeometryChangeEvent: {
+  prototype: WindowControlsOverlayGeometryChangeEvent
+  new (type: string, initDict?: WindowControlsOverlayGeometryChangeEventInit): WindowControlsOverlayGeometryChangeEvent
+}
 
 interface Navigator {
   readonly windowControlsOverlay: WindowControlsOverlay
@@ -23,4 +26,9 @@ interface WindowControlsOverlayEventMap {
 interface WindowControlsOverlayGeometryChangeEvent extends Event {
   readonly titlebarAreaRect: DOMRect
   readonly visible: boolean
+}
+
+interface WindowControlsOverlayGeometryChangeEventInit extends EventInit {
+  visible: boolean
+  titlebarAreaRect: DOMRect
 }

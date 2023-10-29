@@ -12,7 +12,7 @@ declare var SpeechGrammarList: {
 
 declare var SpeechRecognitionEvent: {
   prototype: SpeechRecognitionEvent
-  new (): SpeechRecognitionEvent
+  new (type: string, eventInitDict: SpeechRecognitionEventInit): SpeechRecognitionEvent
 }
 
 declare var SpeechRecognitionErrorEvent: {
