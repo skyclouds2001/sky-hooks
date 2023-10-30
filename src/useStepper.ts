@@ -117,7 +117,7 @@ interface UseStepperReturn<SS, S> {
  * @param options @see {@link UseStepperOptions}
  * @returns @see {@link UseStepperReturn}
  */
-const useStepper = <Steppers extends Stepper, Value = Steppers extends Array<infer S> ? S : Steppers extends Record<string, infer R> ? R : never, Key = Steppers extends Array<infer S> ? S : keyof Steppers>(steps: MaybeRefOrGetter<Steppers>, options: UseStepperOptions<Key>): UseStepperReturn<Steppers, Value> => {
+const useStepper = <Steppers extends Stepper, Value = Steppers extends Array<infer S> ? S : Steppers extends Record<string, infer R> ? R : never, Key = Steppers extends Array<infer S> ? S : keyof Steppers>(steps: MaybeRefOrGetter<Steppers>, options: UseStepperOptions<Key> = {}): UseStepperReturn<Steppers, Value> => {
   const { initial } = options
 
   const step = ref(toValue(steps)) as Ref<Steppers>
