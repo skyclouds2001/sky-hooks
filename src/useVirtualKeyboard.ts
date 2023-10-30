@@ -1,16 +1,48 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, watch, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
-const useVirtualKeyboard = (): {
+interface UseVirtualKeyboardReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
-  visible: Readonly<Ref<boolean>>
+
+  /**
+   * virtual keyboard visibility status
+   */
+  visible: Ref<boolean>
+
+  /**
+   * virtual keyboard controls
+   */
+  controls: Ref<boolean>
+
+  /**
+   * virtual keyboard dom rect
+   */
   rect: Readonly<Ref<DOMRect>>
+
+  /**
+   * hide virtual keyboard
+   */
   hide: () => void
+
+  /**
+   * show virtual keyboard
+   */
   show: () => void
-} => {
+}
+
+/**
+ * reactive VirtualKeyboard API
+ * @returns @see {@link UseVirtualKeyboardReturn}
+ */
+const useVirtualKeyboard = (): UseVirtualKeyboardReturn => {
   const isSupported = 'virtualKeyboard' in navigator
 
   const visible = ref(false)
+
+  const controls = ref(true)
 
   const rect = ref(navigator.virtualKeyboard.boundingRect)
 
@@ -18,32 +50,36 @@ const useVirtualKeyboard = (): {
     if (!isSupported) return
 
     navigator.virtualKeyboard.hide()
-    visible.value = false
   }
 
   const show = (): void => {
     if (!isSupported) return
 
     navigator.virtualKeyboard.show()
-    visible.value = true
   }
 
   if (isSupported) {
-    useEventListener(
-      navigator.virtualKeyboard,
-      'geometrychange',
-      () => {
-        rect.value = navigator.virtualKeyboard.boundingRect
-      },
-      {
-        passive: true,
-      }
-    )
+    navigator.virtualKeyboard.overlaysContent = controls.value
+
+    watch(visible, (visible) => {
+      visible ? show() : hide()
+    })
+
+    watch(controls, (controls) => {
+      navigator.virtualKeyboard.overlaysContent = controls
+    })
+
+    useEventListener(navigator.virtualKeyboard, 'geometrychange', () => {
+      visible.value = Object.entries(navigator.virtualKeyboard.boundingRect).some(([, v]) => v !== 0)
+
+      rect.value = navigator.virtualKeyboard.boundingRect
+    })
   }
 
   return {
     isSupported,
-    visible: readonly(visible),
+    visible,
+    controls,
     rect: readonly(rect),
     hide,
     show,

@@ -1,23 +1,30 @@
 import { readonly, ref, type Ref } from 'vue'
 import { useEventListener } from '.'
 
-const useWindowScroll = (): {
+interface UseWindowScrollReturn {
+  /**
+   * scroll x position
+   */
   x: Readonly<Ref<number>>
-  y: Readonly<Ref<number>>
-} => {
-  const x = ref(0)
-  const y = ref(0)
 
-  const update = (): void => {
+  /**
+   * scroll y position
+   */
+  y: Readonly<Ref<number>>
+}
+
+/**
+ * reactive window scroll position
+ * @returns @see {@link UseWindowScrollReturn}
+ */
+const useWindowScroll = (): UseWindowScrollReturn => {
+  const x = ref(window.scrollX)
+  const y = ref(window.scrollY)
+
+  useEventListener(window, 'scroll', () => {
     x.value = window.scrollX
     y.value = window.scrollY
-  }
-
-  useEventListener(window, 'scroll', update, {
-    passive: true,
   })
-
-  update()
 
   return {
     x: readonly(x),

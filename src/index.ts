@@ -50,6 +50,8 @@ export { default as useDisplayMedia } from './useDisplayMedia'
 
 export { default as useDocumentActiveElement } from './useDocumentActiveElement'
 
+export { default as useDocumentFocus } from './useDocumentFocus'
+
 export { default as useDocumentReadyState } from './useDocumentReadyState'
 
 export { default as useDocumentVisibility } from './useDocumentVisibility'
@@ -82,7 +84,7 @@ export { default as useIntersectionObserver } from './useIntersectionObserver'
 
 export { default as useInterval } from './useInterval'
 
-export { default as useKeyboard, DEFAULT_ALIASES_MAP, current } from './useKeyboard'
+export { DEFAULT_ALIASES_MAP, current, default as useKeyboard } from './useKeyboard'
 
 export { default as useKeyboardLock } from './useKeyboardLock'
 
@@ -167,8 +169,6 @@ export { default as useWebSocket } from './useWebSocket'
 export { default as useWebWorker } from './useWebWorker'
 
 export { default as useWindowControlsOverlay } from './useWindowControlsOverlay'
-
-export { default as useWindowFocus } from './useWindowFocus'
 
 export { default as useWindowScroll } from './useWindowScroll'
 
