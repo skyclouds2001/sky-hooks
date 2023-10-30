@@ -3,8 +3,8 @@ import { reactive, ref } from 'vue'
 import { useStepper } from '../src'
 
 describe('useStepper', () => {
-  const stepsArray = ['a', 'b', 0, 1] as const
-  const stepsObject = { a: 1, b: 'str', c: true, d: () => 0, e: null, f: undefined } as const
+  const stepsArray = ['a', 'b', 0, 1]
+  const stepsObject = { a: 1, b: 'str', c: true, d: () => 0, e: null, f: undefined }
 
   it('should be defined', () => {
     expect(useStepper).toBeDefined()
@@ -61,8 +61,12 @@ describe('useStepper', () => {
   it('should index at 0 without initial or other index with given initial', () => {
     const sa = useStepper(stepsArray)
     const so = useStepper(stepsObject)
-    const sai = useStepper(stepsArray, 0)
-    const soi = useStepper(stepsObject, 'e')
+    const sai = useStepper(stepsArray, {
+      initial: 0,
+    })
+    const soi = useStepper(stepsObject, {
+      initial: 'e',
+    })
 
     expect(sa.index.value).toBe(0)
     expect(so.index.value).toBe(0)
@@ -73,8 +77,12 @@ describe('useStepper', () => {
   it('should correctly represent current & previous & next step', () => {
     const sab = useStepper(stepsArray)
     const sob = useStepper(stepsObject)
-    const sae = useStepper(stepsArray, 1)
-    const soe = useStepper(stepsObject, 'f')
+    const sae = useStepper(stepsArray, {
+      initial: 1,
+    })
+    const soe = useStepper(stepsObject, {
+      initial: 'f',
+    })
 
     expect(sab.current.value).toBe('a')
     expect(sob.current.value).toBe(1)
@@ -118,8 +126,15 @@ describe('useStepper', () => {
   })
 
   it('should represent current position comparison', () => {
-    const sa = useStepper(['0', '1', '2', '3', '4'], '2')
-    const so = useStepper({ a: '0', b: '1', c: '2', d: '3', e: '4' }, 'c')
+    const sa = useStepper(['0', '1', '2', '3', '4'], {
+      initial: '2',
+    })
+    const so = useStepper(
+      { a: '0', b: '1', c: '2', d: '3', e: '4' },
+      {
+        initial: 'c',
+      }
+    )
 
     expect(sa.isPrevious('0')).toBe(false)
     expect(sa.isPrevious('1')).toBe(true)
