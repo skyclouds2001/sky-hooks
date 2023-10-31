@@ -110,7 +110,7 @@ export { default as useNotification } from './useNotification'
 
 export { default as useNow } from './useNow'
 
-export { default as useObjectURL } from './useObjectUrl'
+export { default as useObjectURL } from './useObjectURL'
 
 export { default as useOnline } from './useOnline'
 

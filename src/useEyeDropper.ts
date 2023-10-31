@@ -18,7 +18,7 @@ interface useEyeDropperReturn {
 }
 
 /**
- * reactive Badging API
+ * reactive EyeDropper API
  * @param initial initial value for eye dropper, default to `null`
  * @returns @see {@link useEyeDropperReturn}
  */

@@ -1,6 +1,11 @@
-import { type MaybeRefOrGetter, ref, type Ref, watch, toValue } from 'vue'
+import { type MaybeRefOrGetter, ref, type Ref, watch, toValue, readonly } from 'vue'
 
-const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[] | Blob | File | ArrayBuffer | HTMLImageElement | HTMLCanvasElement>): Ref<string> => {
+/**
+ * reactive base64 encode
+ * @param target encode target
+ * @returns encode result
+ */
+const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[] | Blob | File | ArrayBuffer | HTMLImageElement | HTMLCanvasElement>): Readonly<Ref<string>> => {
   const base64 = ref('')
 
   const encoder = new TextEncoder()
@@ -56,7 +61,7 @@ const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[
         } catch {
           base64.value = ''
         }
-      } else if (typeof target === 'object') {
+      } else {
         base64.value = window.btoa(String.fromCharCode(...encoder.encode(JSON.stringify(target))))
       }
     },
@@ -65,7 +70,7 @@ const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[
     }
   )
 
-  return base64
+  return readonly(base64)
 }
 
 export default useBase64

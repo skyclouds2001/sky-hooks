@@ -1,16 +1,36 @@
-import { type Ref, ref } from 'vue'
+import { type Ref, ref, type MaybeRefOrGetter, toValue } from 'vue'
 
-const useVibrate = (
-  initial?: VibratePattern
-): {
+interface UseVibrateReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * vibrate pattern
+   */
   pattern: Ref<VibratePattern>
+
+  /**
+   * start vibrate
+   */
   vibrate: () => void
+
+  /**
+   * stop vibrate
+   */
   stop: () => void
-} => {
+}
+
+/**
+ * reactive Vibration API
+ * @param initial initial value of vibrate pattern
+ * @returns @see {@link UseVibrateReturn}
+ */
+const useVibrate = (initial: MaybeRefOrGetter<VibratePattern> = 0): UseVibrateReturn => {
   const isSupported = 'vibrate' in navigator
 
-  const pattern = ref<VibratePattern>(initial ?? 0)
+  const pattern = ref(toValue(initial))
 
   const vibrate = (): void => {
     if (!isSupported) return
