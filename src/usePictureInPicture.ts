@@ -70,6 +70,8 @@ const usePictureInPicture = (target: MaybeRefOrGetter<HTMLVideoElement | null>):
   }
 
   const toggle = async (): Promise<void> => {
+    if (!isSupported) return
+
     await (isPictureInPicture.value ? exit() : enter())
   }
 

@@ -61,6 +61,8 @@ const useFullscreen = (target: MaybeRefOrGetter<HTMLElement | null> = document.d
   }
 
   const toggle = async (): Promise<void> => {
+    if (!isSupported) return
+
     await (isFullscreen.value ? exit() : enter())
   }
 
