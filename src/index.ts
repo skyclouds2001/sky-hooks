@@ -52,6 +52,8 @@ export { default as useDocumentActiveElement } from './useDocumentActiveElement'
 
 export { default as useDocumentFocus } from './useDocumentFocus'
 
+export { default as useDocumentPictureInPicture } from './useDocumentPictureInPicture'
+
 export { default as useDocumentReadyState } from './useDocumentReadyState'
 
 export { default as useDocumentVisibility } from './useDocumentVisibility'
