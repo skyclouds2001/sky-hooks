@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, shallowReadonly, toValue, watch } from 'vue'
+import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
 import { useEventListener } from '.'
 
 interface UsePictureInPictureReturn {
@@ -15,7 +15,7 @@ interface UsePictureInPictureReturn {
   /**
    * picture-in-picture window of the specified element
    */
-  pictureInPictureWindow: Readonly<Ref<PictureInPictureWindow | null>>
+  pictureInPictureWindow: Readonly<ShallowRef<PictureInPictureWindow | null>>
 
   /**
    * enter picture-in-picture status of the specified element
@@ -43,7 +43,7 @@ const usePictureInPicture = (target: MaybeRefOrGetter<HTMLVideoElement | null>):
 
   const isPictureInPicture = ref(document.pictureInPictureElement === toValue(target) && document.pictureInPictureElement != null)
 
-  const pictureInPictureWindow = ref<PictureInPictureWindow | null>(null)
+  const pictureInPictureWindow = shallowRef<PictureInPictureWindow | null>(null)
 
   const enter = async (): Promise<void> => {
     if (!isSupported) return
