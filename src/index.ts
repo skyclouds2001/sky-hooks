@@ -1,3 +1,5 @@
+import './../type/index.d.ts'
+
 export { default as reactifyFunction } from './reactifyFunction'
 
 export { default as tryOnActivated } from './tryOnActivated'
@@ -84,7 +86,7 @@ export { default as useIntersectionObserver } from './useIntersectionObserver'
 
 export { default as useInterval } from './useInterval'
 
-export { DEFAULT_ALIASES_MAP, CURRENT, default as useKeyboard } from './useKeyboard'
+export { CURRENT, DEFAULT_ALIASES_MAP, default as useKeyboard } from './useKeyboard'
 
 export { default as useKeyboardLock } from './useKeyboardLock'
 
