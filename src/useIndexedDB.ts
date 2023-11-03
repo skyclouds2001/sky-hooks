@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/promise-function-async */
-
 import { shallowReadonly, shallowRef, type ShallowRef } from 'vue'
 import { type Obj } from '.'
 
@@ -50,8 +48,8 @@ const useIndexedDB = <D extends Obj>(options: {
 
   const store = shallowRef<IDBObjectStore | null>(null)
 
-  const createDatabase = (): Promise<IDBDatabase> => {
-    return new Promise((resolve, reject) => {
+  const createDatabase = async (): Promise<IDBDatabase> => {
+    return await new Promise((resolve, reject) => {
       const request = window.indexedDB.open(db.name, db.version)
 
       request.addEventListener(
@@ -116,8 +114,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const closeDatabase = (): Promise<Event> => {
-    return new Promise((resolve) => {
+  const closeDatabase = async (): Promise<Event> => {
+    return await new Promise((resolve) => {
       database.value?.close()
 
       database.value?.addEventListener(
@@ -134,8 +132,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const deleteDatabase = (): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const deleteDatabase = async (): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = window.indexedDB.deleteDatabase(db.name)
 
       request.addEventListener(
@@ -166,8 +164,8 @@ const useIndexedDB = <D extends Obj>(options: {
 
   const compareOperationKey = window.indexedDB.cmp
 
-  const insertData = (data: D): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const insertData = async (data: D): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readwrite').objectStore(os.name).add(data)
 
       request?.addEventListener(
@@ -192,8 +190,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const updateData = (data: D): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const updateData = async (data: D): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readwrite').objectStore(os.name).put(data)
 
       request?.addEventListener(
@@ -218,8 +216,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const deleteData = (query: IDBValidKey | IDBKeyRange): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const deleteData = async (query: IDBValidKey | IDBKeyRange): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readwrite').objectStore(os.name).delete(query)
 
       request?.addEventListener(
@@ -244,8 +242,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const selectData = (query: IDBValidKey | IDBKeyRange): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const selectData = async (query: IDBValidKey | IDBKeyRange): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).get(query)
 
       request?.addEventListener(
@@ -270,8 +268,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const selectAllData = (query?: IDBValidKey | IDBKeyRange, count?: number): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const selectAllData = async (query?: IDBValidKey | IDBKeyRange, count?: number): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).getAll(query, count)
 
       request?.addEventListener(
@@ -296,8 +294,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const selectDataByIndex = (name: string, query: IDBValidKey | IDBKeyRange): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const selectDataByIndex = async (name: string, query: IDBValidKey | IDBKeyRange): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).index(name).get(query)
 
       request?.addEventListener(
@@ -322,8 +320,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const traverseData = (onData: (data: D) => void, query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): Promise<null> => {
-    return new Promise((resolve, reject) => {
+  const traverseData = async (onData: (data: D) => void, query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): Promise<null> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).openCursor(query, direction)
 
       request?.addEventListener(
@@ -354,8 +352,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const traverseDataByIndex = (name: string, onData: (data: D) => void, query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): Promise<null> => {
-    return new Promise((resolve, reject) => {
+  const traverseDataByIndex = async (name: string, onData: (data: D) => void, query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): Promise<null> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).index(name).openCursor(query, direction)
 
       request?.addEventListener(
@@ -386,8 +384,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const countData = (query?: IDBValidKey | IDBKeyRange): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const countData = async (query?: IDBValidKey | IDBKeyRange): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readonly').objectStore(os.name).count(query)
 
       request?.addEventListener(
@@ -412,8 +410,8 @@ const useIndexedDB = <D extends Obj>(options: {
     })
   }
 
-  const clearData = (): Promise<Event> => {
-    return new Promise((resolve, reject) => {
+  const clearData = async (): Promise<Event> => {
+    return await new Promise((resolve, reject) => {
       const request = database.value?.transaction(os.name, 'readwrite').objectStore(os.name).clear()
 
       request?.addEventListener(

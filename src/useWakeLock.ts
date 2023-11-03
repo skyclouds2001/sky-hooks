@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-
 import { readonly, ref, type Ref } from 'vue'
 import { useEventListener } from '.'
 
