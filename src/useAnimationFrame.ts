@@ -1,16 +1,37 @@
 import { readonly, ref, type Ref } from 'vue'
 import { tryOnScopeDispose } from '.'
 
-const useAnimationFrame = (
-  fn: (time: DOMHighResTimeStamp) => void,
-  options: {
-    immediate?: boolean
-  } = {}
-): {
+interface UseAnimationFrameOptions {
+  /**
+   * whether immediate start exec the callback
+   */
+  immediate?: boolean
+}
+
+interface UseAnimationFrameReturn {
+  /**
+   * current status
+   */
   isActive: Readonly<Ref<boolean>>
+
+  /**
+   * resume the callback
+   */
   resume: () => void
+
+  /**
+   * pause the callback
+   */
   pause: () => void
-} => {
+}
+
+/**
+ * reactive animation frame
+ * @param fn callback
+ * @param options @see {@link UseAnimationFrameOptions}
+ * @returns @see {@link UseAnimationFrameReturn}
+ */
+const useAnimationFrame = (fn: (time: DOMHighResTimeStamp) => void, options: UseAnimationFrameOptions = {}): UseAnimationFrameReturn => {
   const { immediate = true } = options
 
   const isActive = ref(false)
@@ -23,14 +44,17 @@ const useAnimationFrame = (
   }
 
   const resume = (): void => {
-    if (!isActive.value && id === null) {
-      isActive.value = true
-      id = window.requestAnimationFrame(loop)
+    if (id !== null) {
+      window.cancelAnimationFrame(id)
+      id = null
     }
+
+    isActive.value = true
+    id = window.requestAnimationFrame(loop)
   }
 
   const pause = (): void => {
-    if (isActive.value && id !== null) {
+    if (id !== null) {
       isActive.value = false
       window.cancelAnimationFrame(id)
       id = null

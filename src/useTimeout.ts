@@ -1,54 +1,78 @@
-import { type MaybeRefOrGetter, readonly, ref, toValue, type Ref } from 'vue'
+import { readonly, ref, toValue, type MaybeRefOrGetter, type Ref } from 'vue'
 import { tryOnScopeDispose } from '.'
 
-const useTimeout = (
-  fn: () => void,
-  timeout: MaybeRefOrGetter<number>,
-  options: {
-    immediate?: boolean
-  } = {}
-): {
-  isPending: Readonly<Ref<boolean>>
-  start: () => void
-  stop: () => void
-} => {
+interface UseTimeoutOptions {
+  /**
+   * whether immediate start exec the idle callback
+   */
+  immediate?: boolean
+}
+
+interface UseTimeoutReturn {
+  /**
+   * current status
+   */
+  isActive: Readonly<Ref<boolean>>
+
+  /**
+   * resume the callback
+   */
+  resume: () => void
+
+  /**
+   * pause the callback
+   */
+  pause: () => void
+}
+
+/**
+ * reactive timeout
+ * @param fn callback
+ * @param timeout timeout, will pass to `setTimeout()`
+ * @param options @see {@link UseTimeoutOptions}
+ * @returns @see {@link UseTimeoutReturn}
+ */
+const useTimeout = (fn: () => void, timeout: MaybeRefOrGetter<number>, options: UseTimeoutOptions = {}): UseTimeoutReturn => {
   const { immediate = true } = options
 
-  const isPending = ref(false)
+  const isActive = ref(false)
 
   let id: number | null = null
 
-  const start = (): void => {
-    stop()
-
-    isPending.value = true
-    id = window.setTimeout(() => {
-      isPending.value = false
+  const resume = (): void => {
+    if (id !== null) {
+      window.clearTimeout(id)
       id = null
+    }
 
-      fn()
-    }, toValue(timeout))
+    if (toValue(timeout) >= 0) {
+      isActive.value = true
+      id = window.setTimeout(() => {
+        isActive.value = false
+        id = null
+        fn()
+      }, toValue(timeout))
+    }
   }
 
-  const stop = (): void => {
-    isPending.value = false
-
+  const pause = (): void => {
     if (id !== null) {
+      isActive.value = false
       window.clearTimeout(id)
       id = null
     }
   }
 
   if (immediate) {
-    start()
+    resume()
   }
 
-  tryOnScopeDispose(stop)
+  tryOnScopeDispose(pause)
 
   return {
-    isPending: readonly(isPending),
-    start,
-    stop,
+    isActive: readonly(isActive),
+    resume,
+    pause,
   }
 }
 
