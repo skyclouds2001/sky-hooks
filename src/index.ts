@@ -84,7 +84,7 @@ export { default as useIntersectionObserver } from './useIntersectionObserver'
 
 export { default as useInterval } from './useInterval'
 
-export { DEFAULT_ALIASES_MAP, current, default as useKeyboard } from './useKeyboard'
+export { DEFAULT_ALIASES_MAP, CURRENT, default as useKeyboard } from './useKeyboard'
 
 export { default as useKeyboardLock } from './useKeyboardLock'
 

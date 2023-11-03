@@ -18,7 +18,7 @@ export const DEFAULT_ALIASES_MAP = {
 /**
  * a constant for using current pressed keyboard codes
  */
-export const current = Symbol('current')
+export const CURRENT = Symbol('current')
 
 interface UseKeyboardOptions {
   /**
@@ -28,7 +28,7 @@ interface UseKeyboardOptions {
   aliasMap?: Record<string, string>
 }
 
-type UseKeyboardReturn = Readonly<Record<string, Readonly<Ref<boolean>>> & { [current]: ReadonlySet<string> }>
+type UseKeyboardReturn = Readonly<Record<string, Readonly<Ref<boolean>>> & { [CURRENT]: ReadonlySet<string> }>
 
 /**
  * reactive key code of keyboard
@@ -40,8 +40,8 @@ const useKeyboard = (options: UseKeyboardOptions = {}): UseKeyboardReturn => {
 
   const aliases = Object.assign({}, DEFAULT_ALIASES_MAP, aliasMap)
 
-  const keys: Record<string, Ref<boolean>> & { [current]: Set<string> } = {
-    [current]: reactive(new Set()),
+  const keys: Record<string, Ref<boolean>> & { [CURRENT]: Set<string> } = {
+    [CURRENT]: reactive(new Set()),
   }
 
   const updateKeys = (e: KeyboardEvent, mode: boolean): void => {
@@ -52,9 +52,9 @@ const useKeyboard = (options: UseKeyboardOptions = {}): UseKeyboardReturn => {
     }
 
     if (mode) {
-      keys[current].add(e.key)
+      keys[CURRENT].add(e.key)
     } else {
-      keys[current].delete(e.key)
+      keys[CURRENT].delete(e.key)
     }
   }
 
@@ -67,7 +67,7 @@ const useKeyboard = (options: UseKeyboardOptions = {}): UseKeyboardReturn => {
   })
 
   const reset = (): void => {
-    keys[current].clear()
+    keys[CURRENT].clear()
     Object.entries(keys).forEach(([_, value]) => {
       value.value = false
     })
