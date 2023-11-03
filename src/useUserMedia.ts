@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref, shallowReadonly, shallowRef, type ShallowRef, watch } from 'vue'
+import { readonly, ref, shallowReadonly, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
 
 const useUserMedia = (
   options: {

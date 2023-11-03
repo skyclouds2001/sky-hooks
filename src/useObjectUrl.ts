@@ -1,5 +1,5 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, toValue, watch } from 'vue'
-import { tryOnScopeDispose } from '.'
+import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
 /**
  * reactive object url

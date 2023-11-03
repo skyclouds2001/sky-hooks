@@ -1,5 +1,6 @@
 import { readonly, ref, type Ref } from 'vue'
-import { useEventListener, useTimeout } from '.'
+import useEventListener from './useEventListener'
+import useTimeout from './useTimeout'
 
 interface UseClipboardOptions {
   /**

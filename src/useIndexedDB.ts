@@ -1,5 +1,5 @@
 import { shallowReadonly, shallowRef, type ShallowRef } from 'vue'
-import { type Obj } from '.'
+import { type Obj } from './util'
 
 const useIndexedDB = <D extends Obj>(options: {
   database: {

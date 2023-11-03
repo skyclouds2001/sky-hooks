@@ -1,5 +1,5 @@
-import { computed, type ComputedRef, shallowReadonly, shallowRef, type ShallowRef } from 'vue'
-import { useEventListener } from '.'
+import { computed, shallowReadonly, shallowRef, type ComputedRef, type ShallowRef } from 'vue'
+import useEventListener from './useEventListener'
 
 const useSelection = (): {
   selection: Readonly<ShallowRef<Selection | null>>

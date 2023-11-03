@@ -1,5 +1,5 @@
 import { readonly, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import useEventListener from './useEventListener'
 
 const usePermission = (
   name: PermissionName | 'accelerometer' | 'accessibility-events' | 'ambient-light-sensor' | 'background-sync' | 'camera' | 'clipboard-read' | 'clipboard-write' | 'gyroscope' | 'magnetometer' | 'microphone' | 'payment-handler' | 'speaker'

@@ -1,5 +1,5 @@
 import { readonly, ref, type Ref } from 'vue'
-import { tryOnScopeDispose } from '.'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
 interface UseAnimationFrameOptions {
   /**

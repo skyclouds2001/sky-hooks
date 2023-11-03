@@ -1,4 +1,4 @@
-import { type Ref, ref, type MaybeRefOrGetter, toValue } from 'vue'
+import { ref, toValue, type MaybeRefOrGetter, type Ref } from 'vue'
 
 interface UseVibrateReturn {
   /**

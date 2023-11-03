@@ -1,5 +1,6 @@
 import { readonly, ref, type Ref } from 'vue'
-import { useAnimationFrame, useInterval } from '.'
+import useAnimationFrame from './useAnimationFrame'
+import useInterval from './useInterval'
 
 interface UseNowOptions {
   /**

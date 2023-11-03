@@ -1,5 +1,5 @@
 import { readonly, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import useEventListener from './useEventListener'
 
 interface UseMouseOptions {
   /**

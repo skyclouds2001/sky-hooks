@@ -1,5 +1,5 @@
 import { getCurrentScope, onScopeDispose } from 'vue'
-import { type Fn } from '.'
+import { type Fn } from './util'
 
 /**
  * if the callback function is called in a scope, call it in `onScopeDispose` hook, otherwise do not call it

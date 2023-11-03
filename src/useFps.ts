@@ -1,5 +1,5 @@
 import { ref, type Ref } from 'vue'
-import { useAnimationFrame } from '.'
+import useAnimationFrame from './useAnimationFrame'
 
 const useFps = (
   options: {

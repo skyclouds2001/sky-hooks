@@ -1,4 +1,4 @@
-import { tryOnScopeDispose } from '.'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
 const useMutationObserver = (
   target: Node,

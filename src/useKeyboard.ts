@@ -1,5 +1,5 @@
 import { reactive, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import useEventListener from './useEventListener'
 
 /**
  * default alias map to use

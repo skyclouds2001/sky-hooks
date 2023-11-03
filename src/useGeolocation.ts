@@ -1,5 +1,6 @@
 import { readonly, ref, type Ref } from 'vue'
-import { tryOnMounted, tryOnBeforeUnmount } from '.'
+import tryOnMounted from './tryOnMounted'
+import tryOnUnmounted from './tryOnUnmounted'
 
 interface UseGeolocationOptions {
   /**
@@ -82,7 +83,7 @@ const useGeolocation = (options?: UseGeolocationOptions): UseGeolocationReturn =
       )
     })
 
-    tryOnBeforeUnmount(() => {
+    tryOnUnmounted(() => {
       if (watcher !== null) {
         navigator.geolocation.clearWatch(watcher)
       }

@@ -1,5 +1,5 @@
-import { type ShallowRef, type Ref, type UnwrapRef } from 'vue'
-import { useStorage } from '.'
+import { type Ref, type ShallowRef, type UnwrapRef } from 'vue'
+import useStorage from './useStorage'
 
 interface UseSessionStorageOptions<T> {
   /**

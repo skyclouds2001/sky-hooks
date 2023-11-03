@@ -1,5 +1,5 @@
-import { shallowReadonly, type ShallowRef, shallowRef, readonly, ref, type Ref, watch } from 'vue'
-import { tryOnScopeDispose } from '.'
+import { readonly, ref, shallowReadonly, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
 const grammar = `
 #JSGF V1.0;

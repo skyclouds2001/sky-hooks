@@ -1,5 +1,5 @@
 import { reactive, readonly } from 'vue'
-import { useEventListener } from '.'
+import useEventListener from './useEventListener'
 
 interface UseBatteryReturn {
   /**

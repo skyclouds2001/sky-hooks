@@ -1,4 +1,4 @@
-import { type Fn } from '.'
+import { type Fn } from './util'
 
 const map = new WeakMap()
 

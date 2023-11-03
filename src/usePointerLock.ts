@@ -1,5 +1,5 @@
 import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
-import { useEventListener } from '.'
+import useEventListener from './useEventListener'
 
 interface UsePointerLockReturn {
   /**

@@ -1,5 +1,6 @@
-import { computed, type ComputedRef, shallowRef, type ShallowRef } from 'vue'
-import { useEventListener, usePermission } from '.'
+import { computed, shallowRef, type ComputedRef, type ShallowRef } from 'vue'
+import usePermission from './usePermission'
+import useEventListener from './useEventListener'
 
 const useDevicesList = (
   options: {

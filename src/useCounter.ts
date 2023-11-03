@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, readonly, ref, toValue, type Ref, watch } from 'vue'
+import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
 
 interface UseCounterOptions {
   /**

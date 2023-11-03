@@ -1,5 +1,5 @@
 import { shallowReadonly, shallowRef, type ShallowRef } from 'vue'
-import { useEventListener } from '.'
+import useEventListener from './useEventListener'
 
 /**
  * reactive document active element

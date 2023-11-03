@@ -1,4 +1,4 @@
-import { ref, shallowRef, type MaybeRefOrGetter, type Ref, type ShallowRef, toValue, watch } from 'vue'
+import { ref, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
 
 interface UseDocumentPictureInPictureOptions {
   /**

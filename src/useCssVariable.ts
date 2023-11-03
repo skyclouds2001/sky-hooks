@@ -1,4 +1,4 @@
-import { type MaybeRef, type MaybeRefOrGetter, toValue, watch, ref, unref, type Ref } from 'vue'
+import { ref, toValue, unref, watch, type MaybeRef, type MaybeRefOrGetter, type Ref } from 'vue'
 
 /**
  * CSS variable controller hook

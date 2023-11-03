@@ -1,5 +1,5 @@
-import { type MaybeRefOrGetter, toValue } from 'vue'
-import { type Fn } from '.'
+import { toValue, type MaybeRefOrGetter } from 'vue'
+import { type Fn } from './util'
 
 /**
  * debounce function

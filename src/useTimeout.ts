@@ -1,5 +1,5 @@
 import { readonly, ref, toValue, type MaybeRefOrGetter, type Ref } from 'vue'
-import { tryOnScopeDispose } from '.'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
 interface UseTimeoutOptions {
   /**

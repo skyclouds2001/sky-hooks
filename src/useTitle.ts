@@ -1,5 +1,5 @@
-import { ref, type Ref, watch } from 'vue'
-import { useMutationObserver } from '.'
+import { ref, watch, type Ref } from 'vue'
+import useMutationObserver from './useMutationObserver'
 
 const useTitle = (initial?: string): Ref<string> => {
   const title = ref<string>(initial ?? '')

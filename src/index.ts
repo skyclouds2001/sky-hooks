@@ -173,5 +173,3 @@ export { default as useWindowControlsOverlay } from './useWindowControlsOverlay'
 export { default as useWindowScroll } from './useWindowScroll'
 
 export { default as useWindowSize } from './useWindowSize'
-
-export type { Fn, Obj } from './util'

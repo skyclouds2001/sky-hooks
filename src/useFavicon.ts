@@ -1,4 +1,4 @@
-import { ref, type Ref, watch } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 
 const useFavicon = (initial?: string): Ref<string | null> => {
   const favicon = ref<string | null>(initial ?? null)

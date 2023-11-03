@@ -1,4 +1,5 @@
-import { type Fn, tryOnScopeDispose } from '.'
+import tryOnScopeDispose from './tryOnScopeDispose'
+import { type Fn } from './util'
 
 type MaybeArray<T> = T | T[]
 

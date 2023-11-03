@@ -1,5 +1,5 @@
-import { type MaybeRefOrGetter, readonly, ref, toValue, type Ref } from 'vue'
-import { tryOnScopeDispose } from '.'
+import { readonly, ref, toValue, type MaybeRefOrGetter, type Ref } from 'vue'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
 interface UseIntervalOptions {
   /**

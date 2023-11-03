@@ -1,5 +1,5 @@
 import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
-import { useEventListener } from '.'
+import useEventListener from './useEventListener'
 
 interface UsePictureInPictureReturn {
   /**

@@ -1,5 +1,7 @@
-import { computed, type ComputedRef, readonly, ref, type Ref, shallowReadonly, shallowRef, type ShallowRef } from 'vue'
-import { tryOnMounted, tryOnUnmounted, useEventListener } from '.'
+import { computed, readonly, ref, shallowReadonly, shallowRef, type ComputedRef, type Ref, type ShallowRef } from 'vue'
+import tryOnMounted from './tryOnMounted'
+import tryOnUnmounted from './tryOnUnmounted'
+import useEventListener from './useEventListener'
 
 const useBluetooth = (): {
   isSupported: boolean

@@ -1,5 +1,6 @@
-import { readonly, ref, type Ref, shallowRef, type ShallowRef, shallowReadonly } from 'vue'
-import { tryOnScopeDispose, useEventListener } from '.'
+import { readonly, ref, shallowReadonly, shallowRef, type Ref, type ShallowRef } from 'vue'
+import tryOnScopeDispose from './tryOnScopeDispose'
+import useEventListener from './useEventListener'
 
 interface UseBroadcastChannelReturn<D = unknown, P = D> {
   /**

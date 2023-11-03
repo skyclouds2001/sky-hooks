@@ -1,5 +1,5 @@
 import { type Ref } from 'vue'
-import { useMediaQuery } from '.'
+import useMediaQuery from './useMediaQuery'
 
 type Breakpoints<K extends string = string> = Record<K, number>
 

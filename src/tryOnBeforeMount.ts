@@ -1,5 +1,5 @@
 import { getCurrentInstance, onBeforeMount } from 'vue'
-import { type Fn } from '.'
+import { type Fn } from './util'
 
 /**
  * if the callback function is called in a component, call it in `onBeforeMount` hook, otherwise call it immediately

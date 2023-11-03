@@ -1,5 +1,6 @@
 import { shallowRef, type ShallowRef } from 'vue'
-import { tryOnScopeDispose, useEventListener } from '.'
+import tryOnScopeDispose from './tryOnScopeDispose'
+import useEventListener from './useEventListener'
 
 interface UseNotificationReturn {
   /**

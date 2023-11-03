@@ -1,5 +1,5 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, shallowReadonly, shallowRef, type ShallowRef, toValue, watch } from 'vue'
-import { tryOnScopeDispose } from '.'
+import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
 const useSpeechSynthesis = (
   text: MaybeRefOrGetter<string>,

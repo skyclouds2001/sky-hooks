@@ -1,5 +1,5 @@
-import { computed, type ComputedRef, type Ref, unref } from 'vue'
-import { type Fn } from '.'
+import { computed, unref, type ComputedRef, type Ref } from 'vue'
+import { type Fn } from './util'
 
 type Reactify<T> = T extends (...args: infer A) => infer R
   ? (

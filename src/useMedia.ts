@@ -1,4 +1,4 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, watch, toValue } from 'vue'
+import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 enum MediaType {
