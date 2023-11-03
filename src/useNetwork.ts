@@ -45,7 +45,7 @@ const useNetwork = (): UseNetworkReturn => {
   if (isSupported) {
     updateNetworkInformation()
 
-    useEventListener<NetworkInformation, NetworkInformationEventMap, 'change'>(navigator.connection, 'change', () => {
+    useEventListener(navigator.connection, 'change', () => {
       updateNetworkInformation()
     })
   }

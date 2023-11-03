@@ -21,7 +21,7 @@ const useScreenOrientation = (): {
     screen.orientation.unlock()
   }
 
-  useEventListener<ScreenOrientation, ScreenOrientationEventMap, 'change'>(
+  useEventListener(
     screen.orientation,
     'change',
     () => {

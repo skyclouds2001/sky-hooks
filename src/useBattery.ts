@@ -38,19 +38,19 @@ const useBattery = (): UseBatteryReturn => {
     void navigator.getBattery().then((batteryManager) => {
       updateBatteryInfo(batteryManager)
 
-      useEventListener<BatteryManager, BatteryManagerEventMap, 'chargingchange'>(batteryManager, 'chargingchange', (e) => {
+      useEventListener(batteryManager, 'chargingchange', (e) => {
         updateBatteryInfo(e.target as BatteryManager)
       })
 
-      useEventListener<BatteryManager, BatteryManagerEventMap, 'levelchange'>(batteryManager, 'levelchange', (e) => {
+      useEventListener(batteryManager, 'levelchange', (e) => {
         updateBatteryInfo(e.target as BatteryManager)
       })
 
-      useEventListener<BatteryManager, BatteryManagerEventMap, 'chargingtimechange'>(batteryManager, 'chargingtimechange', (e) => {
+      useEventListener(batteryManager, 'chargingtimechange', (e) => {
         updateBatteryInfo(e.target as BatteryManager)
       })
 
-      useEventListener<BatteryManager, BatteryManagerEventMap, 'dischargingtimechange'>(batteryManager, 'dischargingtimechange', (e) => {
+      useEventListener(batteryManager, 'dischargingtimechange', (e) => {
         updateBatteryInfo(e.target as BatteryManager)
       })
     })

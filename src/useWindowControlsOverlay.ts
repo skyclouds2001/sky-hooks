@@ -30,9 +30,9 @@ const useWindowControlsOverlay = (): UseWindowControlsOverlayReturn => {
   const rect = ref(navigator.windowControlsOverlay.getTitlebarAreaRect())
 
   if (isSupported) {
-    useEventListener<WindowControlsOverlay, WindowControlsOverlayEventMap, 'geometrychange'>(navigator.windowControlsOverlay, 'geometrychange', (e) => {
-      visible.value = e.visible
-      rect.value = e.titlebarAreaRect
+    useEventListener(navigator.windowControlsOverlay, 'geometrychange', (e) => {
+      visible.value = (e as WindowControlsOverlayGeometryChangeEvent).visible
+      rect.value = (e as WindowControlsOverlayGeometryChangeEvent).titlebarAreaRect
     })
   }
 

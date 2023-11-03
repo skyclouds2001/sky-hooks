@@ -23,8 +23,6 @@ interface UseEventListener {
   <E extends keyof MathMLElementEventMap>(target: MathMLElement, event: E, listener: MaybeArray<Listener<MathMLElement, MathMLElementEventMap[E]>>, options?: UseEventListenerOptions): () => void
 
   <E extends string>(target: EventTarget, event: E, listener: MaybeArray<Listener<EventTarget, Event>>, options?: UseEventListenerOptions): () => void
-
-  <T extends EventTarget, M extends Record<string, any>, E extends keyof M>(target: T, event: E, listener: MaybeArray<Listener<T, M[E]>>, options?: UseEventListenerOptions): () => void
 }
 
 /**

@@ -38,27 +38,27 @@ const useMediaRecorder = (
     state.value = mediaRecorder.state
 
     if (onDataAvailable !== undefined) {
-      useEventListener<MediaRecorder, MediaRecorderEventMap, 'dataavailable'>(mediaRecorder, 'dataavailable', onDataAvailable, { passive: true })
+      useEventListener(mediaRecorder, 'dataavailable', onDataAvailable as (e: Event) => void, { passive: true })
     }
 
     if (onError !== undefined) {
-      useEventListener<MediaRecorder, MediaRecorderEventMap, 'error'>(mediaRecorder, 'error', onError, { passive: true })
+      useEventListener(mediaRecorder, 'error', onError, { passive: true })
     }
 
     if (onPause !== undefined) {
-      useEventListener<MediaRecorder, MediaRecorderEventMap, 'pause'>(mediaRecorder, 'pause', onPause, { passive: true })
+      useEventListener(mediaRecorder, 'pause', onPause, { passive: true })
     }
 
     if (onResume !== undefined) {
-      useEventListener<MediaRecorder, MediaRecorderEventMap, 'resume'>(mediaRecorder, 'resume', onResume, { passive: true })
+      useEventListener(mediaRecorder, 'resume', onResume, { passive: true })
     }
 
     if (onStart !== undefined) {
-      useEventListener<MediaRecorder, MediaRecorderEventMap, 'start'>(mediaRecorder, 'start', onStart, { passive: true })
+      useEventListener(mediaRecorder, 'start', onStart, { passive: true })
     }
 
     if (onStop !== undefined) {
-      useEventListener<MediaRecorder, MediaRecorderEventMap, 'stop'>(mediaRecorder, 'stop', onStop, { passive: true })
+      useEventListener(mediaRecorder, 'stop', onStop, { passive: true })
     }
   }
 

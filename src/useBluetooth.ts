@@ -44,7 +44,7 @@ const useBluetooth = (): {
     isAvailable.value = await navigator.bluetooth.getAvailability()
   }
 
-  useEventListener<Bluetooth, BluetoothEventMap, 'availabilitychanged'>(
+  useEventListener(
     navigator.bluetooth,
     'availabilitychanged',
     () => {

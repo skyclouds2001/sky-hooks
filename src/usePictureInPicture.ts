@@ -83,11 +83,11 @@ const usePictureInPicture = (target: MaybeRefOrGetter<HTMLVideoElement | null>):
 
         void (isPictureInPicture.value ? enter() : exit())
 
-        useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(target, 'enterpictureinpicture', () => {
+        useEventListener(target, 'enterpictureinpicture', () => {
           isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
         })
 
-        useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(target, 'leavepictureinpicture', () => {
+        useEventListener(target, 'leavepictureinpicture', () => {
           isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
         })
       },

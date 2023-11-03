@@ -44,28 +44,28 @@ const useMouse = (options: UseMouseOptions = {}): UseMouseReturn => {
   const y = ref(0)
   const pressed = ref(false)
 
-  useEventListener(target, 'mousemove', (e: MouseEvent) => {
+  useEventListener(target, 'mousemove', (e) => {
     if (typeof type === 'function') {
-      const [mx, my] = type(e)
+      const [mx, my] = type(e as MouseEvent)
       x.value = mx
       y.value = my
     } else {
       switch (type) {
         case 'client':
-          x.value = e.clientX
-          y.value = e.clientY
+          x.value = (e as MouseEvent).clientX
+          y.value = (e as MouseEvent).clientY
           break
         case 'offset':
-          x.value = e.offsetX
-          y.value = e.offsetY
+          x.value = (e as MouseEvent).offsetX
+          y.value = (e as MouseEvent).offsetY
           break
         case 'page':
-          x.value = e.pageX
-          y.value = e.pageY
+          x.value = (e as MouseEvent).pageX
+          y.value = (e as MouseEvent).pageY
           break
         case 'screen':
-          x.value = e.screenX
-          y.value = e.screenY
+          x.value = (e as MouseEvent).screenX
+          y.value = (e as MouseEvent).screenY
           break
       }
     }

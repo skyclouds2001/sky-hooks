@@ -59,13 +59,13 @@ const useBroadcastChannel = <D = unknown, P = D>(name: string): UseBroadcastChan
     isOpen.value = false
   }
 
-  useEventListener<BroadcastChannel, BroadcastChannelEventMap, 'message'>(broadcastChannel, 'message', (e) => {
-    data.value = e.data
+  useEventListener(broadcastChannel, 'message', (e) => {
+    data.value = (e as MessageEvent).data
     error.value = null
   })
 
-  useEventListener<BroadcastChannel, BroadcastChannelEventMap, 'messageerror'>(broadcastChannel, 'messageerror', (e) => {
-    error.value = e
+  useEventListener(broadcastChannel, 'messageerror', (e) => {
+    error.value = e as MessageEvent
     data.value = null
   })
 
