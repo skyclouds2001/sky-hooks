@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 const useMediaRecorder = (
@@ -12,7 +12,7 @@ const useMediaRecorder = (
   } = {}
 ): {
   isSupported: boolean
-  state: Readonly<Ref<RecordingState>>
+  state: DeepReadonly<Ref<RecordingState>>
   start: (stream: MediaStream, options?: MediaRecorderOptions) => void
   pause: () => void
   resume: () => void

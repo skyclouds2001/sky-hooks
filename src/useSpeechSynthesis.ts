@@ -1,4 +1,4 @@
-import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
+import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
 import tryOnScopeDispose from './tryOnScopeDispose'
 
 const useSpeechSynthesis = (
@@ -13,8 +13,8 @@ const useSpeechSynthesis = (
 ): {
   isSupported: boolean
   isPlaying: Ref<boolean>
-  status: Readonly<Ref<'init' | 'play' | 'pause' | 'end'>>
-  error: Readonly<Ref<string | null>>
+  status: DeepReadonly<Ref<'init' | 'play' | 'pause' | 'end'>>
+  error: DeepReadonly<Ref<string | null>>
   utterance: Readonly<ShallowRef<SpeechSynthesisUtterance | null>>
   speak: () => void
   pause: () => void

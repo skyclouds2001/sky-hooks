@@ -1,4 +1,4 @@
-import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 
 interface UseCounterOptions {
   /**
@@ -24,7 +24,7 @@ interface UseCounterReturn {
   /**
    * the value of the counter
    */
-  count: Readonly<Ref<number>>
+  count: DeepReadonly<Ref<number>>
 
   /**
    * increase the value of the counter

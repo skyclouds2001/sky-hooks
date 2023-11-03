@@ -1,4 +1,4 @@
-import { ref, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
+import { ref, shallowRef, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
 
 interface UseDocumentPictureInPictureOptions {
   /**
@@ -21,7 +21,7 @@ interface UseDocumentPictureInPictureReturn {
   /**
    * picture in picture status of the specified element
    */
-  isDocumentPictureInPicture: Readonly<Ref<boolean>>
+  isDocumentPictureInPicture: DeepReadonly<Ref<boolean>>
 
   /**
    * picture-in-picture window of the specified element

@@ -1,11 +1,11 @@
-import { shallowReadonly, shallowRef, type ShallowRef } from 'vue'
+import { shallowReadonly, shallowRef, type DeepReadonly, type ShallowRef } from 'vue'
 import useEventListener from './useEventListener'
 
 /**
  * reactive document active element
  * @returns document active element
  */
-const useDocumentActiveElement = (): Readonly<ShallowRef<Element | null>> => {
+const useDocumentActiveElement = (): DeepReadonly<ShallowRef<Element | null>> => {
   const activeElement = shallowRef(document.activeElement)
 
   useEventListener(window, 'blur', () => {

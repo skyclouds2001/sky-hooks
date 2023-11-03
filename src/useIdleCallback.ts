@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import tryOnScopeDispose from './tryOnScopeDispose'
 
 interface UseIdleCallbackOptions {
@@ -17,7 +17,7 @@ interface UseIdleCallbackReturn {
   /**
    * current status
    */
-  isActive: Readonly<Ref<boolean>>
+  isActive: DeepReadonly<Ref<boolean>>
 
   /**
    * resume the callback

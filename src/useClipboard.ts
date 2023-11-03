@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 import useTimeout from './useTimeout'
 
@@ -23,12 +23,12 @@ interface UseClipboardReturn {
   /**
    * copied data
    */
-  text: Readonly<Ref<string>>
+  text: DeepReadonly<Ref<string>>
 
   /**
    * whether data is copied to clipboard yet, will reset in a delay
    */
-  isCopied: Readonly<Ref<boolean>>
+  isCopied: DeepReadonly<Ref<boolean>>
 
   /**
    * copy data to clipboard

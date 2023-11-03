@@ -1,4 +1,4 @@
-import { readonly, ref, shallowReadonly, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
+import { readonly, ref, shallowReadonly, shallowRef, watch, type DeepReadonly, type Ref, type ShallowRef } from 'vue'
 import tryOnScopeDispose from './tryOnScopeDispose'
 
 const grammar = `
@@ -18,8 +18,8 @@ const useSpeechRecognition = (
   isSupported: boolean
   recognition: Readonly<ShallowRef<SpeechRecognition | null>>
   isListening: Ref<boolean>
-  isFinished: Readonly<Ref<boolean>>
-  result: Readonly<Ref<string>>
+  isFinished: DeepReadonly<Ref<boolean>>
+  result: DeepReadonly<Ref<string>>
   error: Readonly<ShallowRef<SpeechRecognitionErrorEvent | null>>
   start: () => void
   stop: () => void

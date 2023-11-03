@@ -1,11 +1,11 @@
-import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 
 const usePointerCapture = (
   target: MaybeRefOrGetter<HTMLElement | null> = document.documentElement,
   id: number
 ): {
   isSupported: boolean
-  isPointerCapture: Readonly<Ref<boolean>>
+  isPointerCapture: DeepReadonly<Ref<boolean>>
   set: () => void
   release: () => void
   toggle: () => void

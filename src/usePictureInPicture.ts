@@ -1,4 +1,4 @@
-import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
+import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UsePictureInPictureReturn {
@@ -10,7 +10,7 @@ interface UsePictureInPictureReturn {
   /**
    * picture-in-picture status of the specified element
    */
-  isPictureInPicture: Readonly<Ref<boolean>>
+  isPictureInPicture: DeepReadonly<Ref<boolean>>
 
   /**
    * picture-in-picture window of the specified element

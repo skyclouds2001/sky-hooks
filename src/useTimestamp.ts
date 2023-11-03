@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useAnimationFrame from './useAnimationFrame'
 import useInterval from './useInterval'
 
@@ -33,7 +33,7 @@ interface UseTimestampOptions {
  * @param options @see {@link UseTimestampOptions}
  * @returns the reactive timestamp
  */
-const useTimestamp = (options: UseTimestampOptions = {}): Readonly<Ref<number>> => {
+const useTimestamp = (options: UseTimestampOptions = {}): DeepReadonly<Ref<number>> => {
   const { offset = 0, immediate = true, mode = 'AnimationFrame', interval = 0 } = options
 
   const timestamp = ref(Date.now() + offset)

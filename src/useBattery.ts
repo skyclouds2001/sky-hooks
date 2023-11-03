@@ -1,4 +1,4 @@
-import { reactive, readonly } from 'vue'
+import { reactive, readonly, type DeepReadonly } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseBatteryReturn {
@@ -10,7 +10,7 @@ interface UseBatteryReturn {
   /**
    * Battery Status
    */
-  battery: Readonly<Partial<BatteryManager>>
+  battery: DeepReadonly<Partial<BatteryManager>>
 }
 
 /**

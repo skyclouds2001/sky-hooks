@@ -1,4 +1,4 @@
-import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 import tryOnScopeDispose from './tryOnScopeDispose'
 
 /**
@@ -6,7 +6,7 @@ import tryOnScopeDispose from './tryOnScopeDispose'
  * @param source data source
  * @returns transform result
  */
-const useObjectURL = (source: MaybeRefOrGetter<File | Blob | MediaSource | null>): Readonly<Ref<string | null>> => {
+const useObjectURL = (source: MaybeRefOrGetter<File | Blob | MediaSource | null>): DeepReadonly<Ref<string | null>> => {
   const url = ref<string | null>(null)
 
   const release = (): void => {

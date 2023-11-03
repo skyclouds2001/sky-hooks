@@ -1,11 +1,11 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 const useMediaQuery = (
   query: string
 ): {
   isSupported: boolean
-  matchMediaQuery: Readonly<Ref<boolean>>
+  matchMediaQuery: DeepReadonly<Ref<boolean>>
 } => {
   const isSupported = 'matchMedia' in window && typeof window.matchMedia === 'function'
 

@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseWindowControlsOverlayReturn {
@@ -10,12 +10,12 @@ interface UseWindowControlsOverlayReturn {
   /**
    * the title bar visibility
    */
-  visible: Readonly<Ref<boolean>>
+  visible: DeepReadonly<Ref<boolean>>
 
   /**
    * the size and position of the title bar
    */
-  rect: Readonly<Ref<DOMRect>>
+  rect: DeepReadonly<Ref<DOMRect>>
 }
 
 /**

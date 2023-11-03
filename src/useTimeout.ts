@@ -1,4 +1,4 @@
-import { readonly, ref, toValue, type MaybeRefOrGetter, type Ref } from 'vue'
+import { readonly, ref, toValue, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 import tryOnScopeDispose from './tryOnScopeDispose'
 
 interface UseTimeoutOptions {
@@ -12,7 +12,7 @@ interface UseTimeoutReturn {
   /**
    * current status
    */
-  isActive: Readonly<Ref<boolean>>
+  isActive: DeepReadonly<Ref<boolean>>
 
   /**
    * resume the callback

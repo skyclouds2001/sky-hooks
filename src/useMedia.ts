@@ -1,4 +1,4 @@
-import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 enum MediaType {
@@ -36,23 +36,23 @@ const transformTimeRanges = (timeRanges: TimeRanges): number[] => {
 const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
   target: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>
 ): {
-  element: Readonly<MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>>
-  type: Readonly<Ref<MediaType>>
-  readyState: Readonly<Ref<ReadyState>>
-  networkState: Readonly<Ref<NetworkState>>
-  playing: Readonly<Ref<boolean>>
-  pausing: Readonly<Ref<boolean>>
+  element: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>
+  type: DeepReadonly<Ref<MediaType>>
+  readyState: DeepReadonly<Ref<ReadyState>>
+  networkState: DeepReadonly<Ref<NetworkState>>
+  playing: DeepReadonly<Ref<boolean>>
+  pausing: DeepReadonly<Ref<boolean>>
   play: () => Promise<void>
   pause: () => Promise<void>
   volume: Ref<number>
   muted: Ref<boolean>
   rate: Ref<number>
-  duration: Readonly<Ref<number>>
+  duration: DeepReadonly<Ref<number>>
   currentTime: Ref<number>
-  seeking: Readonly<Ref<boolean>>
-  waiting: Readonly<Ref<boolean>>
-  buffered: Readonly<Ref<readonly number[]>>
-  error: Readonly<Ref<MediaError | null>>
+  seeking: DeepReadonly<Ref<boolean>>
+  waiting: DeepReadonly<Ref<boolean>>
+  buffered: DeepReadonly<Ref<readonly number[]>>
+  error: DeepReadonly<Ref<MediaError | null>>
 } => {
   const type = ref(MediaType.MEDIA)
 

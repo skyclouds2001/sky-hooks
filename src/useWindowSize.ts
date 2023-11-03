@@ -1,16 +1,16 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseWindowSize {
   /**
    * window width
    */
-  width: Readonly<Ref<number>>
+  width: DeepReadonly<Ref<number>>
 
   /**
    * window height
    */
-  height: Readonly<Ref<number>>
+  height: DeepReadonly<Ref<number>>
 }
 
 /**

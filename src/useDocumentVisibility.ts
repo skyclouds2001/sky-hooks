@@ -1,11 +1,11 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 /**
  * reactive document visibility state
  * @returns document visibility state
  */
-const useDocumentVisibility = (): Readonly<Ref<DocumentVisibilityState>> => {
+const useDocumentVisibility = (): DeepReadonly<Ref<DocumentVisibilityState>> => {
   const visibility = ref(document.visibilityState)
 
   useEventListener(document, 'visibilitychange', () => {

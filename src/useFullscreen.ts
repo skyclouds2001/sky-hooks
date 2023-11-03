@@ -1,4 +1,4 @@
-import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseFullscreenReturn {
@@ -10,7 +10,7 @@ interface UseFullscreenReturn {
   /**
    * fullscreen status of the specified element
    */
-  isFullscreen: Readonly<Ref<boolean>>
+  isFullscreen: DeepReadonly<Ref<boolean>>
 
   /**
    * enter fullscreen status of the specified element

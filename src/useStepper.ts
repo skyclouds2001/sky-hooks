@@ -1,4 +1,4 @@
-import { computed, readonly, ref, toValue, type ComputedRef, type MaybeRefOrGetter, type Ref } from 'vue'
+import { computed, readonly, ref, toValue, type ComputedRef, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 import { type Obj } from './util'
 
 type StepperArray = Array<string | number>
@@ -18,7 +18,7 @@ interface UseStepperReturn<SS, S> {
   /**
    * the steps of the stepper
    */
-  steps: Readonly<Ref<SS>>
+  steps: DeepReadonly<Ref<SS>>
 
   /**
    * the step keys of the counter
@@ -175,7 +175,7 @@ const useStepper = <Steppers extends Stepper, Value = Steppers extends Array<inf
   }
 
   return {
-    steps: readonly(step) as Readonly<Ref<Steppers>>,
+    steps: readonly(step),
     stepNames,
     stepCount,
     index,

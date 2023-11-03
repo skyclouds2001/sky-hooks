@@ -1,11 +1,11 @@
-import { computed, readonly, ref, shallowReadonly, shallowRef, type ComputedRef, type Ref, type ShallowRef } from 'vue'
+import { computed, readonly, ref, shallowReadonly, shallowRef, type ComputedRef, type DeepReadonly, type Ref, type ShallowRef } from 'vue'
 import tryOnMounted from './tryOnMounted'
 import tryOnUnmounted from './tryOnUnmounted'
 import useEventListener from './useEventListener'
 
 const useBluetooth = (): {
   isSupported: boolean
-  isAvailable: Readonly<Ref<boolean>>
+  isAvailable: DeepReadonly<Ref<boolean>>
   isConnected: ComputedRef<boolean>
   device: ShallowRef<BluetoothDevice | null>
   server: ShallowRef<BluetoothRemoteGATTServer | null>

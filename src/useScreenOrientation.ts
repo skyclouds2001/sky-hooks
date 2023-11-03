@@ -1,10 +1,10 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 const useScreenOrientation = (): {
   isSupported: boolean
-  type: Readonly<Ref<OrientationType>>
-  angel: Readonly<Ref<number>>
+  type: DeepReadonly<Ref<OrientationType>>
+  angel: DeepReadonly<Ref<number>>
   lock: (type: OrientationLockType) => Promise<void>
   unlock: () => Promise<void>
 } => {

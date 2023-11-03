@@ -1,4 +1,4 @@
-import { readonly, ref, shallowReadonly, shallowRef, type Ref, type ShallowRef } from 'vue'
+import { readonly, ref, shallowReadonly, shallowRef, type DeepReadonly, type Ref, type ShallowRef } from 'vue'
 import tryOnScopeDispose from './tryOnScopeDispose'
 import useEventListener from './useEventListener'
 
@@ -11,12 +11,12 @@ interface UseBroadcastChannelReturn<D = unknown, P = D> {
   /**
    * broadcast channel open status
    */
-  isOpen: Readonly<Ref<boolean>>
+  isOpen: DeepReadonly<Ref<boolean>>
 
   /**
    * broadcast channel transferred data
    */
-  data: Readonly<Ref<D | null>>
+  data: DeepReadonly<Ref<D | null>>
 
   /**
    * broadcast channel transferred error
@@ -74,7 +74,7 @@ const useBroadcastChannel = <D = unknown, P = D>(name: string): UseBroadcastChan
   return {
     isSupported,
     isOpen: readonly(isOpen),
-    data: readonly(data) as Readonly<Ref<D | null>>,
+    data: readonly(data),
     error: shallowReadonly(error),
     post,
     close,

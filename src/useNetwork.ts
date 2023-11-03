@@ -1,4 +1,4 @@
-import { reactive, readonly } from 'vue'
+import { reactive, readonly, type DeepReadonly } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseNetworkReturn {
@@ -10,7 +10,7 @@ interface UseNetworkReturn {
   /**
    * network information
    */
-  connection: Readonly<Pick<NetworkInformation, 'downlink' | 'effectiveType' | 'rtt' | 'saveData' | 'type' | 'downlinkMax'>>
+  connection: DeepReadonly<Pick<NetworkInformation, 'downlink' | 'effectiveType' | 'rtt' | 'saveData' | 'type' | 'downlinkMax'>>
 }
 
 /**

@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseMouseOptions {
@@ -19,17 +19,17 @@ interface UseMouseReturn {
   /**
    * x coordinate of mouse
    */
-  x: Readonly<Ref<number>>
+  x: DeepReadonly<Ref<number>>
 
   /**
    * y coordinate of mouse
    */
-  y: Readonly<Ref<number>>
+  y: DeepReadonly<Ref<number>>
 
   /**
    * whether the mouse is pressed
    */
-  pressed: Readonly<Ref<boolean>>
+  pressed: DeepReadonly<Ref<boolean>>
 }
 
 /**

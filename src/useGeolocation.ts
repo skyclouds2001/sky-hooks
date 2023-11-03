@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import tryOnMounted from './tryOnMounted'
 import tryOnUnmounted from './tryOnUnmounted'
 
@@ -31,17 +31,17 @@ interface UseGeolocationReturn {
   /**
    * geolocation information
    */
-  geolocation: Readonly<Ref<GeolocationCoordinates>>
+  geolocation: DeepReadonly<Ref<GeolocationCoordinates>>
 
   /**
    * geolocation information recently updated timestamp
    */
-  locatedAt: Readonly<Ref<number | null>>
+  locatedAt: DeepReadonly<Ref<number | null>>
 
   /**
    * geolocation information error if has
    */
-  error: Readonly<Ref<GeolocationPositionError | null>>
+  error: DeepReadonly<Ref<GeolocationPositionError | null>>
 }
 
 /**

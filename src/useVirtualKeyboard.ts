@@ -1,4 +1,4 @@
-import { readonly, ref, watch, type Ref } from 'vue'
+import { readonly, ref, watch, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseVirtualKeyboardReturn {
@@ -20,7 +20,7 @@ interface UseVirtualKeyboardReturn {
   /**
    * virtual keyboard dom rect
    */
-  rect: Readonly<Ref<DOMRect>>
+  rect: DeepReadonly<Ref<DOMRect>>
 
   /**
    * hide virtual keyboard

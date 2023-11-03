@@ -1,4 +1,4 @@
-import { reactive, readonly } from 'vue'
+import { reactive, readonly, type DeepReadonly } from 'vue'
 import useEventListener from './useEventListener'
 
 interface BrowserLocation {
@@ -16,7 +16,7 @@ interface BrowserLocation {
   search: string
 }
 
-const useLocation = (): Readonly<BrowserLocation> => {
+const useLocation = (): DeepReadonly<BrowserLocation> => {
   const location = reactive<BrowserLocation>({
     trigger: 'load',
     length: 0,

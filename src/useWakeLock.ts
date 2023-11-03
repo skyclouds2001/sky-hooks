@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseWakeLockReturn {
@@ -10,7 +10,7 @@ interface UseWakeLockReturn {
   /**
    * screen wake lock status
    */
-  isWakeLock: Readonly<Ref<boolean>>
+  isWakeLock: DeepReadonly<Ref<boolean>>
 
   /**
    * request screen wake lock

@@ -1,16 +1,16 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 interface UseWindowScrollReturn {
   /**
    * scroll x position
    */
-  x: Readonly<Ref<number>>
+  x: DeepReadonly<Ref<number>>
 
   /**
    * scroll y position
    */
-  y: Readonly<Ref<number>>
+  y: DeepReadonly<Ref<number>>
 }
 
 /**

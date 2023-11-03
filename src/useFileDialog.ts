@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 
 interface UseFileDialogOptions {
   /**
@@ -21,7 +21,7 @@ interface UseFileDialogReturn {
   /**
    * selected files
    */
-  files: Readonly<Ref<FileList | null>>
+  files: DeepReadonly<Ref<FileList | null>>
 
   /**
    * open a file dialog to select files

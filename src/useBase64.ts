@@ -1,11 +1,11 @@
-import { type MaybeRefOrGetter, ref, type Ref, watch, toValue, readonly } from 'vue'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 
 /**
  * reactive base64 encode
  * @param target encode target
  * @returns encode result
  */
-const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[] | Blob | File | ArrayBuffer | HTMLImageElement | HTMLCanvasElement>): Readonly<Ref<string>> => {
+const useBase64 = (target: MaybeRefOrGetter<undefined | null | string | unknown[] | Blob | File | ArrayBuffer | HTMLImageElement | HTMLCanvasElement>): DeepReadonly<Ref<string>> => {
   const base64 = ref('')
 
   const encoder = new TextEncoder()

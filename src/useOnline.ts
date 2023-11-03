@@ -1,10 +1,10 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 const useOnline = (): {
-  isOnline: Readonly<Ref<boolean>>
-  onlineAt: Readonly<Ref<number | undefined>>
-  offlineAt: Readonly<Ref<number | undefined>>
+  isOnline: DeepReadonly<Ref<boolean>>
+  onlineAt: DeepReadonly<Ref<number | undefined>>
+  offlineAt: DeepReadonly<Ref<number | undefined>>
 } => {
   const isOnline = ref(window.navigator.onLine)
 

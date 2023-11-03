@@ -1,4 +1,4 @@
-import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 
 interface UseToggleOptions<T, F> {
   /**
@@ -24,7 +24,7 @@ interface UseToggleReturn<T, F> {
   /**
    * the value of the toggle
    */
-  value: Readonly<Ref<T | F>>
+  value: DeepReadonly<Ref<T | F>>
 
   /**
    * toggle the value of the toggle
@@ -70,7 +70,7 @@ const useToggle = <T = true, F = false>(options: UseToggleOptions<T, F> = {}): U
   )
 
   return {
-    value: readonly(value) as Readonly<Ref<T | F>>,
+    value: readonly(value),
     toggle,
   }
 }

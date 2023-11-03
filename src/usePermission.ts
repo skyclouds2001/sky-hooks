@@ -1,11 +1,11 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
 const usePermission = (
   name: PermissionName | 'accelerometer' | 'accessibility-events' | 'ambient-light-sensor' | 'background-sync' | 'camera' | 'clipboard-read' | 'clipboard-write' | 'gyroscope' | 'magnetometer' | 'microphone' | 'payment-handler' | 'speaker'
 ): {
   isSupported: boolean
-  status: Readonly<Ref<PermissionState | null>>
+  status: DeepReadonly<Ref<PermissionState | null>>
 } => {
   const isSupported = 'permissions' in navigator
 

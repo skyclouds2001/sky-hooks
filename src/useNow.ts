@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useAnimationFrame from './useAnimationFrame'
 import useInterval from './useInterval'
 
@@ -27,7 +27,7 @@ interface UseNowOptions {
  * @param options @see {@link UseNowOptions}
  * @returns the reactive date
  */
-const useNow = (options: UseNowOptions = {}): Readonly<Ref<Date>> => {
+const useNow = (options: UseNowOptions = {}): DeepReadonly<Ref<Date>> => {
   const { immediate = true, mode = 'AnimationFrame', interval = 0 } = options
 
   const now = ref(new Date())

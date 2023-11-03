@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 
 interface useEyeDropperReturn {
   /**
@@ -9,7 +9,7 @@ interface useEyeDropperReturn {
   /**
    * select color
    */
-  color: Readonly<Ref<string | null>>
+  color: DeepReadonly<Ref<string | null>>
 
   /**
    * open a select to set a color
