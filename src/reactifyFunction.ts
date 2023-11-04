@@ -1,10 +1,10 @@
-import { computed, unref, type ComputedRef, type Ref } from 'vue'
+import { computed, toValue, type ComputedRef, type MaybeRefOrGetter } from 'vue'
 import { type Fn } from './util'
 
-type Reactify<T> = T extends (...args: infer A) => infer R
+type Reactify<T extends Fn> = T extends (...args: infer A) => infer R
   ? (
       ...args: {
-        [K in keyof A]: A[K] | Ref<A[K]>
+        [K in keyof A]: MaybeRefOrGetter<A[K]>
       }
     ) => ComputedRef<R>
   : never
@@ -19,10 +19,10 @@ const reactifyFunction = function <T extends Fn>(fn: T): Reactify<T> {
     return computed(() =>
       fn.apply(
         this,
-        args.map((v) => unref(v))
+        args.map((v) => toValue(v))
       )
     )
-  } as unknown as Reactify<T>
+  } as Reactify<T>
 }
 
 export default reactifyFunction
