@@ -3,7 +3,8 @@ import tryOnScopeDispose from './tryOnScopeDispose'
 
 interface UseTimeoutOptions {
   /**
-   * whether immediate start exec the idle callback
+   * whether immediate start exec the callback
+   * @default true
    */
   immediate?: boolean
 }

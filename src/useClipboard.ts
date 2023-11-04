@@ -5,11 +5,13 @@ import useTimeout from './useTimeout'
 interface UseClipboardOptions {
   /**
    * keep copied data delay
+   * @default 2500
    */
   delay?: number
 
   /**
-   * whether listen to `copy` and `cut` event and
+   * whether listen to `copy` and `cut` event
+   * @default true
    */
   listen?: boolean
 }

@@ -1,7 +1,7 @@
 import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
-interface UseWindowSize {
+interface UseWindowSizeReturn {
   /**
    * window width
    */
@@ -15,9 +15,9 @@ interface UseWindowSize {
 
 /**
  * reactive window size
- * @returns @see {@link UseWindowSize}
+ * @returns @see {@link UseWindowSizeReturn}
  */
-const useWindowSize = (): UseWindowSize => {
+const useWindowSize = (): UseWindowSizeReturn => {
   const width = ref(window.innerWidth)
   const height = ref(window.innerHeight)
 

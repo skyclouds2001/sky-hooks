@@ -4,6 +4,7 @@ import tryOnScopeDispose from './tryOnScopeDispose'
 interface UseAnimationFrameOptions {
   /**
    * whether immediate start exec the callback
+   * @default true
    */
   immediate?: boolean
 }

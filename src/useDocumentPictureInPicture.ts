@@ -3,11 +3,13 @@ import { ref, shallowRef, toValue, watch, type DeepReadonly, type MaybeRefOrGett
 interface UseDocumentPictureInPictureOptions {
   /**
    * picture in picture window width
+   * @default 0
    */
   width?: number
 
   /**
    * picture in picture window height
+   * @default 0
    */
   height?: number
 }

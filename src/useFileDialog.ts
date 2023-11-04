@@ -3,16 +3,19 @@ import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 interface UseFileDialogOptions {
   /**
    * whether allow to select multiple files
+   * @default true
    */
   multiple?: boolean
 
   /**
    * support to select files
+   * @default '*'
    */
   accept?: string
 
   /**
    * whether allow to select multiple files
+   * @default 'environment'
    */
   capture?: 'user' | 'environment'
 }

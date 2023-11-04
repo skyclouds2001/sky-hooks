@@ -4,6 +4,7 @@ import tryOnScopeDispose from './tryOnScopeDispose'
 interface UseIdleCallbackOptions {
   /**
    * whether immediate start exec the callback
+   * @default true
    */
   immediate?: boolean
 
