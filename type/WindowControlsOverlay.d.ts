@@ -1,10 +1,3 @@
-declare var WindowControlsOverlay: WindowControlsOverlay
-
-declare var WindowControlsOverlayGeometryChangeEvent: {
-  prototype: WindowControlsOverlayGeometryChangeEvent
-  new (type: string, initDict?: WindowControlsOverlayGeometryChangeEventInit): WindowControlsOverlayGeometryChangeEvent
-}
-
 interface Navigator {
   readonly windowControlsOverlay: WindowControlsOverlay
 }
@@ -19,6 +12,10 @@ interface WindowControlsOverlay extends EventTarget {
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
 }
 
+declare var WindowControlsOverlay: {
+  prototype: WindowControlsOverlay
+}
+
 interface WindowControlsOverlayEventMap {
   geometrychange: WindowControlsOverlayGeometryChangeEvent
 }
@@ -26,6 +23,11 @@ interface WindowControlsOverlayEventMap {
 interface WindowControlsOverlayGeometryChangeEvent extends Event {
   readonly titlebarAreaRect: DOMRect
   readonly visible: boolean
+}
+
+declare var WindowControlsOverlayGeometryChangeEvent: {
+  prototype: WindowControlsOverlayGeometryChangeEvent
+  new (type: string, initDict?: WindowControlsOverlayGeometryChangeEventInit): WindowControlsOverlayGeometryChangeEvent
 }
 
 interface WindowControlsOverlayGeometryChangeEventInit extends EventInit {

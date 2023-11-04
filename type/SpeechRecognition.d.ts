@@ -1,25 +1,3 @@
-declare var SpeechRecognition: {
-  prototype: SpeechRecognition
-  new (): SpeechRecognition
-}
-
-declare var SpeechGrammar: SpeechGrammar
-
-declare var SpeechGrammarList: {
-  prototype: SpeechGrammarList
-  new (): SpeechGrammarList
-}
-
-declare var SpeechRecognitionEvent: {
-  prototype: SpeechRecognitionEvent
-  new (type: string, eventInitDict: SpeechRecognitionEventInit): SpeechRecognitionEvent
-}
-
-declare var SpeechRecognitionErrorEvent: {
-  prototype: SpeechRecognitionErrorEvent
-  new (type: string, eventInitDict: SpeechRecognitionErrorEventInit): SpeechRecognitionErrorEvent
-}
-
 interface SpeechRecognition extends EventTarget {
   continuous: boolean
   grammars: SpeechGrammarList
@@ -46,6 +24,11 @@ interface SpeechRecognition extends EventTarget {
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
 }
 
+declare var SpeechRecognition: {
+  prototype: SpeechRecognition
+  new (): SpeechRecognition
+}
+
 interface SpeechRecognitionEventMap {
   audioend: Event
   audiostart: Event
@@ -65,6 +48,10 @@ interface SpeechGrammar {
   weight: number
 }
 
+declare var SpeechGrammar: {
+  prototype: SpeechGrammar
+}
+
 interface SpeechGrammarList {
   readonly length: number
   addFromString: (string: string, wieght?: number) => void
@@ -73,9 +60,19 @@ interface SpeechGrammarList {
   [index: number]: SpeechGrammar
 }
 
+declare var SpeechGrammarList: {
+  prototype: SpeechGrammarList
+  new (): SpeechGrammarList
+}
+
 interface SpeechRecognitionEvent extends Event {
   readonly resultIndex: number
   readonly results: SpeechRecognitionResultList
+}
+
+declare var SpeechRecognitionEvent: {
+  prototype: SpeechRecognitionEvent
+  new (type: string, eventInitDict: SpeechRecognitionEventInit): SpeechRecognitionEvent
 }
 
 interface SpeechRecognitionEventInit extends EventInit {
@@ -86,6 +83,11 @@ interface SpeechRecognitionEventInit extends EventInit {
 interface SpeechRecognitionErrorEvent extends Event {
   readonly error: SpeechRecognitionErrorCode
   readonly message?: string
+}
+
+declare var SpeechRecognitionErrorEvent: {
+  prototype: SpeechRecognitionErrorEvent
+  new (type: string, eventInitDict: SpeechRecognitionErrorEventInit): SpeechRecognitionErrorEvent
 }
 
 interface SpeechRecognitionErrorEventInit extends EventInit {

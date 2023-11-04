@@ -1,5 +1,3 @@
-declare var VirtualKeyboard: VirtualKeyboard
-
 interface Navigator {
   readonly virtualKeyboard: VirtualKeyboard
 }
@@ -14,6 +12,10 @@ interface VirtualKeyboard extends EventTarget {
   addEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void
   removeEventListener: <K extends keyof VirtualKeyboardEventMap>(type: K, listener: (this: VirtualKeyboard, ev: VirtualKeyboardEventMap[K]) => any, options?: boolean | EventListenerOptions) => void
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
+}
+
+declare var VirtualKeyboard: {
+  prototype: VirtualKeyboard
 }
 
 interface VirtualKeyboardEventMap {
