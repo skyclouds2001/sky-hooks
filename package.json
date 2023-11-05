@@ -55,6 +55,7 @@
     "pnpm": ">=8.4.0"
   },
   "scripts": {
+    "dev": "vite ./playground",
     "build": "rollup --config --bundleConfigAsCjs",
     "lint": "eslint --fix . && prettier --write . && markdownlint --fix **/*.md && tsc --noEmit",
     "test": "vitest",

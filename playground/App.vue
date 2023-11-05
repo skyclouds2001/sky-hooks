@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <span>sky-hooks</span>
+  <div>sky-hooks</div>
 </template>
 
 <style scoped lang="scss"></style>
