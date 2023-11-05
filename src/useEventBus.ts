@@ -1,6 +1,6 @@
 import tryOnScopeDispose from './tryOnScopeDispose'
 
-type Listener<T = string, P extends unknown[] = unknown[]> = (event: T, ...payload: P[]) => void
+type Listener<T = string, P extends unknown[] = unknown[]> = (event: T, ...payload: P) => void
 
 const mappers = new Map()
 
@@ -28,7 +28,7 @@ interface UseEventBusReturn<T extends string | number | symbol = string, P exten
    * @param listener listener
    * @param payload listener payloads
    */
-  emit: (event: T, ...payload: P[]) => void
+  emit: (event: T, ...payload: P) => void
 
   /**
    * reset all listeners
@@ -62,13 +62,13 @@ const useEventBus = <T extends string | number | symbol = string, P extends unkn
   }
 
   const once = (listener: Listener<T, P>): void => {
-    on((event, payload) => {
+    on((event, ...payload) => {
       off(listener)
-      listener(event, payload)
+      listener(event, ...payload)
     })
   }
 
-  const emit = (event: T, ...payload: P[]): void => {
+  const emit = (event: T, ...payload: P): void => {
     events.get(key)?.forEach((listener) => {
       listener(event, ...payload)
     })
