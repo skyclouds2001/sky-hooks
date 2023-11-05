@@ -1,34 +1,113 @@
 import { ref, shallowRef, type Ref, type ShallowRef } from 'vue'
 import tryOnScopeDispose from './tryOnScopeDispose'
 
-const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferView = string>(
-  url: string | URL,
-  options: {
-    immediate?: boolean
-    autoClose?: boolean
-    protocols?: string | string[]
-    autoReconnect?:
-      | boolean
-      | {
-          retries?: number
-          delay?: number
-        }
-    heartbeat?:
-      | boolean
-      | {
-          message?: string
-          interval?: number
-        }
-  } = {}
-): {
+interface UseWebSocketOptions {
+  /**
+   * the protocols of WebSocket server, will pass to `WebSocket()` constructor as the second parameters
+   */
+  protocols?: string | string[]
+
+  /**
+   * whether immediately create WebSocket server
+   * @default true
+   */
+  immediate?: boolean
+
+  /**
+   * whether auto close WebSocket server when scope dispose
+   * @default true
+   */
+  autoClose?: boolean
+
+  /**
+   * whether auto reconnect if the connection lost
+   * @default true
+   */
+  autoReconnect?:
+    | boolean
+    | {
+        /**
+         * the retry times to create WebSocket server
+         * @default Infinity
+         */
+        retries?: number
+
+        /**
+         * the delay time to re-create WebSocket server
+         * @default 1000
+         */
+        delay?: number
+      }
+
+  /**
+   * whether to make heartbeat pings
+   * @default false
+   */
+  heartbeat?:
+    | boolean
+    | {
+        /**
+         * the retry times to create WebSocket server
+         * @default 'ping'
+         */
+        message?: string
+
+        /**
+         * the delay time to re-create WebSocket server
+         * @default 1000
+         */
+        interval?: number
+      }
+}
+
+interface UseWebSocketReturn<D> {
+  /**
+   * the WebSocket instance
+   */
   websocket: ShallowRef<WebSocket | null>
+
+  /**
+   * the most recent data sent from the remote WebSocket server
+   */
   data: Ref<D | null>
+
+  /**
+   * the most recent error of the WebSocket server, if any
+   */
+  error: ShallowRef<Event | null>
+
+  /**
+   * the WebSocket server status
+   */
   status: Ref<WebSocket['CONNECTING' | 'OPEN' | 'CLOSING' | 'CLOSED']>
+
+  /**
+   * open the WebSocket server
+   */
   open: () => void
+
+  /**
+   * close the WebSocket server
+   * @param code server close code, must be an integer between 3000 and 4999 or 1000
+   * @param reason server close reason
+   */
   close: (code?: number, reason?: string) => void
+
+  /**
+   * send a message through the WebSocket server
+   * @param message message to be sent to the remote
+   */
   send: (message: D) => void
-} => {
-  const { immediate = true, autoClose = true, protocols, autoReconnect = true, heartbeat = false } = options
+}
+
+/**
+ * reactive WebSocket
+ * @param url WebSocket url
+ * @param options @see {@link UseWebSocketOptions}
+ * @returns @see {@link UseWebSocketReturn}
+ */
+const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferView = string>(url: string | URL, options: UseWebSocketOptions = {}): UseWebSocketReturn<D> => {
+  const { protocols, immediate = true, autoClose = true, autoReconnect = true, heartbeat = false } = options
 
   const websocket = shallowRef<WebSocket | null>(null)
 
@@ -43,9 +122,12 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
   let id: number | null = null
 
   const open = (): void => {
-    if (websocket.value != null || status.value === WebSocket.OPEN) return
+    if (websocket.value != null || status.value !== WebSocket.CLOSED) return
 
     const ws = new WebSocket(url, protocols)
+
+    status.value = WebSocket.CONNECTING
+    websocket.value = ws
 
     manualClose = false
     retry = 0
@@ -54,6 +136,7 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
       'open',
       () => {
         status.value = WebSocket.OPEN
+        error.value = null
 
         if (heartbeat !== false) {
           const { message = 'ping', interval = 1000 } = typeof heartbeat === 'object' ? heartbeat : {}
@@ -123,15 +206,13 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
         passive: true,
       }
     )
-
-    status.value = WebSocket.CONNECTING
-    websocket.value = ws
   }
 
   const close = (code?: number, reason?: string): void => {
     if (websocket.value == null) return
 
     websocket.value.close(code, reason)
+    websocket.value = null
     status.value = WebSocket.CLOSING
 
     manualClose = true
@@ -154,6 +235,7 @@ const useWebSocket = <D extends string | Blob | ArrayBufferLike | ArrayBufferVie
   return {
     websocket,
     data,
+    error,
     status,
     open,
     close,

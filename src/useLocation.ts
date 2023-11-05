@@ -1,26 +1,24 @@
 import { reactive, readonly, type DeepReadonly } from 'vue'
 import useEventListener from './useEventListener'
 
-interface BrowserLocation {
-  trigger: 'load' | 'hashchange' | 'popstate'
-  length: number
-  state: any
-  hash: string
-  host: string
-  hostname: string
-  href: string
-  origin: string
-  pathname: string
-  port: string
-  protocol: string
-  search: string
-}
+type BrowserLocation = Writable<
+  {
+    trigger: 'load' | 'hashchange' | 'popstate'
+    ancestorOrigins: string[]
+  } & Pick<History, 'length' | 'state'> &
+    Pick<Location, 'hash' | 'host' | 'hostname' | 'href' | 'origin' | 'pathname' | 'port' | 'protocol' | 'search'>
+>
 
+/**
+ * reactive web location
+ * @returns location information
+ */
 const useLocation = (): DeepReadonly<BrowserLocation> => {
-  const location = reactive<BrowserLocation>({
+  const location: BrowserLocation = reactive({
     trigger: 'load',
     length: 0,
     state: null,
+    ancestorOrigins: [],
     hash: '',
     host: '',
     hostname: '',
@@ -36,6 +34,7 @@ const useLocation = (): DeepReadonly<BrowserLocation> => {
     location.trigger = trigger
     location.length = window.history.length
     location.state = window.history.state
+    location.ancestorOrigins = Array.from(window.location.ancestorOrigins)
     location.hash = window.location.hash
     location.host = window.location.host
     location.hostname = window.location.hostname
@@ -49,27 +48,13 @@ const useLocation = (): DeepReadonly<BrowserLocation> => {
 
   update('load')
 
-  useEventListener(
-    window,
-    'hashchange',
-    () => {
-      update('hashchange')
-    },
-    {
-      passive: true,
-    }
-  )
+  useEventListener(window, 'hashchange', () => {
+    update('hashchange')
+  })
 
-  useEventListener(
-    window,
-    'popstate',
-    () => {
-      update('popstate')
-    },
-    {
-      passive: true,
-    }
-  )
+  useEventListener(window, 'popstate', () => {
+    update('popstate')
+  })
 
   return readonly(location)
 }

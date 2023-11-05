@@ -1,40 +1,43 @@
 import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
-const useOnline = (): {
+interface UseOnlineReturn {
+  /**
+   * whether currently network status in online mode
+   */
   isOnline: DeepReadonly<Ref<boolean>>
-  onlineAt: DeepReadonly<Ref<number | undefined>>
-  offlineAt: DeepReadonly<Ref<number | undefined>>
-} => {
-  const isOnline = ref(window.navigator.onLine)
 
-  const onlineAt = ref(isOnline.value ? Date.now() : undefined)
+  /**
+   * timestamp of the most recent network status change to online
+   */
+  onlineAt: DeepReadonly<Ref<number | null>>
 
-  const offlineAt = ref(isOnline.value ? undefined : Date.now())
+  /**
+   * timestamp of the most recent network status change to offline
+   */
+  offlineAt: DeepReadonly<Ref<number | null>>
+}
 
-  useEventListener(
-    window,
-    'online',
-    () => {
-      isOnline.value = true
-      onlineAt.value = isOnline.value ? Date.now() : undefined
-    },
-    {
-      passive: true,
-    }
-  )
+/**
+ * reactive online status
+ * @returns @see {@link UseOnlineReturn}
+ */
+const useOnline = (): UseOnlineReturn => {
+  const isOnline = ref(navigator.onLine)
 
-  useEventListener(
-    window,
-    'offline',
-    () => {
-      isOnline.value = false
-      offlineAt.value = isOnline.value ? undefined : Date.now()
-    },
-    {
-      passive: true,
-    }
-  )
+  const onlineAt = ref(isOnline.value ? Date.now() : null)
+
+  const offlineAt = ref(isOnline.value ? null : Date.now())
+
+  useEventListener(window, 'online', () => {
+    isOnline.value = navigator.onLine
+    onlineAt.value = isOnline.value ? Date.now() : null
+  })
+
+  useEventListener(window, 'offline', () => {
+    isOnline.value = navigator.onLine
+    offlineAt.value = isOnline.value ? null : Date.now()
+  })
 
   return {
     isOnline: readonly(isOnline),
