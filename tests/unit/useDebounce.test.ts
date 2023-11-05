@@ -1,5 +1,5 @@
+import { useDebounce } from '@'
 import { describe, expect, it, vi } from 'vitest'
-import { useDebounce } from '../src'
 
 describe('useDebounce', () => {
   it('should be defined', () => {

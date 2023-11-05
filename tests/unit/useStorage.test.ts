@@ -1,6 +1,6 @@
+import { useStorage } from '@'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { nextTick } from 'vue'
-import { useStorage } from '../src'
 
 describe('useStorage', () => {
   const KEY = 'key'

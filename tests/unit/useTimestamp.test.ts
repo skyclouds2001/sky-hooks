@@ -1,5 +1,5 @@
+import { useTimestamp } from '@'
 import { describe, expect, it } from 'vitest'
-import { useTimestamp } from '../src'
 
 describe('useTimestamp', () => {
   it('should be defined', () => {

@@ -1,5 +1,5 @@
+import { useFavicon } from '@'
 import { describe, expect, it } from 'vitest'
-import { useFavicon } from '../src'
 import { nextTick } from 'vue'
 
 describe('useFavicon', () => {
