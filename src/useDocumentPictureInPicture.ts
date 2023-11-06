@@ -1,4 +1,5 @@
 import { ref, shallowRef, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
+import useEventListener from './useEventListener'
 
 interface UseDocumentPictureInPictureOptions {
   /**
@@ -61,7 +62,7 @@ const useDocumentPictureInPicture = (target: MaybeRefOrGetter<HTMLElement | null
 
   const pictureInPictureWindow = shallowRef<Window | null>(null)
 
-  let parentElement: Element | null = null
+  let element: Element | null = null
 
   const enter = async (): Promise<void> => {
     if (!isSupported) return
@@ -70,7 +71,8 @@ const useDocumentPictureInPicture = (target: MaybeRefOrGetter<HTMLElement | null
 
     if (el === null) return
 
-    parentElement = el.parentElement
+    element = document.createElement('span')
+    el.parentElement?.replaceChild(element, el)
 
     if (pictureInPictureWindow.value === null) {
       void window.documentPictureInPicture.requestWindow({
@@ -78,31 +80,23 @@ const useDocumentPictureInPicture = (target: MaybeRefOrGetter<HTMLElement | null
         height,
       })
 
-      window.documentPictureInPicture.addEventListener(
-        'enter',
-        (e) => {
-          pictureInPictureWindow.value = e.window
+      useEventListener(window.documentPictureInPicture, 'enter', (e) => {
+        isDocumentPictureInPicture.value = true
 
-          pictureInPictureWindow.value.document.body.appendChild(el)
+        const win = (e as DocumentPictureInPictureEvent).window
 
-          pictureInPictureWindow.value.addEventListener(
-            'pagehide',
-            () => {
-              parentElement?.appendChild(el)
+        win.document.body.appendChild(el)
 
-              parentElement = null
+        pictureInPictureWindow.value = win
 
-              pictureInPictureWindow.value = null
-            },
-            {
-              passive: true,
-            }
-          )
-        },
-        {
-          passive: true,
-        }
-      )
+        useEventListener(win, 'pagehide', () => {
+          element?.parentElement?.replaceChild(el, element)
+
+          element = null
+
+          pictureInPictureWindow.value = null
+        })
+      })
     } else {
       pictureInPictureWindow.value.document.body.appendChild(el)
     }
@@ -113,6 +107,7 @@ const useDocumentPictureInPicture = (target: MaybeRefOrGetter<HTMLElement | null
 
     if (pictureInPictureWindow.value !== null) {
       pictureInPictureWindow.value.close()
+      isDocumentPictureInPicture.value = false
     }
   }
 
