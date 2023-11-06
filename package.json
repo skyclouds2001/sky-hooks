@@ -58,7 +58,7 @@
     "dev": "vite ./playground",
     "build": "rollup --config --bundleConfigAsCjs",
     "lint": "eslint --fix . && prettier --write . && markdownlint --fix **/*.md && tsc --noEmit",
-    "test": "vitest",
+    "test": "vitest && playwright test",
     "clean": "rimraf node_modules && rimraf dist",
     "changeset": "changeset",
     "bump": "changeset version",

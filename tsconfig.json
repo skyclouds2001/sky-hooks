@@ -42,6 +42,6 @@
 
     "skipLibCheck": true
   },
-  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+  "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.vue"],
   "exclude": ["node_modules", "dist"]
 }
