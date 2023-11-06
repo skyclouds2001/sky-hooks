@@ -1,6 +1,12 @@
 import { ref, type Ref } from 'vue'
 import useAnimationFrame from './useAnimationFrame'
 
+/**
+ * reactive fps
+ * @param options hook options
+ * @param options.every every exec time
+ * @returns fps
+ */
 const useFps = (
   options: {
     every?: number
