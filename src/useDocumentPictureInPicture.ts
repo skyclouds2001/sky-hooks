@@ -67,6 +67,8 @@ const useDocumentPictureInPicture = (target: MaybeRefOrGetter<HTMLElement | null
   const enter = async (): Promise<void> => {
     if (!isSupported) return
 
+    if (isDocumentPictureInPicture.value) return
+
     const el = toValue(target)
 
     if (el === null) return
@@ -104,6 +106,8 @@ const useDocumentPictureInPicture = (target: MaybeRefOrGetter<HTMLElement | null
 
   const exit = async (): Promise<void> => {
     if (!isSupported) return
+
+    if (!isDocumentPictureInPicture.value) return
 
     if (pictureInPictureWindow.value !== null) {
       pictureInPictureWindow.value.close()
