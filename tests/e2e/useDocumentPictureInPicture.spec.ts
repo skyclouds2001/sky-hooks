@@ -19,21 +19,25 @@ test.describe('useDocumentPictureInPicture', () => {
 
     await enter.click()
 
+    expect(page.evaluate(() => window.documentPictureInPicture.window != null)).toBeTruthy()
     await expect(page.getByText('document-picture-in-picture')).toBeHidden()
     await expect(status).toHaveText('true')
 
     await enter.click()
 
+    expect(page.evaluate(() => window.documentPictureInPicture.window != null)).toBeTruthy()
     await expect(page.getByText('document-picture-in-picture')).toBeHidden()
     await expect(status).toHaveText('true')
 
     await exit.click()
 
+    expect(page.evaluate(() => window.documentPictureInPicture.window == null)).toBeTruthy()
     await expect(page.getByText('document-picture-in-picture')).toBeVisible()
     await expect(status).toHaveText('false')
 
     await exit.click()
 
+    expect(page.evaluate(() => window.documentPictureInPicture.window == null)).toBeTruthy()
     await expect(page.getByText('document-picture-in-picture')).toBeVisible()
     await expect(status).toHaveText('false')
   })
@@ -46,21 +50,25 @@ test.describe('useDocumentPictureInPicture', () => {
 
     await toggle.click()
 
+    expect(page.evaluate(() => window.documentPictureInPicture.window != null)).toBeTruthy()
     await expect(page.getByText('document-picture-in-picture')).toBeHidden()
     await expect(status).toHaveText('true')
 
     await toggle.click()
 
+    expect(page.evaluate(() => window.documentPictureInPicture.window == null)).toBeTruthy()
     await expect(page.getByText('document-picture-in-picture')).toBeVisible()
     await expect(status).toHaveText('false')
 
     await toggle.click()
 
+    expect(page.evaluate(() => window.documentPictureInPicture.window != null)).toBeTruthy()
     await expect(page.getByText('document-picture-in-picture')).toBeHidden()
     await expect(status).toHaveText('true')
 
     await toggle.click()
 
+    expect(page.evaluate(() => window.documentPictureInPicture.window == null)).toBeTruthy()
     await expect(page.getByText('document-picture-in-picture')).toBeVisible()
     await expect(status).toHaveText('false')
   })
