@@ -3,6 +3,11 @@ import useEventListener from './useEventListener'
 
 interface UseScreenReturn {
   /**
+   * API support status
+   */
+  isSupported: boolean
+
+  /**
    * screen information
    */
   screen: DeepReadonly<Pick<Screen, 'availHeight' | 'availWidth' | 'width' | 'height' | 'colorDepth' | 'pixelDepth' | 'isExtended'>>
@@ -13,6 +18,8 @@ interface UseScreenReturn {
  * @returns @see {@link UseScreenReturn}
  */
 const useScreen = (): UseScreenReturn => {
+  const isSupported = 'isExtended' in window.screen
+
   const screen = reactive({
     width: 0,
     height: 0,
@@ -38,6 +45,7 @@ const useScreen = (): UseScreenReturn => {
   useEventListener(window.screen, 'change', update)
 
   return {
+    isSupported,
     screen: readonly(screen),
   }
 }
