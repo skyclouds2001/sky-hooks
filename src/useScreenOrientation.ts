@@ -33,7 +33,7 @@ interface UseScreenOrientationReturn {
  * @returns @see {@link UseScreenOrientationReturn}
  */
 const useScreenOrientation = (): UseScreenOrientationReturn => {
-  const isSupported = 'screen' in window && 'orientation' in screen
+  const isSupported = 'orientation' in window.screen
 
   const type = ref(screen.orientation.type)
   const angel = ref(screen.orientation.angle)
