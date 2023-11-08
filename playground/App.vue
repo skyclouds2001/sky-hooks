@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useDocumentPictureInPicture, usePictureInPicture } from '@'
-import { ref } from 'vue'
+import { useDocumentPictureInPicture, usePictureInPicture } from '@';
+import { ref } from 'vue';
 
 const dpip = ref<HTMLDivElement | null>(null)
 
@@ -24,7 +24,7 @@ const upip = usePictureInPicture(pip)
   </div>
 
   <div id="picture-in-picture">
-    <video ref="pip" class="video" src="/demo.mp4" width="300" height="200"></video>
+    <video ref="pip" class="video" src="/video.mp4" width="300" height="200"></video>
     <div class="support">{{ upip.isSupported }}</div>
     <div class="status">{{ upip.isPictureInPicture }}</div>
     <button class="enter" @click="upip.enter()">enter</button>
