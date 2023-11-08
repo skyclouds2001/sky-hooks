@@ -3,16 +3,16 @@ import { test, expect } from '@playwright/test'
 test.describe('usePictureInPicture', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
+
+    test.skip((await page.locator('#picture-in-picture .support').textContent()) === 'false')
   })
 
-  test('should render document-picture-in-picture dom', async ({ page }) => {
+  test('should render picture-in-picture dom', async ({ page }) => {
     await expect(page.locator('#picture-in-picture .video')).toBeVisible()
     await expect(page.locator('#picture-in-picture .status')).toHaveText('false')
   })
 
   test('should support enter or exit picture-in-picture', async ({ page }) => {
-    test.skip((await page.locator('#picture-in-picture .support').textContent()) === 'false')
-
     const status = page.locator('#picture-in-picture .status')
     const enter = page.locator('#picture-in-picture .enter')
     const exit = page.locator('#picture-in-picture .exit')
@@ -39,8 +39,6 @@ test.describe('usePictureInPicture', () => {
   })
 
   test('should support toggle picture-in-picture', async ({ page }) => {
-    test.skip((await page.locator('#picture-in-picture .support').textContent()) === 'false')
-
     const status = page.locator('#picture-in-picture .status')
     const toggle = page.locator('#picture-in-picture .toggle')
 

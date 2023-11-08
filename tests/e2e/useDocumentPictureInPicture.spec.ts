@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test'
 test.describe('useDocumentPictureInPicture', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
+
+    test.skip((await page.locator('#document-picture-in-picture .support').textContent()) === 'false')
   })
 
   test('should render document-picture-in-picture dom', async ({ page }) => {
@@ -11,8 +13,6 @@ test.describe('useDocumentPictureInPicture', () => {
   })
 
   test('should support enter or exit picture-in-picture', async ({ page }) => {
-    test.skip((await page.locator('#document-picture-in-picture .support').textContent()) === 'false')
-
     const status = page.locator('#document-picture-in-picture .status')
     const enter = page.locator('#document-picture-in-picture .enter')
     const exit = page.locator('#document-picture-in-picture .exit')
@@ -43,8 +43,6 @@ test.describe('useDocumentPictureInPicture', () => {
   })
 
   test('should support toggle picture-in-picture', async ({ page }) => {
-    test.skip((await page.locator('#document-picture-in-picture .support').textContent()) === 'false')
-
     const status = page.locator('#document-picture-in-picture .status')
     const toggle = page.locator('#document-picture-in-picture .toggle')
 
