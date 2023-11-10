@@ -33,7 +33,7 @@ const transformTimeRanges = (timeRanges: TimeRanges): number[] => {
   return ranges
 }
 
-const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
+const useMediaElement = <T extends HTMLVideoElement | HTMLAudioElement>(
   target: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>
 ): {
   element: MaybeRefOrGetter<T | HTMLMediaElement | null | undefined>
@@ -455,4 +455,4 @@ const useMedia = <T extends HTMLVideoElement | HTMLAudioElement>(
   }
 }
 
-export default useMedia
+export default useMediaElement
