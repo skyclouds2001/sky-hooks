@@ -54,12 +54,11 @@ const useDevicesList = (options: UseDevicesListOptions = {}): UseDevicesListRetu
 
   const camera = usePermission('camera')
   const microphone = usePermission('microphone')
-  const speakerSelection = usePermission('speaker-selection')
 
   const update = async (): Promise<void> => {
     if (!isSupported) return
 
-    if (camera.status.value !== 'granted' || microphone.status.value !== 'granted' || speakerSelection.status.value !== 'granted') {
+    if (camera.status.value !== 'granted' || microphone.status.value !== 'granted') {
       await requestPermission()
     }
 
@@ -69,7 +68,7 @@ const useDevicesList = (options: UseDevicesListOptions = {}): UseDevicesListRetu
   const requestPermission = async (): Promise<void> => {
     if (!isSupported) return
 
-    if (camera.status.value === 'granted' && microphone.status.value === 'granted' && speakerSelection.status.value === 'granted') return
+    if (camera.status.value === 'granted' && microphone.status.value === 'granted') return
 
     await navigator.mediaDevices.getUserMedia({
       audio: true,
