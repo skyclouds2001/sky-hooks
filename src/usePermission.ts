@@ -1,7 +1,7 @@
 import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
-type PermissionEnum = PermissionName | 'accelerometer' | 'accessibility-events' | 'ambient-light-sensor' | 'background-sync' | 'camera' | 'clipboard-read' | 'clipboard-write' | 'gyroscope' | 'local-fonts' | 'magnetometer' | 'microphone' | 'midi' | 'payment-handler' | 'speaker-selection' | 'storage-access'
+type PermissionEnum = PermissionName | 'accelerometer' | 'accessibility-events' | 'ambient-light-sensor' | 'background-sync' | 'camera' | 'clipboard-read' | 'clipboard-write' | 'gyroscope' | 'local-fonts' | 'magnetometer' | 'microphone' | 'midi' | 'payment-handler' | 'speaker-selection' | 'storage-access' | 'window-management'
 
 interface UsePermissionReturn {
   /**
