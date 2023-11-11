@@ -3,15 +3,48 @@ import tryOnMounted from './tryOnMounted'
 import tryOnUnmounted from './tryOnUnmounted'
 import useEventListener from './useEventListener'
 
-const useBluetooth = (): {
+interface UseBluetoothReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * available status of bluetooth
+   */
   isAvailable: DeepReadonly<Ref<boolean>>
+
+  /**
+   * connect status of bluetooth
+   */
   isConnected: ComputedRef<boolean>
+
+  /**
+   * current connected bluetooth device
+   */
   device: ShallowRef<BluetoothDevice | null>
+
+  /**
+   * current connected bluetooth server
+   */
   server: ShallowRef<BluetoothRemoteGATTServer | null>
+
+  /**
+   * connect bluetooth device running error, if any
+   */
   error: Readonly<ShallowRef<unknown>>
+
+  /**
+   * method to request the device
+   */
   requestDevice: () => Promise<void>
-} => {
+}
+
+/**
+ * reactive Bluetooth API
+ * @returns @see {@link UseBluetoothReturn}
+ */
+const useBluetooth = (): UseBluetoothReturn => {
   const isSupported = 'bluetooth' in navigator
 
   const isAvailable = ref(false)
@@ -44,16 +77,9 @@ const useBluetooth = (): {
     isAvailable.value = await navigator.bluetooth.getAvailability()
   }
 
-  useEventListener(
-    navigator.bluetooth,
-    'availabilitychanged',
-    () => {
-      void updateBluetoothAvailability()
-    },
-    {
-      passive: true,
-    }
-  )
+  useEventListener(navigator.bluetooth, 'availabilitychanged', () => {
+    void updateBluetoothAvailability()
+  })
 
   tryOnMounted(async () => {
     await updateBluetoothAvailability()
