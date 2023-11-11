@@ -1,23 +1,76 @@
 import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 
-const useMediaRecorder = (
-  options: {
-    onDataAvailable?: (e: BlobEvent) => void
-    onError?: (e: Event) => void
-    onPause?: (e: Event) => void
-    onResume?: (e: Event) => void
-    onStart?: (e: Event) => void
-    onStop?: (e: Event) => void
-  } = {}
-): {
+interface UseMediaRecorderOptions {
+  /**
+   * callback to call when the dataavailable event of MediaRecorder happen
+   */
+  onDataAvailable?: (e: BlobEvent) => void
+
+  /**
+   * callback to call when the error event of MediaRecorder happen
+   */
+  onError?: (e: Event) => void
+
+  /**
+   * callback to call when the pause event of MediaRecorder happen
+   */
+  onPause?: (e: Event) => void
+
+  /**
+   * callback to call when the resume event of MediaRecorder happen
+   */
+  onResume?: (e: Event) => void
+
+  /**
+   * callback to call when the start event of MediaRecorder happen
+   */
+  onStart?: (e: Event) => void
+
+  /**
+   * callback to call when the stop event of MediaRecorder happen
+   */
+  onStop?: (e: Event) => void
+}
+
+interface UseMediaRecorderReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * media recorder state
+   */
   state: DeepReadonly<Ref<RecordingState>>
+
+  /**
+   * start to record media
+   */
   start: (stream: MediaStream, options?: MediaRecorderOptions) => void
+
+  /**
+   * pause to record media
+   */
   pause: () => void
+
+  /**
+   * resume to record media
+   */
   resume: () => void
+
+  /**
+   * stop to record media
+   */
   stop: () => void
-} => {
+}
+
+/**
+ * reactive MediaStream Recording API
+ * @param options @see {@link UseMediaRecorderOptions}
+ * @returns @see {@link UseMediaRecorderReturn}
+ */
+const useMediaRecorder = (options: UseMediaRecorderOptions = {}): UseMediaRecorderReturn => {
   const { onDataAvailable, onError, onPause, onResume, onStart, onStop } = options
 
   const isSupported = 'MediaRecorder' in window
@@ -38,27 +91,27 @@ const useMediaRecorder = (
     state.value = mediaRecorder.state
 
     if (onDataAvailable !== undefined) {
-      useEventListener(mediaRecorder, 'dataavailable', onDataAvailable as (e: Event) => void, { passive: true })
+      useEventListener(mediaRecorder, 'dataavailable', onDataAvailable as (e: Event) => void)
     }
 
     if (onError !== undefined) {
-      useEventListener(mediaRecorder, 'error', onError, { passive: true })
+      useEventListener(mediaRecorder, 'error', onError)
     }
 
     if (onPause !== undefined) {
-      useEventListener(mediaRecorder, 'pause', onPause, { passive: true })
+      useEventListener(mediaRecorder, 'pause', onPause)
     }
 
     if (onResume !== undefined) {
-      useEventListener(mediaRecorder, 'resume', onResume, { passive: true })
+      useEventListener(mediaRecorder, 'resume', onResume)
     }
 
     if (onStart !== undefined) {
-      useEventListener(mediaRecorder, 'start', onStart, { passive: true })
+      useEventListener(mediaRecorder, 'start', onStart)
     }
 
     if (onStop !== undefined) {
-      useEventListener(mediaRecorder, 'stop', onStop, { passive: true })
+      useEventListener(mediaRecorder, 'stop', onStop)
     }
   }
 

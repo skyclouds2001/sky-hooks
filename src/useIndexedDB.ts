@@ -1,47 +1,186 @@
 import { shallowReadonly, shallowRef, type ShallowRef } from 'vue'
 import { type Obj } from './util'
 
-const useIndexedDB = <D extends Obj>(options: {
+interface UseIndexedDBOptions {
+  /**
+   * database options
+   */
   database: {
+    /**
+     * database name
+     */
     name: string
+
+    /**
+     * database version
+     */
     version?: number
   }
+
+  /**
+   * store options
+   */
   store: {
+    /**
+     * store name
+     */
     name: string
+
+    /**
+     * store auto increase
+     */
     autoIncrement?: boolean
+
+    /**
+     * store key path
+     */
     keyPath?: string | string[] | null
+
+    /**
+     * store indexes
+     */
     indexes?: Array<{
+      /**
+       * store index name
+       */
       name: string
+
+      /**
+       * store index keypath
+       */
       keyPath: string | string[]
+
+      /**
+       * store index additional options
+       */
       options?: {
+        /**
+         * store index unique symbol
+         */
         unique?: boolean
+
+        /**
+         * store index multiple entry symbol
+         */
         multiEntry?: boolean
       }
     }>
   }
+
+  /**
+   * callback to call if database abort
+   */
   onDatabaseAbort?: (e: Event) => void
+
+  /**
+   * callback to call if database close
+   */
   onDatabaseClose?: (e: Event) => void
+
+  /**
+   * callback to call if database occur error
+   */
   onDatabaseError?: (e: Event) => void
+
+  /**
+   * callback to call if database's version change
+   */
   onDatabaseVersionChange?: (e: IDBVersionChangeEvent) => void
-}): {
+}
+
+interface UseIndexedDBReturn<D extends Obj> {
+  /**
+   * reference to database
+   */
   database: Readonly<ShallowRef<IDBDatabase | null>>
+
+  /**
+   * reference to store
+   */
   store: Readonly<ShallowRef<IDBObjectStore | null>>
+
+  /**
+   * method to create database
+   */
   createDatabase: () => Promise<IDBDatabase>
+
+  /**
+   * method to close database
+   */
   closeDatabase: () => Promise<Event>
+
+  /**
+   * method to delete database
+   */
   deleteDatabase: () => Promise<Event>
+
+  /**
+   * method to enum databases
+   */
   enumDatabases: () => Promise<IDBDatabaseInfo[]>
+
+  /**
+   * method to compare two operation keys
+   */
   compareOperationKey: (first: unknown, second: unknown) => number
+
+  /**
+   * method to insert data
+   */
   insertData: (data: D) => Promise<Event>
+
+  /**
+   * method to update data
+   */
   updateData: (data: D) => Promise<Event>
+
+  /**
+   * method to delete data
+   */
   deleteData: (query: IDBValidKey | IDBKeyRange) => Promise<Event>
+
+  /**
+   * method to select data
+   */
   selectData: (query: IDBValidKey | IDBKeyRange) => Promise<Event>
+
+  /**
+   * method to select all datas
+   */
   selectAllData: (query?: IDBValidKey | IDBKeyRange) => Promise<Event>
+
+  /**
+   * method to select data by index
+   */
   selectDataByIndex: (name: string, query: IDBValidKey | IDBKeyRange) => Promise<Event>
+
+  /**
+   * method to traverse data
+   */
   traverseData: (onData: (data: D) => void, query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection) => Promise<null>
+
+  /**
+   * method to traverse data by index
+   */
   traverseDataByIndex: (name: string, onData: (data: D) => void, query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection) => Promise<null>
+
+  /**
+   * method to count data
+   */
   countData: (query?: IDBValidKey | IDBKeyRange) => Promise<Event>
+
+  /**
+   * method to clear data
+   */
   clearData: () => Promise<Event>
-} => {
+}
+
+/**
+ * reactive IndexedDB API
+ * @param options @see {@link UseIndexedDBOptions}
+ * @returns @see {@link UseIndexedDBReturn}
+ */
+const useIndexedDB = <D extends Obj>(options: UseIndexedDBOptions): UseIndexedDBReturn<D> => {
   const { database: db, store: os, onDatabaseAbort, onDatabaseClose, onDatabaseError, onDatabaseVersionChange } = options
 
   const database = shallowRef<IDBDatabase | null>(null)

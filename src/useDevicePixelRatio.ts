@@ -1,5 +1,9 @@
 import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 
+/**
+ * reactive device pixel ratio
+ * @returns device pixel ratio value
+ */
 const useDevicePixelRatio = (): DeepReadonly<Ref<number>> => {
   const pixelRatio = ref(1)
 
