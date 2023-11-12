@@ -5,6 +5,7 @@ import useEventListener from './useEventListener'
 interface UseDevicesListOptions {
   /**
    * whether immediate load media devices list, which may request permission immediate
+   * @default false
    */
   immediate?: boolean
 }
