@@ -1,13 +1,25 @@
 import tryOnScopeDispose from './tryOnScopeDispose'
 
-const useMutationObserver = (
-  target: Node,
-  callback: MutationCallback,
-  options?: MutationObserverInit
-): {
+interface UseMutationObserverReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * method to stop observe
+   */
   stop: () => void
-} => {
+}
+
+/**
+ * reactive MutationObserver
+ * @param target observe target dom element
+ * @param callback observe callback
+ * @param options observer options
+ * @returns @see {@link UseMutationObserverReturn}
+ */
+const useMutationObserver = (target: Node, callback: MutationCallback, options?: MutationObserverInit): UseMutationObserverReturn => {
   const isSupported = 'MutationObserver' in window
 
   let observer: MutationObserver | null = null

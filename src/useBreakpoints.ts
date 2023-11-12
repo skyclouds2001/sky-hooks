@@ -41,15 +41,15 @@ interface UseBreakpointsReturn<K extends string = string> {
  * @returns @see {@link UseBreakpointsReturn}
  */
 const useBreakpoints = <K extends string = string>(breakpoints: Breakpoints<K>): UseBreakpointsReturn<K> => {
-  const greater = (k: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(min-width: ${breakpoints[k] + 0.001}px)`).matchMediaQuery
+  const greater = (k: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(min-width: ${breakpoints[k] + 0.001}px)`).matches
 
-  const greaterOrEqual = (k: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(min-width: ${breakpoints[k] - 0.001}px)`).matchMediaQuery
+  const greaterOrEqual = (k: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(min-width: ${breakpoints[k] - 0.001}px)`).matches
 
-  const smaller = (k: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(max-width: ${breakpoints[k] - 0.001}px)`).matchMediaQuery
+  const smaller = (k: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(max-width: ${breakpoints[k] - 0.001}px)`).matches
 
-  const smallerOrEqual = (k: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(max-width: ${breakpoints[k] + 0.001}px)`).matchMediaQuery
+  const smallerOrEqual = (k: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(max-width: ${breakpoints[k] + 0.001}px)`).matches
 
-  const between = (a: K, b: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(min-width: ${breakpoints[a] - 0.001}px) and (max-width: ${breakpoints[b] + 0.001}px)`).matchMediaQuery
+  const between = (a: K, b: K): DeepReadonly<Ref<boolean>> => useMediaQuery(`(min-width: ${breakpoints[a] - 0.001}px) and (max-width: ${breakpoints[b] + 0.001}px)`).matches
 
   return {
     breakpoints,

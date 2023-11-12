@@ -1,13 +1,25 @@
 import tryOnScopeDispose from './tryOnScopeDispose'
 
-const useIntersectionObserver = (
-  target: Element | Element[],
-  callback: IntersectionObserverCallback,
-  options?: IntersectionObserverInit
-): {
+interface UseIntersectionObserverReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * method to stop observe
+   */
   stop: () => void
-} => {
+}
+
+/**
+ * reactive IntersectionObserver
+ * @param target observe target
+ * @param callback observe callback
+ * @param options observer options
+ * @returns @see {@link UseIntersectionObserverReturn}
+ */
+const useIntersectionObserver = (target: Element | Element[], callback: IntersectionObserverCallback, options?: IntersectionObserverInit): UseIntersectionObserverReturn => {
   const isSupported = 'IntersectionObserver' in window
 
   let observer: IntersectionObserver | null = null

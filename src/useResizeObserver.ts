@@ -1,12 +1,24 @@
 import tryOnScopeDispose from './tryOnScopeDispose'
 
-const useResizeObserver = (
-  target: Element | Element[],
-  callback: ResizeObserverCallback
-): {
+interface UseResizeObserverReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * method to stop observe
+   */
   stop: () => void
-} => {
+}
+
+/**
+ * reactive ResizeObserver
+ * @param target observe target
+ * @param callback observe callback
+ * @returns @see {@link UseResizeObserverReturn}
+ */
+const useResizeObserver = (target: Element | Element[], callback: ResizeObserverCallback): UseResizeObserverReturn => {
   const isSupported = 'ResizeObserver' in window
 
   let observer: ResizeObserver | null = null

@@ -1,7 +1,12 @@
 import { ref, watch, type Ref } from 'vue'
 
-const useFavicon = (initial?: string): Ref<string | null> => {
-  const favicon = ref<string | null>(initial ?? null)
+/**
+ * reactive favicon controller
+ * @param initial initial value
+ * @returns reactive favicon
+ */
+const useFavicon = (initial?: string): Ref<string> => {
+  const favicon = ref(initial ?? '')
 
   watch(
     favicon,
