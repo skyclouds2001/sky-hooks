@@ -42,6 +42,8 @@ export { default as useCssVariable } from './useCssVariable'
 
 export { default as useDebounce } from './useDebounce'
 
+export { default as useDeviceMotion } from './useDeviceMotion'
+
 export { default as useDeviceOrientation } from './useDeviceOrientation'
 
 export { default as useDevicePixelRatio } from './useDevicePixelRatio'
