@@ -1,6 +1,7 @@
 import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import tryOnMounted from './tryOnMounted'
 import tryOnUnmounted from './tryOnUnmounted'
+import usePermission from './usePermission'
 
 interface UseGeolocationOptions {
   /**
@@ -29,6 +30,11 @@ interface UseGeolocationReturn {
   isSupported: boolean
 
   /**
+   * geolocation permission status
+   */
+  permission: ReturnType<typeof usePermission>['status']
+
+  /**
    * geolocation information
    */
   geolocation: DeepReadonly<Ref<GeolocationCoordinates>>
@@ -51,6 +57,8 @@ interface UseGeolocationReturn {
  */
 const useGeolocation = (options?: UseGeolocationOptions): UseGeolocationReturn => {
   const isSupported = 'geolocation' in navigator
+
+  const { status: permission } = usePermission('geolocation')
 
   const location = ref<GeolocationCoordinates>({
     accuracy: 0,
@@ -92,6 +100,7 @@ const useGeolocation = (options?: UseGeolocationOptions): UseGeolocationReturn =
 
   return {
     isSupported,
+    permission,
     geolocation: readonly(location),
     locatedAt: readonly(locatedAt),
     error: readonly(error),

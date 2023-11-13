@@ -1,10 +1,16 @@
-import { ref, type Ref, watch } from 'vue'
+import { ref, watch, type Ref } from 'vue'
+import usePermission from './usePermission'
 
 interface UseAppBadgeReturn {
   /**
    * API support status
    */
   isSupported: boolean
+
+  /**
+   * badging permission status
+   */
+  permission: ReturnType<typeof usePermission>['status']
 
   /**
    * badge contents
@@ -29,6 +35,8 @@ interface UseAppBadgeReturn {
  */
 const useAppBadge = (initial = 0): UseAppBadgeReturn => {
   const isSupported = 'clearAppBadge' in navigator && 'setAppBadge' in navigator
+
+  const { status: permission } = usePermission('notifications')
 
   const contents = ref<number | undefined>(initial)
 
@@ -58,6 +66,7 @@ const useAppBadge = (initial = 0): UseAppBadgeReturn => {
 
   return {
     isSupported,
+    permission,
     contents,
     update,
     clear,
