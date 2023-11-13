@@ -1,6 +1,6 @@
+import { useToggle } from '@'
 import { describe, expect, it } from 'vitest'
 import { ref } from 'vue'
-import { useToggle } from '../src'
 
 describe('useToggle', () => {
   it('should be defined', () => {

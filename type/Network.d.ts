@@ -1,5 +1,3 @@
-declare var NetworkInformation: NetworkInformation
-
 interface Navigator extends NavigatorNetworkInformation {}
 
 interface WorkerNavigator extends NavigatorNetworkInformation {}
@@ -20,6 +18,10 @@ interface NetworkInformation extends EventTarget {
   addEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void
   removeEventListener: <K extends keyof NetworkInformationEventMap>(type: K, listener: (this: NetworkInformation, ev: NetworkInformationEventMap[K]) => any, options?: boolean | EventListenerOptions) => void
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
+}
+
+declare var NetworkInformation: {
+  prototype: NetworkInformation
 }
 
 interface NetworkInformationEventMap {

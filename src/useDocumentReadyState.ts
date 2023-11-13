@@ -1,19 +1,16 @@
-import { readonly, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
+import useEventListener from './useEventListener'
 
-const useDocumentReadyState = (): Readonly<Ref<DocumentReadyState>> => {
+/**
+ * reactive document ready state
+ * @returns document ready state
+ */
+const useDocumentReadyState = (): DeepReadonly<Ref<DocumentReadyState>> => {
   const readyState = ref(document.readyState)
 
-  useEventListener(
-    document,
-    'readystatechange',
-    () => {
-      readyState.value = document.readyState
-    },
-    {
-      passive: true,
-    }
-  )
+  useEventListener(document, 'readystatechange', () => {
+    readyState.value = document.readyState
+  })
 
   return readonly(readyState)
 }

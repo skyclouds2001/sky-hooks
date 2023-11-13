@@ -1,10 +1,10 @@
+interface EyeDropper {
+  open: (options?: ColorSelectionOptions) => Promise<ColorSelectionResult>
+}
+
 declare var EyeDropper: {
   prototype: EyeDropper
   new (): EyeDropper
-}
-
-interface EyeDropper {
-  open: (options?: ColorSelectionOptions) => Promise<ColorSelectionResult>
 }
 
 interface ColorSelectionOptions {

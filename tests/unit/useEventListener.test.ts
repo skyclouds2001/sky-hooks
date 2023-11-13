@@ -1,5 +1,5 @@
+import { useEventListener } from '@'
 import { beforeEach, describe, expect, it, vi, type SpyInstance } from 'vitest'
-import { useEventListener } from '../src'
 
 describe('useEventListener', () => {
   let target: HTMLDivElement

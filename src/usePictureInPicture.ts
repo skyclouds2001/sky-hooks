@@ -1,5 +1,5 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, shallowReadonly, toValue, watch } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
+import useEventListener from './useEventListener'
 
 interface UsePictureInPictureReturn {
   /**
@@ -10,12 +10,12 @@ interface UsePictureInPictureReturn {
   /**
    * picture-in-picture status of the specified element
    */
-  isPictureInPicture: Readonly<Ref<boolean>>
+  isPictureInPicture: DeepReadonly<Ref<boolean>>
 
   /**
    * picture-in-picture window of the specified element
    */
-  pictureInPictureWindow: Readonly<Ref<PictureInPictureWindow | null>>
+  pictureInPictureWindow: Readonly<ShallowRef<PictureInPictureWindow | null>>
 
   /**
    * enter picture-in-picture status of the specified element
@@ -43,7 +43,7 @@ const usePictureInPicture = (target: MaybeRefOrGetter<HTMLVideoElement | null>):
 
   const isPictureInPicture = ref(document.pictureInPictureElement === toValue(target) && document.pictureInPictureElement != null)
 
-  const pictureInPictureWindow = ref<PictureInPictureWindow | null>(null)
+  const pictureInPictureWindow = shallowRef<PictureInPictureWindow | null>(null)
 
   const enter = async (): Promise<void> => {
     if (!isSupported) return
@@ -70,6 +70,8 @@ const usePictureInPicture = (target: MaybeRefOrGetter<HTMLVideoElement | null>):
   }
 
   const toggle = async (): Promise<void> => {
+    if (!isSupported) return
+
     await (isPictureInPicture.value ? exit() : enter())
   }
 
@@ -81,11 +83,11 @@ const usePictureInPicture = (target: MaybeRefOrGetter<HTMLVideoElement | null>):
 
         void (isPictureInPicture.value ? enter() : exit())
 
-        useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'enterpictureinpicture'>(target, 'enterpictureinpicture', () => {
+        useEventListener(target, 'enterpictureinpicture', () => {
           isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
         })
 
-        useEventListener<HTMLVideoElement, HTMLVideoElementEventMap, 'leavepictureinpicture'>(target, 'leavepictureinpicture', () => {
+        useEventListener(target, 'leavepictureinpicture', () => {
           isPictureInPicture.value = document.pictureInPictureElement === target && document.pictureInPictureElement !== null
         })
       },

@@ -1,3 +1,5 @@
+import './../type/index.d.ts'
+
 export { default as reactifyFunction } from './reactifyFunction'
 
 export { default as tryOnActivated } from './tryOnActivated'
@@ -28,9 +30,7 @@ export { default as useBattery } from './useBattery'
 
 export { default as useBluetooth } from './useBluetooth'
 
-export { breakpointsAntDesign, breakpointsBootstrapV5, breakpointsMasterCss, breakpointsQuasar, breakpointsSematic, breakpointsTailwind, breakpointsVuetify } from './useBreakpoints'
-
-export { default as useBreakpoints } from './useBreakpoints'
+export { BreakpointsAntDesign, BreakpointsBootstrapV5, BreakpointsMasterCss, BreakpointsQuasar, BreakpointsSematic, BreakpointsTailwind, BreakpointsVuetify, default as useBreakpoints } from './useBreakpoints'
 
 export { default as useBroadcastChannel } from './useBroadcastChannel'
 
@@ -42,6 +42,10 @@ export { default as useCssVariable } from './useCssVariable'
 
 export { default as useDebounce } from './useDebounce'
 
+export { default as useDeviceMotion } from './useDeviceMotion'
+
+export { default as useDeviceOrientation } from './useDeviceOrientation'
+
 export { default as useDevicePixelRatio } from './useDevicePixelRatio'
 
 export { default as useDevicesList } from './useDevicesList'
@@ -49,6 +53,10 @@ export { default as useDevicesList } from './useDevicesList'
 export { default as useDisplayMedia } from './useDisplayMedia'
 
 export { default as useDocumentActiveElement } from './useDocumentActiveElement'
+
+export { default as useDocumentFocus } from './useDocumentFocus'
+
+export { default as useDocumentPictureInPicture } from './useDocumentPictureInPicture'
 
 export { default as useDocumentReadyState } from './useDocumentReadyState'
 
@@ -82,7 +90,7 @@ export { default as useIntersectionObserver } from './useIntersectionObserver'
 
 export { default as useInterval } from './useInterval'
 
-export { default as useKeyboard } from './useKeyboard'
+export { CURRENT, DEFAULT_ALIASES_MAP, default as useKeyboard } from './useKeyboard'
 
 export { default as useKeyboardLock } from './useKeyboardLock'
 
@@ -90,7 +98,7 @@ export { default as useLocalStorage } from './useLocalStorage'
 
 export { default as useLocation } from './useLocation'
 
-export { default as useMedia } from './useMedia'
+export { default as useMediaElement } from './useMediaElement'
 
 export { default as useMediaQuery } from './useMediaQuery'
 
@@ -108,7 +116,7 @@ export { default as useNotification } from './useNotification'
 
 export { default as useNow } from './useNow'
 
-export { default as useObjectURL } from './useObjectUrl'
+export { default as useObjectURL } from './useObjectURL'
 
 export { default as useOnline } from './useOnline'
 
@@ -125,6 +133,8 @@ export { default as usePreferredLanguages } from './usePreferredLanguages'
 export { default as usePreferredTheme } from './usePreferredTheme'
 
 export { default as useResizeObserver } from './useResizeObserver'
+
+export { default as useScreen } from './useScreen'
 
 export { default as useScreenOrientation } from './useScreenOrientation'
 
@@ -168,10 +178,6 @@ export { default as useWebWorker } from './useWebWorker'
 
 export { default as useWindowControlsOverlay } from './useWindowControlsOverlay'
 
-export { default as useWindowFocus } from './useWindowFocus'
-
 export { default as useWindowScroll } from './useWindowScroll'
 
 export { default as useWindowSize } from './useWindowSize'
-
-export type { Fn, Obj } from './util'

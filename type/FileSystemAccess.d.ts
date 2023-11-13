@@ -1,10 +1,11 @@
+interface Window {
+  showOpenFilePicker: (options?: OpenFilePickerOptions) => Promise<FileSystemFileHandle[]>
+  showSaveFilePicker: (options?: SaveFilePickerOptions) => Promise<FileSystemFileHandle>
+}
+
 declare var showOpenFilePicker: (options?: OpenFilePickerOptions) => Promise<FileSystemFileHandle[]>
 
 declare var showSaveFilePicker: (options?: SaveFilePickerOptions) => Promise<FileSystemFileHandle>
-
-type WellKnownDirectory = 'desktop' | 'documents' | 'downloads' | 'music' | 'pictures' | 'videos'
-
-type StartInDirectory = WellKnownDirectory | FileSystemHandle
 
 interface FilePickerAcceptType {
   description?: string
@@ -25,3 +26,7 @@ interface OpenFilePickerOptions extends FilePickerOptions {
 interface SaveFilePickerOptions extends FilePickerOptions {
   suggestedName?: string
 }
+
+type WellKnownDirectory = 'desktop' | 'documents' | 'downloads' | 'music' | 'pictures' | 'videos'
+
+type StartInDirectory = WellKnownDirectory | FileSystemHandle

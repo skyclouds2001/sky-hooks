@@ -1,31 +1,50 @@
-import { readonly, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
+import useEventListener from './useEventListener'
 
-const usePermission = (
-  name: PermissionName | 'accelerometer' | 'accessibility-events' | 'ambient-light-sensor' | 'background-sync' | 'camera' | 'clipboard-read' | 'clipboard-write' | 'gyroscope' | 'magnetometer' | 'microphone' | 'payment-handler' | 'speaker'
-): {
+type PermissionEnum = PermissionName | 'accelerometer' | 'accessibility-events' | 'ambient-light-sensor' | 'background-sync' | 'camera' | 'clipboard-read' | 'clipboard-write' | 'gyroscope' | 'local-fonts' | 'magnetometer' | 'microphone' | 'midi' | 'payment-handler' | 'speaker-selection' | 'storage-access' | 'window-management'
+
+interface UsePermissionReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
-  status: Readonly<Ref<PermissionState | null>>
-} => {
+
+  /**
+   * the permission status
+   */
+  status: DeepReadonly<Ref<PermissionState | null>>
+}
+
+/**
+ * reactive Permissions API
+ * @param name permission name
+ * @returns @see {@link UsePermissionReturn}
+ */
+const usePermission = (name: MaybeRefOrGetter<PermissionEnum>): UsePermissionReturn => {
   const isSupported = 'permissions' in navigator
 
   const permission = ref<PermissionState | null>(null)
 
   let permissionStatus: PermissionStatus
 
-  const update = (): void => {
-    permission.value = permissionStatus.state
-  }
-
   if (isSupported) {
-    const permission = name as PermissionName
-    void navigator.permissions.query({ name: permission }).then((status) => {
-      permissionStatus = status
+    watch(
+      () => toValue(name),
+      (name) => {
+        void navigator.permissions.query({ name: toValue(name) as PermissionName }).then((status) => {
+          permissionStatus = status
 
-      update()
+          permission.value = permissionStatus.state
 
-      useEventListener<PermissionStatus, PermissionStatusEventMap, 'change'>(status, 'change', update, { passive: true })
-    })
+          useEventListener(status, 'change', () => {
+            permission.value = permissionStatus.state
+          })
+        })
+      },
+      {
+        immediate: true,
+      }
+    )
   }
 
   return {

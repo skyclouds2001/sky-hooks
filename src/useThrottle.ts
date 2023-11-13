@@ -1,14 +1,21 @@
-import { type Ref, unref } from 'vue'
-import { type Fn } from '.'
+import { toValue, type MaybeRefOrGetter } from 'vue'
+import { type Fn } from './util'
 
-const useThrottle = <F extends Fn>(fn: F, timeout: number | Ref<number>): ((...args: Parameters<F>) => void) => {
+/**
+ * throttle function
+ * @param fn callback function
+ * @param timeout timeout delay
+ * @returns wrapped function
+ */
+const useThrottle = <F extends Fn>(fn: F, timeout: MaybeRefOrGetter<number>): ((...args: Parameters<F>) => void) => {
   let timer: number | null = null
+
   return (...args) => {
     if (timer === null) {
       timer = window.setTimeout(() => {
         fn(...args)
         timer = null
-      }, unref(timeout))
+      }, toValue(timeout))
     }
   }
 }

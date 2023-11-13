@@ -1,8 +1,13 @@
-import { ref, type Ref, watch } from 'vue'
-import { useMutationObserver } from '.'
+import { ref, watch, type Ref } from 'vue'
+import useMutationObserver from './useMutationObserver'
 
+/**
+ * reactive title controller
+ * @param initial initial value
+ * @returns reactive title
+ */
 const useTitle = (initial?: string): Ref<string> => {
-  const title = ref<string>(initial ?? '')
+  const title = ref(initial ?? '')
 
   watch(
     title,

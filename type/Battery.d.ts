@@ -1,5 +1,3 @@
-declare var BatteryManager: BatteryManager
-
 interface Navigator {
   getBattery: () => Promise<BatteryManager>
 }
@@ -17,6 +15,10 @@ interface BatteryManager extends EventTarget {
   addEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void
   removeEventListener: <K extends keyof BatteryManagerEventMap>(type: K, listener: (this: BatteryManager, ev: BatteryManagerEventMap[K]) => any, options?: boolean | EventListenerOptions) => void
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
+}
+
+declare var BatteryManager: {
+  prototype: BatteryManager
 }
 
 interface BatteryManagerEventMap {

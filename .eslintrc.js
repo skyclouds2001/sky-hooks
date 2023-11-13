@@ -32,6 +32,12 @@ module.exports = {
         amd: true,
       },
     ],
+    'promise/always-return': [
+      'error',
+      {
+        ignoreLastCallback: true,
+      },
+    ],
   },
   settings: {
     'import/parsers': {

@@ -1,11 +1,20 @@
 import { ref, type Ref } from 'vue'
-import { useAnimationFrame } from '.'
+import useAnimationFrame from './useAnimationFrame'
 
-const useFps = (
-  options: {
-    every?: number
-  } = {}
-): Ref<number> => {
+interface UseFpsOptions {
+  /**
+   * every exec time
+   * @default 10
+   */
+  every?: number
+}
+
+/**
+ * reactive fps
+ * @param options @see {@link UseFpsOptions}
+ * @returns fps
+ */
+const useFps = (options: UseFpsOptions = {}): Ref<number> => {
   const { every = 10 } = options
 
   const fps = ref(0)

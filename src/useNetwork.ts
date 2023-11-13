@@ -1,5 +1,7 @@
-import { reactive, readonly } from 'vue'
-import { useEventListener } from '.'
+import { reactive, readonly, type DeepReadonly } from 'vue'
+import useEventListener from './useEventListener'
+
+type Connection = Writable<Pick<NetworkInformation, 'downlink' | 'effectiveType' | 'rtt' | 'saveData' | 'type' | 'downlinkMax'>>
 
 interface UseNetworkReturn {
   /**
@@ -10,7 +12,7 @@ interface UseNetworkReturn {
   /**
    * network information
    */
-  connection: Readonly<Pick<NetworkInformation, 'downlink' | 'effectiveType' | 'rtt' | 'saveData' | 'type' | 'downlinkMax'>>
+  connection: DeepReadonly<Connection>
 }
 
 /**
@@ -20,7 +22,7 @@ interface UseNetworkReturn {
 const useNetwork = (): UseNetworkReturn => {
   const isSupported = 'connection' in navigator
 
-  const connection = reactive<Writable<Pick<NetworkInformation, 'downlink' | 'effectiveType' | 'rtt' | 'saveData' | 'type' | 'downlinkMax'>>>({
+  const connection = reactive<Connection>({
     downlink: 0,
     downlinkMax: 0,
     type: 'unknown',
@@ -43,7 +45,7 @@ const useNetwork = (): UseNetworkReturn => {
   if (isSupported) {
     updateNetworkInformation()
 
-    useEventListener<NetworkInformation, NetworkInformationEventMap, 'change'>(navigator.connection, 'change', () => {
+    useEventListener(navigator.connection, 'change', () => {
       updateNetworkInformation()
     })
   }

@@ -1,76 +1,120 @@
-import { ref, type Ref, shallowRef, type ShallowRef } from 'vue'
-import { tryOnScopeDispose } from '.'
+import { ref, shallowRef, type Ref, type ShallowRef } from 'vue'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
-const useEventSource = (
-  url: string | URL,
-  events: string[] = [],
-  options: {
-    immediate?: boolean
-    autoClose?: boolean
-    withCredentials?: boolean
-    onError?: (e: Event) => void
-    onMessage?: (e: MessageEvent) => void
-    onOpen?: (e: Event) => void
-  } = {}
-): {
-  es: ShallowRef<EventSource | null>
+interface UseEventSourceOptions {
+  /**
+   * whether Cross-Origin Resource Sharing should include credentials, will pass to `EventSource()` constructor as the second parameters
+   * @default false
+   */
+  withCredentials?: boolean
+
+  /**
+   * whether immediately create EventSource server
+   * @default true
+   */
+  immediate?: boolean
+
+  /**
+   * whether auto close EventSource server when scope dispose
+   * @default true
+   */
+  autoClose?: boolean
+}
+
+interface UseEventSourceReturn {
+  /**
+   * the EventSource instance
+   */
+  eventsource: ShallowRef<EventSource | null>
+
+  /**
+   * the most recent event name sent from the remote EventSource server
+   */
   event: Ref<string | null>
-  message: Ref<string | null>
-  status: Ref<EventSource['CONNECTING' | 'OPEN' | 'CLOSED']>
-  error: ShallowRef<Event | null>
-  open: () => void
-  close: () => void
-} => {
-  const { immediate = true, autoClose = true, withCredentials = false, onError, onMessage, onOpen } = options
 
-  const es = shallowRef<EventSource | null>(null)
+  /**
+   * the most recent message sent from the remote EventSource server
+   */
+  message: Ref<string | null>
+
+  /**
+   * the most recent error of the EventSource server, if any
+   */
+  error: ShallowRef<Event | null>
+
+  /**
+   * the EventSource server status
+   */
+  status: Ref<EventSource['CONNECTING' | 'OPEN' | 'CLOSED']>
+
+  /**
+   * open the EventSource server
+   */
+  open: () => void
+
+  /**
+   * close the EventSource server
+   */
+  close: () => void
+}
+
+/**
+ * reactive EventSource
+ * @param url EventSource url
+ * @param events events to listen
+ * @param options @see {@link UseEventSourceOptions}
+ * @returns @see {@link UseEventSourceReturn}
+ */
+const useEventSource = (url: string | URL, events: string[] = [], options: UseEventSourceOptions = {}): UseEventSourceReturn => {
+  const { withCredentials = false, immediate = true, autoClose = true } = options
+
+  const eventsource = shallowRef<EventSource | null>(null)
 
   const event = ref<string | null>(null)
 
   const message = ref<string | null>(null)
 
-  const status = ref<EventSource['CONNECTING' | 'OPEN' | 'CLOSED']>(EventSource.CLOSED)
-
   const error = shallowRef<Event | null>(null)
 
-  const open = (): void => {
-    if (es.value !== null || es.value !== EventSource.CLOSED) return
+  const status = ref<EventSource['CONNECTING' | 'OPEN' | 'CLOSED']>(EventSource.CLOSED)
 
-    es.value = new EventSource(url, {
+  const open = (): void => {
+    if (eventsource.value !== null || eventsource.value !== EventSource.CLOSED) return
+
+    const es = new EventSource(url, {
       withCredentials,
     })
-    status.value = EventSource.CONNECTING
 
-    es.value.addEventListener(
+    status.value = EventSource.CONNECTING
+    eventsource.value = es
+
+    es.addEventListener(
+      'open',
+      () => {
+        status.value = EventSource.OPEN
+        error.value = null
+      },
+      {
+        passive: true,
+      }
+    )
+
+    es.addEventListener(
       'error',
       (e) => {
         status.value = EventSource.CLOSED
         error.value = e
-        onError?.(e)
       },
       {
         passive: true,
       }
     )
 
-    es.value.addEventListener(
+    es.addEventListener(
       'message',
       (e) => {
         message.value = e.data
         event.value = 'message'
-        onMessage?.(e)
-      },
-      {
-        passive: true,
-      }
-    )
-
-    es.value.addEventListener(
-      'open',
-      (e) => {
-        status.value = EventSource.OPEN
-        error.value = null
-        onOpen?.(e)
       },
       {
         passive: true,
@@ -78,12 +122,11 @@ const useEventSource = (
     )
 
     events.forEach((ev) => {
-      es.value?.addEventListener(
+      es.addEventListener(
         ev,
         (e) => {
           message.value = e.data
           event.value = ev
-          onMessage?.(e)
         },
         {
           passive: true,
@@ -93,10 +136,10 @@ const useEventSource = (
   }
 
   const close = (): void => {
-    if (es.value === null || status.value === EventSource.CLOSED) return
+    if (eventsource.value === null || status.value === EventSource.CLOSED) return
 
-    es.value.close()
-    es.value = null
+    eventsource.value.close()
+    eventsource.value = null
     status.value = EventSource.CLOSED
   }
 
@@ -109,7 +152,7 @@ const useEventSource = (
   }
 
   return {
-    es,
+    eventsource,
     event,
     message,
     status,

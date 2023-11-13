@@ -1,4 +1,4 @@
-import { readonly, ref, toValue, type MaybeRefOrGetter, type Ref } from 'vue'
+import { readonly, ref, toValue, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
 
 interface UseKeyboardLockReturn {
   /**
@@ -9,7 +9,7 @@ interface UseKeyboardLockReturn {
   /**
    * keyboard lock status
    */
-  isKeyboardLock: Readonly<Ref<boolean>>
+  isKeyboardLock: DeepReadonly<Ref<boolean>>
 
   /**
    * request keyboard lock

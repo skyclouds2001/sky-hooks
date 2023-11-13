@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { ref } from 'vue'
-import { reactifyFunction } from '../src'
+import { reactifyFunction } from '@'
 
 describe('reactifyFunction', () => {
   it('should be defined', () => {

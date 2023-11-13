@@ -1,5 +1,5 @@
-import { readonly, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
+import useEventListener from './useEventListener'
 
 interface UseWindowControlsOverlayReturn {
   /**
@@ -10,12 +10,12 @@ interface UseWindowControlsOverlayReturn {
   /**
    * the title bar visibility
    */
-  visible: Readonly<Ref<boolean>>
+  visible: DeepReadonly<Ref<boolean>>
 
   /**
    * the size and position of the title bar
    */
-  rect: Readonly<Ref<DOMRect>>
+  rect: DeepReadonly<Ref<DOMRect>>
 }
 
 /**
@@ -30,9 +30,9 @@ const useWindowControlsOverlay = (): UseWindowControlsOverlayReturn => {
   const rect = ref(navigator.windowControlsOverlay.getTitlebarAreaRect())
 
   if (isSupported) {
-    useEventListener<WindowControlsOverlay, WindowControlsOverlayEventMap, 'geometrychange'>(navigator.windowControlsOverlay, 'geometrychange', (e) => {
-      visible.value = e.visible
-      rect.value = e.titlebarAreaRect
+    useEventListener(navigator.windowControlsOverlay, 'geometrychange', (e) => {
+      visible.value = (e as WindowControlsOverlayGeometryChangeEvent).visible
+      rect.value = (e as WindowControlsOverlayGeometryChangeEvent).titlebarAreaRect
     })
   }
 

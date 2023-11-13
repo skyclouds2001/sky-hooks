@@ -1,27 +1,97 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, shallowReadonly, shallowRef, type ShallowRef, toValue, watch } from 'vue'
-import { tryOnScopeDispose } from '.'
+import { readonly, ref, shallowReadonly, shallowRef, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref, type ShallowRef } from 'vue'
+import tryOnScopeDispose from './tryOnScopeDispose'
 
-const useSpeechSynthesis = (
-  text: MaybeRefOrGetter<string>,
-  options: {
-    lang?: SpeechSynthesisUtterance['lang']
-    pitch?: SpeechSynthesisUtterance['pitch']
-    rate?: SpeechSynthesisUtterance['rate']
-    volume?: SpeechSynthesisUtterance['volume']
-    voice?: SpeechSynthesisUtterance['voice']
-  } = {}
-): {
+interface UseSpeechSynthesisOptions {
+  /**
+   * speech recognition language
+   * @default 'en-US'
+   */
+  lang?: SpeechSynthesisUtterance['lang']
+
+  /**
+   * speech synthesis pitch value
+   * @default 1
+   */
+  pitch?: SpeechSynthesisUtterance['pitch']
+
+  /**
+   * speech synthesis rate value
+   * @default 1
+   */
+  rate?: SpeechSynthesisUtterance['rate']
+
+  /**
+   * speech synthesis volume value
+   * @default 1
+   */
+  volume?: SpeechSynthesisUtterance['volume']
+
+  /**
+   * speech synthesis voice
+   * @default null
+   */
+  voice?: SpeechSynthesisUtterance['voice']
+}
+
+interface UseSpeechSynthesisReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * speech synthesis play status
+   */
   isPlaying: Ref<boolean>
-  status: Readonly<Ref<'init' | 'play' | 'pause' | 'end'>>
-  error: Readonly<Ref<string | null>>
+
+  /**
+   * speech synthesis status
+   */
+  status: DeepReadonly<Ref<'init' | 'play' | 'pause' | 'end'>>
+
+  /**
+   * speech synthesis error, if any
+   */
+  error: DeepReadonly<Ref<string | null>>
+
+  /**
+   * speech synthesis utterance, if any
+   */
   utterance: Readonly<ShallowRef<SpeechSynthesisUtterance | null>>
-  speak: () => void
+
+  /**
+   * method to start speech synthesis
+   */
+  start: () => void
+
+  /**
+   * method to pause speech synthesis
+   */
   pause: () => void
+
+  /**
+   * method to resume speech synthesis
+   */
   resume: () => void
+
+  /**
+   * method to stop speech synthesis
+   */
   stop: () => void
+
+  /**
+   * method to toggle speech synthesis
+   */
   toggle: () => void
-} => {
+}
+
+/**
+ * reactive speech synthesis
+ * @param text speech synthesis text
+ * @param options @see {@link UseSpeechSynthesisOptions}
+ * @returns @see {@link UseSpeechSynthesisReturn}
+ */
+const useSpeechSynthesis = (text: MaybeRefOrGetter<string>, options: UseSpeechSynthesisOptions = {}): UseSpeechSynthesisReturn => {
   const { lang = 'en-US', pitch = 1, rate = 1, volume = 1, voice = null } = options
 
   const isSupported = 'speechSynthesis' in window
@@ -36,7 +106,7 @@ const useSpeechSynthesis = (
     isPlaying.value = !isPlaying.value
   }
 
-  const speak = (): void => {
+  const start = (): void => {
     if (utterance.value === null || window.speechSynthesis.speaking) return
 
     window.speechSynthesis.speak(utterance.value)
@@ -153,7 +223,7 @@ const useSpeechSynthesis = (
     status: readonly(status),
     error: readonly(error),
     utterance: shallowReadonly(utterance),
-    speak,
+    start,
     pause,
     resume,
     stop,

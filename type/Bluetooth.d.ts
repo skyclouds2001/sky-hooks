@@ -1,29 +1,3 @@
-declare var Bluetooth: Bluetooth
-
-declare var BluetoothCharacteristicProperties: BluetoothCharacteristicProperties
-
-declare var BluetoothDevice: BluetoothDevice
-
-declare var BluetoothRemoteGATTCharacteristic: BluetoothRemoteGATTCharacteristic
-
-declare var BluetoothRemoteGATTDescriptor: BluetoothRemoteGATTDescriptor
-
-declare var BluetoothRemoteGATTServer: BluetoothRemoteGATTServer
-
-declare var BluetoothRemoteGATTService: BluetoothRemoteGATTService
-
-declare var BluetoothUUID: BluetoothUUID
-
-declare var ValueEvent: {
-  prototype: ValueEvent
-  new (type: string, initDict?: ValueEventInit): ValueEvent
-}
-
-declare var BluetoothAdvertisingEvent: {
-  prototype: BluetoothAdvertisingEvent
-  new (type: string, init: BluetoothAdvertisingEventInit): BluetoothAdvertisingEvent
-}
-
 interface Navigator {
   readonly bluetooth: Bluetooth
 }
@@ -38,6 +12,10 @@ interface Bluetooth extends EventTarget, CharacteristicEventHandlers, BluetoothD
   addEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void
   removeEventListener: <K extends keyof BluetoothEventMap>(type: K, listener: (this: Bluetooth, ev: BluetoothEventMap[K]) => any, options?: boolean | EventListenerOptions) => void
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
+}
+
+declare var Bluetooth: {
+  prototype: Bluetooth
 }
 
 interface BluetoothEventMap extends CharacteristicEventHandlersEventMap, BluetoothDeviceEventHandlersEventMap, ServiceEventHandlersEventMap {
@@ -57,6 +35,10 @@ interface BluetoothDevice extends EventTarget, CharacteristicEventHandlers, Blue
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
 }
 
+declare var BluetoothDevice: {
+  prototype: BluetoothDevice
+}
+
 interface BluetoothDeviceEventMap extends CharacteristicEventHandlersEventMap, BluetoothDeviceEventHandlersEventMap, ServiceEventHandlersEventMap {}
 
 interface BluetoothRemoteGATTServer {
@@ -68,6 +50,10 @@ interface BluetoothRemoteGATTServer {
   getPrimaryServices: (service: BluetoothServiceUUID) => Promise<BluetoothRemoteGATTService[]>
 }
 
+declare var BluetoothRemoteGATTServer: {
+  prototype: BluetoothRemoteGATTServer
+}
+
 interface BluetoothRemoteGATTService extends EventTarget, CharacteristicEventHandlers, ServiceEventHandlers {
   readonly device: BluetoothDevice
   readonly isPrimary: boolean
@@ -76,6 +62,10 @@ interface BluetoothRemoteGATTService extends EventTarget, CharacteristicEventHan
   getCharacteristics: (characteristic?: BluetoothCharacteristicUUID) => Promise<BluetoothRemoteGATTCharacteristic[]>
   getIncludedService: (service: BluetoothServiceUUID) => Promise<BluetoothRemoteGATTService>
   getIncludedServices: (service?: BluetoothServiceUUID) => Promise<BluetoothRemoteGATTService[]>
+}
+
+declare var BluetoothRemoteGATTService: {
+  prototype: BluetoothRemoteGATTService
 }
 
 interface BluetoothRemoteGATTServiceEventMap extends CharacteristicEventHandlersEventMap, ServiceEventHandlersEventMap {}
@@ -99,6 +89,10 @@ interface BluetoothRemoteGATTCharacteristic extends EventTarget, CharacteristicE
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
 }
 
+declare var BluetoothRemoteGATTCharacteristic: {
+  prototype: BluetoothRemoteGATTCharacteristic
+}
+
 interface BluetoothRemoteGATTCharacteristicEventMap extends CharacteristicEventHandlersEventMap {}
 
 interface BluetoothCharacteristicProperties {
@@ -113,12 +107,20 @@ interface BluetoothCharacteristicProperties {
   readonly writeWithoutResponse: boolean
 }
 
+declare var BluetoothCharacteristicProperties: {
+  prototype: BluetoothCharacteristicProperties
+}
+
 interface BluetoothRemoteGATTDescriptor {
   readonly characteristic: BluetoothRemoteGATTCharacteristic
   readonly uuid: UUID
   readonly value?: DataView
   readValue: () => Promise<DataView>
   writeValue: (value: BufferSource) => Promise<void>
+}
+
+declare var BluetoothRemoteGATTDescriptor: {
+  prototype: BluetoothRemoteGATTDescriptor
 }
 
 interface BluetoothUUID {
@@ -128,8 +130,17 @@ interface BluetoothUUID {
   getService: (name: string | number) => UUID
 }
 
+declare var BluetoothUUID: {
+  prototype: BluetoothUUID
+}
+
 interface ValueEvent extends Event {
   readonly value: any
+}
+
+declare var ValueEvent: {
+  prototype: ValueEvent
+  new (type: string, initDict?: ValueEventInit): ValueEvent
 }
 
 interface ValueEventInit extends EventInit {
@@ -167,6 +178,11 @@ interface BluetoothAdvertisingEvent extends Event {
   readonly rssi?: number
   readonly manufacturerData: BluetoothManufacturerDataMap
   readonly serviceData: BluetoothServiceDataMap
+}
+
+declare var BluetoothAdvertisingEvent: {
+  prototype: BluetoothAdvertisingEvent
+  new (type: string, init: BluetoothAdvertisingEventInit): BluetoothAdvertisingEvent
 }
 
 interface BluetoothAdvertisingEventInit extends EventInit {

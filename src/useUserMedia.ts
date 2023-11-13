@@ -1,24 +1,47 @@
-import { readonly, ref, type Ref, shallowReadonly, shallowRef, type ShallowRef, watch } from 'vue'
+import { readonly, ref, shallowReadonly, shallowRef, type DeepReadonly, type Ref, type ShallowRef } from 'vue'
 
-const useUserMedia = (
-  options: {
-    audio?: boolean | MediaTrackConstraints
-    video?: boolean | MediaTrackConstraints
-  } = {}
-): {
+type UseUserMediaOptions = Parameters<MediaDevices['getUserMedia']>[0]
+
+interface UseUserMediaReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
-  isEnabled: Readonly<Ref<boolean>>
+
+  /**
+   * whether currently is capture user media stream
+   */
+  isEnabled: DeepReadonly<Ref<boolean>>
+
+  /**
+   * the captured user media stream
+   */
   stream: Readonly<ShallowRef<MediaStream | null>>
+
+  /**
+   * start to capture user media stream
+   */
   start: () => Promise<void>
+
+  /**
+   * stop to capture user media stream
+   */
   stop: () => Promise<void>
-} => {
+}
+
+/**
+ * reactive user media control
+ * @param options @see {@link UseUserMediaOptions}
+ * @returns @see {@link UseUserMediaReturn}
+ */
+const useUserMedia = (options: UseUserMediaOptions = {}): UseUserMediaReturn => {
   const { audio = false, video = true } = options
 
   const isSupported = 'mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices
 
-  const stream = shallowRef<MediaStream | null>(null)
-
   const isEnabled = ref(false)
+
+  const stream = shallowRef<MediaStream | null>(null)
 
   const start = async (): Promise<void> => {
     if (!isSupported) return
@@ -30,7 +53,7 @@ const useUserMedia = (
       video,
     })
 
-    isEnabled.value = stream.value !== null
+    isEnabled.value = true
   }
 
   const stop = async (): Promise<void> => {
@@ -45,18 +68,6 @@ const useUserMedia = (
 
     isEnabled.value = false
   }
-
-  watch(
-    isEnabled,
-    (isEnabled) => {
-      if (isEnabled) {
-        void start()
-      } else {
-        void stop()
-      }
-    },
-    { immediate: true }
-  )
 
   return {
     isSupported,

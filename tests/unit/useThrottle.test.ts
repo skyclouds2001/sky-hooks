@@ -1,5 +1,5 @@
+import { useThrottle } from '@'
 import { describe, expect, it, vi } from 'vitest'
-import { useThrottle } from '../src'
 
 describe('useThrottle', () => {
   it('should be defined', () => {

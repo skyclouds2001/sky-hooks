@@ -1,35 +1,131 @@
-import { computed, type ComputedRef, type MaybeRefOrGetter, readonly, ref, type Ref, toValue } from 'vue'
+import { computed, readonly, ref, toValue, type ComputedRef, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
+import { type Obj } from './util'
 
-const useStepper = <SS extends Array<string | number> | Record<string, any>, S = SS extends Record<string, infer R> ? R : string | number, N = SS extends Array<string | number> ? string | number : keyof SS>(
-  steps: MaybeRefOrGetter<SS>,
-  initialStep?: N
-): {
-  steps: Readonly<Ref<SS>>
+type StepperArray = Array<string | number>
+
+type StepperObject = Obj
+
+type Stepper = StepperArray | StepperObject
+
+interface UseStepperOptions<N> {
+  /**
+   * the initial value of the counter
+   */
+  initial?: N
+}
+
+interface UseStepperReturn<SS, S> {
+  /**
+   * the steps of the stepper
+   */
+  steps: DeepReadonly<Ref<SS>>
+
+  /**
+   * the step keys of the counter
+   */
   stepNames: ComputedRef<Array<string | number>>
-  stepCount: ComputedRef<number>
-  index: Ref<number>
-  previous: ComputedRef<S | undefined>
-  current: ComputedRef<S | undefined>
-  next: ComputedRef<S | undefined>
-  isFirst: ComputedRef<boolean>
-  isLast: ComputedRef<boolean>
-  at: (index: number) => S | undefined
-  get: (name: string) => S | undefined
-  goToPrevious: () => void
-  goTo: (name: string) => void
-  goToNext: () => void
-  isPrevious: (name: string) => boolean
-  isCurrent: (name: string) => boolean
-  isNext: (name: string) => boolean
-  isBefore: (name: string) => boolean
-  isAfter: (name: string) => boolean
-} => {
-  const step$ = ref(toValue(steps))
 
-  const stepNames = computed(() => (Array.isArray(step$.value) ? step$.value : Object.keys(step$.value)))
+  /**
+   * the steps count of the counter
+   */
+  stepCount: ComputedRef<number>
+
+  /**
+   * the current index of the counter
+   */
+  index: Ref<number>
+
+  /**
+   * the previous value of the counter
+   */
+  previous: ComputedRef<S | undefined>
+
+  /**
+   * the current value of the counter
+   */
+  current: ComputedRef<S | undefined>
+
+  /**
+   * the next value of the counter
+   */
+  next: ComputedRef<S | undefined>
+
+  /**
+   * whether current value is the first value of the counter
+   */
+  isFirst: ComputedRef<boolean>
+
+  /**
+   * whether current value is the first value of the counter
+   */
+  isLast: ComputedRef<boolean>
+
+  /**
+   * get the value of the specific index
+   */
+  at: (index: number) => S | undefined
+
+  /**
+   * get the value of the specific key
+   */
+  get: (name: string) => S | undefined
+
+  /**
+   * change the current value to the previous value
+   */
+  goToPrevious: () => void
+
+  /**
+   * change the current value to the specific value of the key
+   */
+  goTo: (name: string) => void
+
+  /**
+   * change the current value to the next value
+   */
+  goToNext: () => void
+
+  /**
+   * whether the value of the specific key is the previous value
+   */
+  isPrevious: (name: string) => boolean
+
+  /**
+   * whether the value of the specific key is the current value
+   */
+  isCurrent: (name: string) => boolean
+
+  /**
+   * whether the value of the specific key is the next value
+   */
+  isNext: (name: string) => boolean
+
+  /**
+   * whether the value of the specific key is before the current value
+   */
+  isBefore: (name: string) => boolean
+
+  /**
+   * whether the value of the specific key is after the current value
+   */
+  isAfter: (name: string) => boolean
+}
+
+/**
+ * hook for stepper
+ * @param steps steps
+ * @param options @see {@link UseStepperOptions}
+ * @returns @see {@link UseStepperReturn}
+ */
+const useStepper = <Steppers extends Stepper, Value = Steppers extends Array<infer S> ? S : Steppers extends Record<string, infer R> ? R : never, Key = Steppers extends Array<infer S> ? S : keyof Steppers>(steps: MaybeRefOrGetter<Steppers>, options: UseStepperOptions<Key> = {}): UseStepperReturn<Steppers, Value> => {
+  const { initial } = options
+
+  const step = ref(toValue(steps)) as Ref<Steppers>
+
+  const stepNames = computed(() => (Array.isArray(step.value) ? step.value : Object.keys(step.value)))
   const stepCount = computed(() => stepNames.value.length)
 
-  const index = ref(stepNames.value.indexOf(initialStep ?? stepNames.value[0]))
+  const index = ref(stepNames.value.indexOf(initial ?? stepNames.value[0]))
 
   const previous = computed(() => at(index.value - 1))
   const current = computed(() => at(index.value))
@@ -37,8 +133,8 @@ const useStepper = <SS extends Array<string | number> | Record<string, any>, S =
   const isFirst = computed(() => index.value === 0)
   const isLast = computed(() => index.value === stepCount.value - 1)
 
-  const at = (index: number): S | undefined => (Array.isArray(step$.value) ? step$.value[index] : step$.value[stepNames.value[index]])
-  const get = (name: string): S | undefined => (stepNames.value.includes(name) ? at(stepNames.value.indexOf(name)) : undefined)
+  const at = (index: number): Value | undefined => (Array.isArray(step.value) ? step.value[index] : step.value[stepNames.value[index]])
+  const get = (name: string): Value | undefined => (stepNames.value.includes(name) ? at(stepNames.value.indexOf(name)) : undefined)
 
   const goToPrevious = (): void => {
     if (!isFirst.value) {
@@ -79,7 +175,7 @@ const useStepper = <SS extends Array<string | number> | Record<string, any>, S =
   }
 
   return {
-    steps: readonly(step$) as Readonly<Ref<SS>>,
+    steps: readonly(step),
     stepNames,
     stepCount,
     index,

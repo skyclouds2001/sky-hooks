@@ -1,5 +1,5 @@
-import { type MaybeRefOrGetter, readonly, ref, type Ref, toValue, watch } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
+import useEventListener from './useEventListener'
 
 interface UseFullscreenReturn {
   /**
@@ -10,7 +10,7 @@ interface UseFullscreenReturn {
   /**
    * fullscreen status of the specified element
    */
-  isFullscreen: Readonly<Ref<boolean>>
+  isFullscreen: DeepReadonly<Ref<boolean>>
 
   /**
    * enter fullscreen status of the specified element
@@ -61,6 +61,8 @@ const useFullscreen = (target: MaybeRefOrGetter<HTMLElement | null> = document.d
   }
 
   const toggle = async (): Promise<void> => {
+    if (!isSupported) return
+
     await (isFullscreen.value ? exit() : enter())
   }
 

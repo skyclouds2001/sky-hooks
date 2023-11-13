@@ -1,5 +1,5 @@
-import { readonly, ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, toValue, watch, type DeepReadonly, type MaybeRefOrGetter, type Ref } from 'vue'
+import useEventListener from './useEventListener'
 
 interface UsePointerLockReturn {
   /**
@@ -10,7 +10,7 @@ interface UsePointerLockReturn {
   /**
    * pointer lock status
    */
-  isPointerLock: Readonly<Ref<boolean>>
+  isPointerLock: DeepReadonly<Ref<boolean>>
 
   /**
    * request pointer lock of the specified element

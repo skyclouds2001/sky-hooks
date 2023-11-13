@@ -1,5 +1,5 @@
 import { getCurrentInstance, onUpdated } from 'vue'
-import { type Fn } from '.'
+import { type Fn } from './util'
 
 /**
  * if the callback function is called in a component, call it in `onUpdated` hook, otherwise do not call it

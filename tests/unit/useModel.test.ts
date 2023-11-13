@@ -1,5 +1,5 @@
+import { useModel } from '@'
 import { describe, expect, it } from 'vitest'
-import { useModel } from '../src'
 
 describe('useModel', () => {
   const obj = {

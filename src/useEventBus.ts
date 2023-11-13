@@ -1,18 +1,50 @@
 import tryOnScopeDispose from './tryOnScopeDispose'
 
-type Listener<T extends string | number | symbol, P = unknown> = (event: T, payload?: P) => void
+type Listener<T = string, P extends unknown[] = unknown[]> = (event: T, ...payload: P) => void
 
-const events = new Map<string | number | symbol, Set<any>>()
+const mappers = new Map()
 
-const useEventBus = <const T extends string | number | symbol, P = any>(
-  key: T
-): {
+interface UseEventBusReturn<T extends string | number | symbol = string, P extends unknown[] = unknown[]> {
+  /**
+   * add a listener
+   * @param listener listener
+   */
   on: (listener: Listener<T, P>) => void
+
+  /**
+   * close a listener
+   * @param listener listener
+   */
   off: (listener: Listener<T, P>) => void
+
+  /**
+   * add a listener that only calls once
+   * @param listener listener
+   */
   once: (listener: Listener<T, P>) => void
-  emit: (event?: T, payload?: P) => void
+
+  /**
+   * emit a listener event
+   * @param listener listener
+   * @param payload listener payloads
+   */
+  emit: (event: T, ...payload: P) => void
+
+  /**
+   * reset all listeners
+   * @param listener listener
+   */
   reset: () => void
-} => {
+}
+
+/**
+ * reactive event bus
+ * @param key event
+ * @returns @see {@link UseEventBusReturn}
+ */
+const useEventBus = <T extends string | number | symbol = string, P extends unknown[] = unknown[]>(key: T): UseEventBusReturn<T, P> => {
+  const events = mappers as Map<T, Set<Listener<T, P>>>
+
   const on = (listener: Listener<T, P>): void => {
     const listeners = events.get(key) ?? new Set()
     listeners.add(listener)
@@ -30,14 +62,16 @@ const useEventBus = <const T extends string | number | symbol, P = any>(
   }
 
   const once = (listener: Listener<T, P>): void => {
-    on((event, payload) => {
+    on((event, ...payload) => {
       off(listener)
-      listener(event, payload)
+      listener(event, ...payload)
     })
   }
 
-  const emit = (event?: T, payload?: P): void => {
-    events.get(key)?.forEach((listener) => listener(event, payload))
+  const emit = (event: T, ...payload: P): void => {
+    events.get(key)?.forEach((listener) => {
+      listener(event, ...payload)
+    })
   }
 
   const reset = (): void => {

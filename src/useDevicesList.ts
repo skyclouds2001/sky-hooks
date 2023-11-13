@@ -1,18 +1,49 @@
-import { computed, type ComputedRef, shallowRef, type ShallowRef } from 'vue'
-import { useEventListener, usePermission } from '.'
+import { computed, shallowRef, type ComputedRef, type ShallowRef } from 'vue'
+import usePermission from './usePermission'
+import useEventListener from './useEventListener'
 
-const useDevicesList = (
-  options: {
-    requestImmediate?: boolean
-  } = {}
-): {
+interface UseDevicesListOptions {
+  /**
+   * whether immediate load media devices list, which may request permission immediate
+   * @default false
+   */
+  immediate?: boolean
+}
+
+interface UseDevicesListReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
+
+  /**
+   * media devices list
+   */
   devices: ShallowRef<MediaDeviceInfo[]>
+
+  /**
+   * video input media devices list
+   */
   videoInputs: ComputedRef<MediaDeviceInfo[]>
+
+  /**
+   * audio input media devices list
+   */
   audioInputs: ComputedRef<MediaDeviceInfo[]>
+
+  /**
+   * audio output media devices list
+   */
   audioOutputs: ComputedRef<MediaDeviceInfo[]>
-} => {
-  const { requestImmediate = false } = options
+}
+
+/**
+ * reactive media devices list
+ * @param options @see {@link UseDevicesListOptions}
+ * @returns @see {@link UseDevicesListReturn}
+ */
+const useDevicesList = (options: UseDevicesListOptions = {}): UseDevicesListReturn => {
+  const { immediate = false } = options
 
   const isSupported = 'mediaDevices' in navigator && 'enumerateDevices' in navigator.mediaDevices
 
@@ -22,12 +53,13 @@ const useDevicesList = (
   const audioInputs = computed(() => devices.value?.filter((device) => device.kind === 'audioinput'))
   const audioOutputs = computed(() => devices.value?.filter((device) => device.kind === 'audiooutput'))
 
-  const { status } = usePermission('camera')
+  const camera = usePermission('camera')
+  const microphone = usePermission('microphone')
 
   const update = async (): Promise<void> => {
     if (!isSupported) return
 
-    if (status.value !== 'granted') {
+    if (camera.status.value !== 'granted' || microphone.status.value !== 'granted') {
       await requestPermission()
     }
 
@@ -37,30 +69,22 @@ const useDevicesList = (
   const requestPermission = async (): Promise<void> => {
     if (!isSupported) return
 
-    if (status.value === 'granted') return
+    if (camera.status.value === 'granted' && microphone.status.value === 'granted') return
 
-    await navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-
-    void update()
+    await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true,
+    })
   }
 
   if (isSupported) {
-    useEventListener<MediaDevices, MediaDevicesEventMap, 'devicechange'>(
-      navigator.mediaDevices,
-      'devicechange',
-      () => {
-        void update()
-      },
-      {
-        passive: true,
-      }
-    )
+    useEventListener(navigator.mediaDevices, 'devicechange', () => {
+      void update()
+    })
 
-    if (requestImmediate) {
-      void requestPermission()
+    if (immediate) {
+      void update()
     }
-
-    void update()
   }
 
   return {

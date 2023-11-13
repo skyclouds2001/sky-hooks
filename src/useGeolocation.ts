@@ -1,5 +1,7 @@
-import { readonly, ref, type Ref } from 'vue'
-import { tryOnMounted, tryOnBeforeUnmount } from '.'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
+import tryOnMounted from './tryOnMounted'
+import tryOnUnmounted from './tryOnUnmounted'
+import usePermission from './usePermission'
 
 interface UseGeolocationOptions {
   /**
@@ -28,19 +30,24 @@ interface UseGeolocationReturn {
   isSupported: boolean
 
   /**
+   * geolocation permission status
+   */
+  permission: ReturnType<typeof usePermission>['status']
+
+  /**
    * geolocation information
    */
-  geolocation: Readonly<Ref<GeolocationCoordinates>>
+  geolocation: DeepReadonly<Ref<GeolocationCoordinates>>
 
   /**
    * geolocation information recently updated timestamp
    */
-  locatedAt: Readonly<Ref<number | null>>
+  locatedAt: DeepReadonly<Ref<number | null>>
 
   /**
    * geolocation information error if has
    */
-  error: Readonly<Ref<GeolocationPositionError | null>>
+  error: DeepReadonly<Ref<GeolocationPositionError | null>>
 }
 
 /**
@@ -50,6 +57,8 @@ interface UseGeolocationReturn {
  */
 const useGeolocation = (options?: UseGeolocationOptions): UseGeolocationReturn => {
   const isSupported = 'geolocation' in navigator
+
+  const { status: permission } = usePermission('geolocation')
 
   const location = ref<GeolocationCoordinates>({
     accuracy: 0,
@@ -82,7 +91,7 @@ const useGeolocation = (options?: UseGeolocationOptions): UseGeolocationReturn =
       )
     })
 
-    tryOnBeforeUnmount(() => {
+    tryOnUnmounted(() => {
       if (watcher !== null) {
         navigator.geolocation.clearWatch(watcher)
       }
@@ -91,6 +100,7 @@ const useGeolocation = (options?: UseGeolocationOptions): UseGeolocationReturn =
 
   return {
     isSupported,
+    permission,
     geolocation: readonly(location),
     locatedAt: readonly(locatedAt),
     error: readonly(error),

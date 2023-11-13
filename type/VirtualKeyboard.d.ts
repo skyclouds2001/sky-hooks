@@ -1,7 +1,3 @@
-declare var VirtualKeyboard: VirtualKeyboard
-
-declare var VirtualKeyboardGeometryChangeEvent: VirtualKeyboardGeometryChangeEvent
-
 interface Navigator {
   readonly virtualKeyboard: VirtualKeyboard
 }
@@ -11,11 +7,15 @@ interface VirtualKeyboard extends EventTarget {
   overlaysContent: boolean
   hide: () => void
   show: () => void
-  ongeometrychange: ((this: VirtualKeyboard, ev: VirtualKeyboardGeometryChangeEvent) => any) | null
+  ongeometrychange: ((this: VirtualKeyboard, ev: Event) => any) | null
   addEventListener: <K extends keyof VirtualKeyboardEventMap>(type: K, listener: (this: VirtualKeyboard, ev: VirtualKeyboardEventMap[K]) => any, options?: boolean | AddEventListenerOptions) => void
   addEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => void
   removeEventListener: <K extends keyof VirtualKeyboardEventMap>(type: K, listener: (this: VirtualKeyboard, ev: VirtualKeyboardEventMap[K]) => any, options?: boolean | EventListenerOptions) => void
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
+}
+
+declare var VirtualKeyboard: {
+  prototype: VirtualKeyboard
 }
 
 interface VirtualKeyboardEventMap {

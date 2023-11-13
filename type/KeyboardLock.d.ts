@@ -1,7 +1,3 @@
-declare var KeyBoard: KeyBoard
-
-declare var KeyboardLayoutMap: KeyboardLayoutMap
-
 interface Navigator {
   readonly keyboard: KeyBoard
 }
@@ -17,6 +13,10 @@ interface KeyBoard extends EventTarget {
   removeEventListener: (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions) => void
 }
 
+declare var KeyBoard: {
+  prototype: KeyBoard
+}
+
 interface KeyboardEventMap {
   layoutchange: Event
 }
@@ -30,4 +30,8 @@ interface KeyboardLayoutMap {
   get: (key: string) => string | undefined
   has: (key: string) => boolean
   [Symbol.iterator]: IterableIterator<[string, string]>
+}
+
+declare var KeyboardLayoutMap: {
+  prototype: KeyboardLayoutMap
 }

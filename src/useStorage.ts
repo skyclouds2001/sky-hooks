@@ -1,5 +1,5 @@
-import { shallowRef, type ShallowRef, ref, type Ref, watch } from 'vue'
-import { useEventListener } from '.'
+import { ref, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
+import useEventListener from './useEventListener'
 
 type StorageDataType = number | string | boolean | object | null | any
 

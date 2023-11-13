@@ -1,17 +1,40 @@
-import { readonly, ref, type Ref, shallowReadonly, shallowRef, type ShallowRef, watch } from 'vue'
+import { readonly, ref, shallowReadonly, shallowRef, type DeepReadonly, type Ref, type ShallowRef } from 'vue'
 
-const useDisplayMedia = (
-  options: {
-    audio?: boolean
-    video?: true
-  } = {}
-): {
+type UseDisplayMediaOptions = Parameters<MediaDevices['getDisplayMedia']>[0]
+
+interface UseDisplayMediaReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
-  isEnabled: Readonly<Ref<boolean>>
+
+  /**
+   * whether currently is capture display media stream
+   */
+  isEnabled: DeepReadonly<Ref<boolean>>
+
+  /**
+   * the captured display media stream
+   */
   stream: Readonly<ShallowRef<MediaStream | null>>
+
+  /**
+   * start to capture display media stream
+   */
   start: () => Promise<void>
+
+  /**
+   * stop to capture display media stream
+   */
   stop: () => Promise<void>
-} => {
+}
+
+/**
+ * reactive display media control
+ * @param options @see {@link UseDisplayMediaOptions}
+ * @returns @see {@link UseDisplayMediaReturn}
+ */
+const useDisplayMedia = (options: UseDisplayMediaOptions = {}): UseDisplayMediaReturn => {
   const { audio = false, video = true } = options
 
   const isSupported = 'mediaDevices' in navigator && 'getDisplayMedia' in navigator.mediaDevices
@@ -30,7 +53,7 @@ const useDisplayMedia = (
       video,
     })
 
-    isEnabled.value = stream.value !== null
+    isEnabled.value = true
   }
 
   const stop = async (): Promise<void> => {
@@ -45,18 +68,6 @@ const useDisplayMedia = (
 
     isEnabled.value = false
   }
-
-  watch(
-    isEnabled,
-    (isEnabled) => {
-      if (isEnabled) {
-        void start()
-      } else {
-        void stop()
-      }
-    },
-    { immediate: true }
-  )
 
   return {
     isSupported,

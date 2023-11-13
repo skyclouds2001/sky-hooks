@@ -1,19 +1,16 @@
-import { readonly, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
+import useEventListener from './useEventListener'
 
-const usePreferredLanguages = (): Readonly<Ref<readonly string[]>> => {
+/**
+ * reactive preferred languages
+ * @returns language information
+ */
+const usePreferredLanguages = (): DeepReadonly<Ref<string[]>> => {
   const languages = ref(navigator.languages)
 
-  useEventListener(
-    window,
-    'languagechange',
-    () => {
-      languages.value = navigator.languages
-    },
-    {
-      passive: true,
-    }
-  )
+  useEventListener(window, 'languagechange', () => {
+    languages.value = navigator.languages
+  })
 
   return readonly(languages)
 }

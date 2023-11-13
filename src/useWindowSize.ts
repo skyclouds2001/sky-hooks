@@ -1,23 +1,30 @@
-import { readonly, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
+import useEventListener from './useEventListener'
 
-const useWindowSize = (): {
-  width: Readonly<Ref<number>>
-  height: Readonly<Ref<number>>
-} => {
-  const width = ref(Infinity)
-  const height = ref(Infinity)
+interface UseWindowSizeReturn {
+  /**
+   * window width
+   */
+  width: DeepReadonly<Ref<number>>
 
-  const update = (): void => {
+  /**
+   * window height
+   */
+  height: DeepReadonly<Ref<number>>
+}
+
+/**
+ * reactive window size
+ * @returns @see {@link UseWindowSizeReturn}
+ */
+const useWindowSize = (): UseWindowSizeReturn => {
+  const width = ref(window.innerWidth)
+  const height = ref(window.innerHeight)
+
+  useEventListener(window, 'resize', () => {
     width.value = window.innerWidth
     height.value = window.innerHeight
-  }
-
-  useEventListener(window, 'resize', update, {
-    passive: true,
   })
-
-  update()
 
   return {
     width: readonly(width),

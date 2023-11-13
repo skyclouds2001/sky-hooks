@@ -1,4 +1,11 @@
-import { type MaybeRef, type MaybeRefOrGetter, toValue, watch, ref, unref, type Ref } from 'vue'
+import { ref, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
+
+interface UseCssVariableOptions {
+  /**
+   * the initial value for the specific CSS variable
+   */
+  initial?: string
+}
 
 /**
  * CSS variable controller hook
@@ -8,17 +15,17 @@ import { type MaybeRef, type MaybeRefOrGetter, toValue, watch, ref, unref, type 
  * @param options.initial the initial value for CSS variable
  * @returns controllable CSS variable value
  */
-const useCssVariable = (prop: MaybeRefOrGetter<string>, target: MaybeRef<HTMLElement | SVGElement | MathMLElement | null> = document.documentElement, options: { initial?: string } = {}): Ref<string> => {
+const useCssVariable = (prop: MaybeRefOrGetter<string>, target: MaybeRefOrGetter<HTMLElement | SVGElement | MathMLElement | null> = document.documentElement, options: UseCssVariableOptions = {}): Ref<string> => {
   const { initial = '' } = options
 
   const variable = ref(initial)
 
   watch(
-    [() => toValue(prop), () => target],
-    () => {
+    [() => toValue(prop), () => toValue(target)],
+    ([prop, target]) => {
       variable.value = window
-        .getComputedStyle(unref(target) ?? document.documentElement)
-        .getPropertyValue(toValue(prop))
+        .getComputedStyle(target ?? document.documentElement)
+        .getPropertyValue(prop)
         .trim()
     },
     {
@@ -27,7 +34,7 @@ const useCssVariable = (prop: MaybeRefOrGetter<string>, target: MaybeRef<HTMLEle
   )
 
   watch(variable, (variable) => {
-    unref(target)?.style?.setProperty(toValue(prop), variable)
+    toValue(target)?.style?.setProperty(toValue(prop), variable)
   })
 
   return variable

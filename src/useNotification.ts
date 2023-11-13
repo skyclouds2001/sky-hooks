@@ -1,11 +1,18 @@
 import { shallowRef, type ShallowRef } from 'vue'
-import { tryOnScopeDispose, useEventListener } from '.'
+import tryOnScopeDispose from './tryOnScopeDispose'
+import useEventListener from './useEventListener'
+import usePermission from './usePermission'
 
 interface UseNotificationReturn {
   /**
    * API support status
    */
   isSupported: boolean
+
+  /**
+   * notification permission status
+   */
+  permission: ReturnType<typeof usePermission>['status']
 
   /**
    * the current active notification object
@@ -31,6 +38,8 @@ interface UseNotificationReturn {
  */
 const useNotification = (title: string, options: NotificationOptions = {}): UseNotificationReturn => {
   const isSupported = 'Notification' in window
+
+  const { status: permission } = usePermission('notifications')
 
   const notification = shallowRef<Notification | null>(null)
 
@@ -71,6 +80,7 @@ const useNotification = (title: string, options: NotificationOptions = {}): UseN
 
   return {
     isSupported,
+    permission,
     notification,
     show,
     close,

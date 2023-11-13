@@ -1,16 +1,41 @@
-import { readonly, ref, type Ref } from 'vue'
-import { useEventListener } from '.'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
+import useEventListener from './useEventListener'
 
-const useScreenOrientation = (): {
+interface UseScreenOrientationReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
-  type: Readonly<Ref<OrientationType>>
-  angel: Readonly<Ref<number>>
-  lock: (type: OrientationLockType) => Promise<void>
-  unlock: () => Promise<void>
-} => {
-  const isSupported = 'screen' in window && 'orientation' in screen
 
-  const type = ref<OrientationType>(screen.orientation.type)
+  /**
+   * screen orientation type
+   */
+  type: DeepReadonly<Ref<OrientationType>>
+
+  /**
+   * screen orientation angel
+   */
+  angel: DeepReadonly<Ref<number>>
+
+  /**
+   * lock the screen orientation
+   */
+  lock: (type: OrientationLockType) => Promise<void>
+
+  /**
+   * unlock the screen orientation
+   */
+  unlock: () => Promise<void>
+}
+
+/**
+ * reactive screen orientation
+ * @returns @see {@link UseScreenOrientationReturn}
+ */
+const useScreenOrientation = (): UseScreenOrientationReturn => {
+  const isSupported = 'orientation' in window.screen
+
+  const type = ref(screen.orientation.type)
   const angel = ref(screen.orientation.angle)
 
   const lock = async (type: OrientationLockType): Promise<void> => {
@@ -21,17 +46,10 @@ const useScreenOrientation = (): {
     screen.orientation.unlock()
   }
 
-  useEventListener<ScreenOrientation, ScreenOrientationEventMap, 'change'>(
-    screen.orientation,
-    'change',
-    () => {
-      type.value = screen.orientation.type
-      angel.value = screen.orientation.angle
-    },
-    {
-      passive: true,
-    }
-  )
+  useEventListener(screen.orientation, 'change', () => {
+    type.value = screen.orientation.type
+    angel.value = screen.orientation.angle
+  })
 
   return {
     isSupported,

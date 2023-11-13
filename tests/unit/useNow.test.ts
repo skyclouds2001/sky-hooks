@@ -1,5 +1,5 @@
+import { useNow } from '@'
 import { describe, expect, it } from 'vitest'
-import { useNow } from '../src'
 
 describe('useNow', () => {
   it('should be defined', () => {

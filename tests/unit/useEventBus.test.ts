@@ -1,5 +1,5 @@
+import { useEventBus } from '@'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { useEventBus } from '../src'
 
 describe('useEventBus', () => {
   const KEY1 = 'eb1'
@@ -37,15 +37,14 @@ describe('useEventBus', () => {
   })
 
   it('should not trigger binding callback with specified event', () => {
-    eb1.emit()
-    eb1.emit()
+    eb1.emit(KEY2 as any)
+    eb1.emit(KEY2 as any)
 
     expect(f1).toBeCalledTimes(0)
     expect(f2).toBeCalledTimes(0)
   })
 
   it('should not trigger binding callback after reset with specified event', () => {
-    eb1.reset()
     eb1.emit(KEY1)
     eb1.emit(KEY1)
 

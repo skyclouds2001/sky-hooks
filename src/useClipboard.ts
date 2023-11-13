@@ -1,17 +1,49 @@
-import { readonly, ref, type Ref } from 'vue'
-import { useEventListener, useTimeout } from '.'
+import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
+import useEventListener from './useEventListener'
+import useTimeout from './useTimeout'
 
-const useClipboard = (
-  options: {
-    delay?: number
-    listen?: boolean
-  } = {}
-): {
+interface UseClipboardOptions {
+  /**
+   * keep copied data delay
+   * @default 2500
+   */
+  delay?: number
+
+  /**
+   * whether listen to `copy` and `cut` event
+   * @default true
+   */
+  listen?: boolean
+}
+
+interface UseClipboardReturn {
+  /**
+   * API support status
+   */
   isSupported: boolean
-  text: Readonly<Ref<string>>
-  isCopied: Readonly<Ref<boolean>>
+
+  /**
+   * copied data
+   */
+  text: DeepReadonly<Ref<string>>
+
+  /**
+   * whether data is copied to clipboard yet, will reset in a delay
+   */
+  isCopied: DeepReadonly<Ref<boolean>>
+
+  /**
+   * copy data to clipboard
+   */
   copy: (data: string) => Promise<void>
-} => {
+}
+
+/**
+ * reactive Clipboard API
+ * @param options @see {@link UseClipboardOptions}
+ * @returns @see {@link UseClipboardReturn}
+ */
+const useClipboard = (options: UseClipboardOptions = {}): UseClipboardReturn => {
   const { delay = 2500, listen = true } = options
 
   const isSupported = 'clipboard' in navigator
@@ -27,41 +59,27 @@ const useClipboard = (
   const copy = async (data: string): Promise<void> => {
     if (!isSupported) return
 
-    fn.stop()
+    fn.pause()
     isCopied.value = false
 
     await navigator.clipboard.writeText(data)
 
     text.value = data
     isCopied.value = true
-    fn.start()
+    fn.resume()
   }
 
   if (isSupported && listen) {
-    useEventListener(
-      window,
-      'copy',
-      () => {
-        void navigator.clipboard.readText().then((data) => {
-          text.value = data
-        })
-      },
-      {
-        passive: true,
-      }
-    )
-    useEventListener(
-      window,
-      'cut',
-      () => {
-        void navigator.clipboard.readText().then((data) => {
-          text.value = data
-        })
-      },
-      {
-        passive: true,
-      }
-    )
+    useEventListener(window, 'copy', () => {
+      void navigator.clipboard.readText().then((data) => {
+        text.value = data
+      })
+    })
+    useEventListener(window, 'cut', () => {
+      void navigator.clipboard.readText().then((data) => {
+        text.value = data
+      })
+    })
   }
 
   return {
