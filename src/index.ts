@@ -164,6 +164,8 @@ export { default as useTitle } from './useTitle'
 
 export { default as useToggle } from './useToggle'
 
+export { default as useUserActivation } from './useUserActivation'
+
 export { default as useUserMedia } from './useUserMedia'
 
 export { default as useVibrate } from './useVibrate'
