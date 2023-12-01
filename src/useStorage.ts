@@ -1,6 +1,6 @@
 import { ref, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
 import useEventListener from './useEventListener'
-import { parse, stringify } from './serialize'
+import { type StorageDataType, parse, stringify } from './serialize'
 
 interface UseStorageOptions<T> {
   /**
@@ -39,7 +39,7 @@ interface UseStorageOptions<T> {
  * @param options @see {@link UseStorageOptions}
  * @returns storage data of specific key
  */
-const useStorage = <T extends number | string | boolean | object | null>(key: string, options: UseStorageOptions<T> = {}): Ref<T | null> | ShallowRef<T | null> => {
+const useStorage = <T extends StorageDataType>(key: string, options: UseStorageOptions<T> = {}): Ref<T | null> | ShallowRef<T | null> => {
   const { storage = window.localStorage, prefix = true, shallow = false, deep = true, initial } = options
 
   const storageKey = prefix === false ? key : `${typeof prefix === 'string' ? prefix : 'sky-hooks'}-${key}`

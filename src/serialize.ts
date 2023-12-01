@@ -1,8 +1,8 @@
-type StorageDataType = number | string | boolean | object | null | any
+export type StorageDataType = number | string | boolean | object | null | any
 
-type StorageDataTypeEnum = 'number' | 'string' | 'boolean' | 'object' | 'null' | 'map' | 'set' | 'date' | 'any'
+export type StorageDataTypeEnum = 'number' | 'string' | 'boolean' | 'object' | 'null' | 'map' | 'set' | 'date' | 'any'
 
-const getTypeString = <T extends StorageDataType>(data: T): StorageDataTypeEnum => {
+export const getTypeString = <T extends StorageDataType>(data: T): StorageDataTypeEnum => {
   return data === null ? 'null' : data instanceof Set ? 'set' : data instanceof Map ? 'map' : data instanceof Date ? 'date' : typeof data === 'object' ? 'object' : typeof data === 'string' ? 'string' : typeof data === 'boolean' ? 'boolean' : !Number.isNaN(data) ? 'number' : 'any'
 }
 
