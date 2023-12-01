@@ -1,4 +1,4 @@
-import { ref, shallowRef, watch, type Ref, type ShallowRef } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import useEventListener from './useEventListener'
 import { type StorageDataType, parse, stringify } from './serialize'
 
@@ -14,12 +14,6 @@ interface UseStorageOptions<T> {
    * @default true
    */
   prefix?: boolean | string
-
-  /**
-   * whether use shallowRef for wrap data, which may bring performance advantage
-   * @default false
-   */
-  shallow?: boolean
 
   /**
    * storage type
@@ -39,14 +33,14 @@ interface UseStorageOptions<T> {
  * @param options @see {@link UseStorageOptions}
  * @returns storage data of specific key
  */
-const useStorage = <T extends StorageDataType>(key: string, options: UseStorageOptions<T> = {}): Ref<T | null> | ShallowRef<T | null> => {
-  const { storage = window.localStorage, prefix = true, shallow = false, deep = true, initial } = options
+const useStorage = <T extends StorageDataType>(key: string, options: UseStorageOptions<T> = {}): Ref<T | null> => {
+  const { storage = window.localStorage, prefix = true, deep = true, initial } = options
 
   const storageKey = prefix === false ? key : `${typeof prefix === 'string' ? prefix : 'sky-hooks'}-${key}`
 
   const storeValue = storage.getItem(storageKey)
 
-  const data = (shallow ? shallowRef : ref)(storeValue !== null ? parse<T>(storeValue) : null) as Ref<T | null>
+  const data = ref(storeValue !== null ? parse<T>(storeValue) : null) as Ref<T | null>
 
   watch(
     data,
