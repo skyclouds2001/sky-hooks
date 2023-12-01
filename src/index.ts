@@ -1,5 +1,3 @@
-import './../type/index.d.ts'
-
 export { default as reactifyFunction } from './reactifyFunction'
 
 export { default as tryOnActivated } from './tryOnActivated'
