@@ -42,12 +42,6 @@ export default defineConfig({
       exclude: ['node_modules/**/*', 'dist/**/*', 'test/**/*'],
     }),
     terser(),
-    visualizer({
-      filename: 'report.html',
-      title: 'report',
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-    }),
+    visualizer(),
   ],
 })
