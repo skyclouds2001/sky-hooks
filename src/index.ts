@@ -1,5 +1,3 @@
-import './../type/index.d.ts'
-
 export { default as reactifyFunction } from './reactifyFunction'
 
 export { default as tryOnActivated } from './tryOnActivated'
@@ -35,6 +33,8 @@ export { BreakpointsAntDesign, BreakpointsBootstrapV5, BreakpointsMasterCss, Bre
 export { default as useBroadcastChannel } from './useBroadcastChannel'
 
 export { default as useClipboard } from './useClipboard'
+
+export { default as useCookie } from './useCookie'
 
 export { default as useCounter } from './useCounter'
 
@@ -163,6 +163,8 @@ export { default as useTimestamp } from './useTimestamp'
 export { default as useTitle } from './useTitle'
 
 export { default as useToggle } from './useToggle'
+
+export { default as useUserActivation } from './useUserActivation'
 
 export { default as useUserMedia } from './useUserMedia'
 

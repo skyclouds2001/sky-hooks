@@ -5,12 +5,12 @@ import path from 'node:path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+  plugins: [vue(), vueJsx()],
   resolve: {
     alias: {
       '@': path.resolve(process.cwd(), 'src'),
     },
   },
-  plugins: [vue(), vueJsx()],
   css: {
     devSourcemap: true,
   },

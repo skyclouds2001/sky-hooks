@@ -2,7 +2,7 @@ import { readonly, ref, type DeepReadonly, type Ref } from 'vue'
 import useAnimationFrame from './useAnimationFrame'
 import useInterval from './useInterval'
 
-interface UseTimestampOptions {
+interface UseTimestampOptions<T extends 'AnimationFrame' | 'Interval', I extends T extends 'Interval' ? number : never = T extends 'Interval' ? number : never> {
   /**
    * offset of the timestamp
    * @default 0
@@ -19,13 +19,13 @@ interface UseTimestampOptions {
    * update the timestamp via `setInterval()` or `requestAnimationFrame()`
    * @default 'AnimationFrame'
    */
-  mode?: 'AnimationFrame' | 'Interval'
+  mode?: T
 
   /**
    * the interval number passing to `setInterval()` if `mode` is set to `'Interval'`
    * @default 0
    */
-  interval?: number
+  interval?: I
 }
 
 /**
@@ -33,7 +33,7 @@ interface UseTimestampOptions {
  * @param options @see {@link UseTimestampOptions}
  * @returns the reactive timestamp
  */
-const useTimestamp = (options: UseTimestampOptions = {}): DeepReadonly<Ref<number>> => {
+const useTimestamp = <T extends 'AnimationFrame' | 'Interval'>(options: UseTimestampOptions<T> = {}): DeepReadonly<Ref<number>> => {
   const { offset = 0, immediate = true, mode = 'AnimationFrame', interval = 0 } = options
 
   const timestamp = ref(Date.now() + offset)

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useDocumentPictureInPicture, usePictureInPicture } from '@';
-import { ref } from 'vue';
+import { useDocumentPictureInPicture, usePictureInPicture } from '@'
+import { ref } from 'vue'
 
 const dpip = ref<HTMLDivElement | null>(null)
 
