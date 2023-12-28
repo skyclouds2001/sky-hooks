@@ -3,7 +3,6 @@ import babel from '@rollup/plugin-babel'
 import resolve from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
-import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   input: 'src/index.ts',
@@ -42,6 +41,5 @@ export default defineConfig({
       exclude: ['node_modules/**/*', 'dist/**/*', 'test/**/*'],
     }),
     terser(),
-    visualizer(),
   ],
 })
