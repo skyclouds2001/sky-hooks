@@ -67,7 +67,7 @@
     "preinstall": "only-allow pnpm"
   },
   "dependencies": {
-    "vue": "^3.3.9"
+    "vue": "^3.4.21"
   },
   "devDependencies": {
     "@babel/core": "^7.23.5",
